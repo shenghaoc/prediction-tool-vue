@@ -9,7 +9,7 @@
 	"devDependencies": {
 		"@element-plus/nuxt": "^1.1.4",
 		"eslint": "8.14.0",
-		"eslint-config-next": "^14.2.33",
+		"eslint-config-next": "^16.0.1",
 		"eslint-config-prettier": "^10.1.8",
 		"nuxt": "^4.2.0",
 		"prettier": "3.6.2",
