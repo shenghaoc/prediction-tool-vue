@@ -7,17 +7,17 @@
 		"preview": "nuxt preview"
 	},
 	"devDependencies": {
-		"@element-plus/nuxt": "^1.0.7",
+		"@element-plus/nuxt": "^1.1.4",
 		"eslint": "8.14.0",
-		"eslint-config-next": "^14.0.4",
-		"eslint-config-prettier": "^9.1.0",
-		"nuxt": "3.9.0",
+		"eslint-config-next": "^14.2.33",
+		"eslint-config-prettier": "^9.1.2",
+		"nuxt": "^4.2.0",
 		"prettier": "3.1.1",
-		"typescript": "^5.3.3"
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"chart.js": "^4.4.1",
-		"element-plus": "^2.4.4",
-		"vue-chartjs": "^5.3.0"
+		"chart.js": "^4.5.1",
+		"element-plus": "^2.11.7",
+		"vue-chartjs": "^5.3.3"
 	}
 }
