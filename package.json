@@ -4,13 +4,14 @@
 		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
-		"preview": "nuxt preview"
+		"preview": "nuxt preview",
+		"lint": "eslint .",
+    	"lint:fix": "eslint . --fix"
 	},
 	"devDependencies": {
 		"@element-plus/nuxt": "^1.1.4",
+		"@nuxt/eslint": "1.10.0",
 		"eslint": "8.14.0",
-		"eslint-config-next": "^14.2.33",
-		"eslint-config-prettier": "^10.1.8",
 		"nuxt": "^4.2.0",
 		"prettier": "3.6.2",
 		"typescript": "^5.9.3"
