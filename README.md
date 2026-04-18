@@ -1,42 +1,78 @@
-# Nuxt 3 Minimal Starter
+# Prediction Tool Vue
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+Nuxt 4 / Vue 3 port of the original `prediction-tool` HDB resale price prediction app.
 
-## Setup
+The app lets a user enter a flat profile and get:
 
-Make sure to install the dependencies:
+- an estimated resale price
+- a 12-month trend view for that scenario
+- a lightweight bilingual interface (`en` / `zh`)
+- persisted form, theme, and language preferences in local storage
+
+## Background
+
+`prediction-tool` is the original repository and the React / Next.js implementation of the project. This repository is the Nuxt / Vue port.
+
+The original project was built for an EE4802 minor project and uses regression models only. There is no Python model-serving backend in this repo. The frontend submits form data to the existing prediction API endpoint and renders the returned trend data.
+
+Because of the way the original project data/model pipeline works, the tool does not forecast arbitrary future dates. It works against the fixed prediction window exposed by the upstream API.
+
+## Stack
+
+- Nuxt 4
+- Vue 3
+- TypeScript
+- ESLint
+- custom CSS
+- SVG-based trend chart rendering
+
+## App Structure
+
+This repo now follows the canonical Nuxt `app/` layout:
+
+- [app/app.vue](./app/app.vue)
+- [app/pages/index.vue](./app/pages/index.vue)
+- [app/components/prediction](./app/components/prediction)
+- [app/utils](./app/utils)
+- [app/assets/styles/prediction.css](./app/assets/styles/prediction.css)
+- [locales](./locales)
+
+## Development
+
+Install dependencies with Bun:
 
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
+bun install
 ```
 
-## Development Server
-
-Start the development server on http://localhost:3000
+Start the development server:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
-## Production
+The default local URL is usually:
 
-Build the application for production:
+```text
+http://localhost:3000
+```
+
+## Scripts
 
 ```bash
-npm run build
+bun run dev
+bun run build
+bun run preview
+bun run lint
+bun run lint:fix
 ```
 
-Locally preview production build:
+## Notes
 
-```bash
-npm run preview
-```
+- The prediction request is sent to `https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices`.
+- Theme, language, and form values are persisted locally in the browser.
+- The chart is rendered as SVG to avoid client-only canvas/chart bootstrapping issues in Nuxt.
 
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
+## Status
+
+This is no longer the default Nuxt starter. The repository has been converted into a project-specific Nuxt / Vue implementation of the original `prediction-tool` app.
