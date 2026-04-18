@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import PriceTrendChart from '~/components/prediction/PriceTrendChart.vue';
 import { formatCurrency } from '~/utils/format';
 import { translate, type Language } from '~/utils/i18n';
 import type { PredictionTheme, SummaryValues, TrendPoint } from '~/utils/prediction';
@@ -96,7 +97,9 @@ function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_mode
 				</div>
 			</div>
 
-			<PriceTrendChart :data="trendData" :theme="theme" :is-mobile="isMobile" />
+			<ClientOnly fallback-tag="div">
+				<PriceTrendChart :data="trendData" :theme="theme" :is-mobile="isMobile" />
+			</ClientOnly>
 		</div>
 	</section>
 </template>

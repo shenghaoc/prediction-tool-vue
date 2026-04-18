@@ -473,15 +473,22 @@ a {
 }
 
 .prediction-chart-frame {
-	min-height: 320px;
+	height: 320px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	border-radius: 20px;
+	background: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--panel-strong, rgba(255, 255, 255, 0.48)) 88%, transparent) 0%,
+		color-mix(in srgb, var(--price-panel-bg, rgba(255, 255, 255, 0.45)) 72%, transparent) 100%
+	);
 }
 
 .prediction-chart-frame canvas {
 	width: 100% !important;
 	height: 100% !important;
+	display: block;
 }
 
 @keyframes prediction-fade-up {
@@ -556,5 +563,9 @@ a {
 
 	.prediction-price-panel {
 		width: 100%;
+	}
+
+	.prediction-chart-frame {
+		height: 280px;
 	}
 }
