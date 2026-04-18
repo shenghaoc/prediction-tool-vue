@@ -9,7 +9,6 @@
     	"lint:fix": "eslint . --fix"
 	},
 	"devDependencies": {
-		"@element-plus/nuxt": "^1.1.4",
 		"@nuxt/eslint": "1.11.0",
 		"eslint": "9.39.1",
 		"nuxt": "^4.2.1",
@@ -17,8 +16,6 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"chart.js": "^4.5.1",
-		"element-plus": "^2.11.9",
-		"vue-chartjs": "^5.3.3"
+		"chart.js": "^4.5.1"
 	}
 }

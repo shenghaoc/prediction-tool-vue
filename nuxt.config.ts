@@ -1,4 +1,4 @@
 export default defineNuxtConfig({
-				css: ['element-plus/dist/index.css'],
-				modules: ['@element-plus/nuxt', '@nuxt/eslint']
+	css: ['~/assets/styles/prediction.css'],
+	modules: ['@nuxt/eslint']
 });

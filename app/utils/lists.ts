@@ -1,6 +1,7 @@
-export const ml_model_list = ['Support Vector Regression', 'Ridge Regression'] as const;
+export const ML_MODELS = ['Support Vector Regression', 'Ridge Regression'] as const;
+export type MLModel = (typeof ML_MODELS)[number];
 
-export const town_list = [
+export const TOWNS = [
 	'ANG MO KIO',
 	'BEDOK',
 	'BISHAN',
@@ -28,8 +29,9 @@ export const town_list = [
 	'WOODLANDS',
 	'YISHUN'
 ] as const;
+export type Town = (typeof TOWNS)[number];
 
-export const storey_range_list = [
+export const STOREY_RANGES = [
 	'01 TO 03',
 	'04 TO 06',
 	'07 TO 09',
@@ -48,8 +50,9 @@ export const storey_range_list = [
 	'46 TO 48',
 	'49 TO 51'
 ] as const;
+export type StoreyRange = (typeof STOREY_RANGES)[number];
 
-export const flat_model_list = [
+export const FLAT_MODELS = [
 	'2-room',
 	'Adjoined flat',
 	'Apartment',
@@ -71,8 +74,9 @@ export const flat_model_list = [
 	'Type S1',
 	'Type S2'
 ] as const;
+export type FlatModel = (typeof FLAT_MODELS)[number];
 
-export const month_list = [
+export const MONTHS = [
 	'2017-01',
 	'2017-02',
 	'2017-03',
@@ -136,3 +140,10 @@ export const month_list = [
 	'2022-01',
 	'2022-02'
 ] as const;
+export type Month = (typeof MONTHS)[number];
+
+export const ml_model_list = ML_MODELS;
+export const town_list = TOWNS;
+export const storey_range_list = STOREY_RANGES;
+export const flat_model_list = FLAT_MODELS;
+export const month_list = MONTHS;
