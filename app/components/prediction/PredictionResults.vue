@@ -41,33 +41,40 @@ function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_mode
 </script>
 
 <template>
-	<section class="prediction-results-card">
+	<el-card class="prediction-results-card" shadow="never">
 		<div class="prediction-results-header">
 			<div>
 				<span class="prediction-results-label">{{ tr('predicted_trends') }}</span>
 				<h2 class="prediction-results-title">{{ tr('predicted_price') }}</h2>
 			</div>
 
-			<div :class="['prediction-price-panel', { 'prediction-pulse': loading }]">
-				<span class="prediction-results-label">{{ tr('prediction') }}</span>
-				<strong :key="output">{{ formatCurrency(output) }}</strong>
-			</div>
+			<el-card :class="['prediction-price-panel', { 'prediction-pulse': loading }]" shadow="never">
+				<el-statistic :value="output" :formatter="() => formatCurrency(output)">
+					<template #title>
+						<span class="prediction-results-label">{{ tr('prediction') }}</span>
+					</template>
+				</el-statistic>
+			</el-card>
 		</div>
 
-		<div class="prediction-results-grid">
-			<div class="prediction-metric-card">
-				<span>{{ tr('ml_model') }}</span>
-				<strong>{{ optionLabel('ml_models', summaryValues.ml_model) }}</strong>
-			</div>
-			<div class="prediction-metric-card">
-				<span>{{ tr('town') }}</span>
-				<strong>{{ optionLabel('towns', summaryValues.town) }}</strong>
-			</div>
-			<div class="prediction-metric-card">
-				<span>{{ tr('lease_commence_date') }}</span>
-				<strong>{{ summaryValues.lease_commence_date }}</strong>
-			</div>
-		</div>
+		<el-descriptions
+			class="prediction-results-grid"
+			:column="isMobile ? 1 : 3"
+			border
+			direction="vertical"
+		>
+			<el-descriptions-item :label="tr('ml_model')">
+				{{ optionLabel('ml_models', summaryValues.ml_model) }}
+			</el-descriptions-item>
+			<el-descriptions-item :label="tr('town')">
+				{{ optionLabel('towns', summaryValues.town) }}
+			</el-descriptions-item>
+			<el-descriptions-item :label="tr('lease_commence_date')">
+				{{ summaryValues.lease_commence_date }}
+			</el-descriptions-item>
+		</el-descriptions>
+
+		<el-divider />
 
 		<div class="prediction-chart-shell">
 			<div class="prediction-chart-header">
@@ -77,23 +84,23 @@ function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_mode
 				</div>
 
 				<div class="prediction-chart-summary-grid">
-					<div class="prediction-chart-summary-card">
+					<el-card class="prediction-chart-summary-card" shadow="never">
 						<span>{{ tr('chart_latest') }}</span>
 						<strong>{{ `$${latestValue.toLocaleString()}` }}</strong>
-					</div>
-					<div class="prediction-chart-summary-card">
+					</el-card>
+					<el-card class="prediction-chart-summary-card" shadow="never">
 						<span>{{ tr('chart_range') }}</span>
 						<strong>
 							{{ `$${normalizedLowValue.toLocaleString()} - $${peakValue.toLocaleString()}` }}
 						</strong>
-					</div>
-					<div class="prediction-chart-summary-card">
+					</el-card>
+					<el-card class="prediction-chart-summary-card" shadow="never">
 						<span>{{ tr('chart_delta') }}</span>
 						<strong>
 							{{ `${deltaValue >= 0 ? '+' : '-'}$${Math.abs(deltaValue).toLocaleString()}` }}
 						</strong>
 						<small>{{ tr('vs_12m_ago') }}</small>
-					</div>
+					</el-card>
 				</div>
 			</div>
 
@@ -101,5 +108,5 @@ function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_mode
 				<PriceTrendChart :data="trendData" :theme="theme" :is-mobile="isMobile" />
 			</ClientOnly>
 		</div>
-	</section>
+	</el-card>
 </template>

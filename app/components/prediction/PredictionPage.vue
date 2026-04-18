@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
+import en from 'element-plus/es/locale/lang/en';
+import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
 import PredictionForm from '~/components/prediction/PredictionForm.vue';
 import PredictionResults from '~/components/prediction/PredictionResults.vue';
@@ -40,6 +42,7 @@ const summaryValues = computed(() => ({
 	town: form.value.town,
 	lease_commence_date: form.value.lease_commence_date
 }));
+const elementLocale = computed(() => (currentLang.value === 'zh' ? zhCn : en));
 
 const pageStyle = computed<Record<string, string>>(() => ({
 	'--page-bg': theme.value.pageBg,
@@ -176,8 +179,8 @@ function toggleTheme() {
 	darkMode.value = !darkMode.value;
 }
 
-function toggleLanguage() {
-	currentLang.value = currentLang.value === 'en' ? 'zh' : 'en';
+function setLanguage(language: Language) {
+	currentLang.value = language;
 }
 
 function resetForm() {
@@ -280,43 +283,58 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<main class="prediction-shell" :style="pageStyle">
-		<div class="prediction-surface">
-			<div class="prediction-topbar">
-				<div class="prediction-pill">{{ tr('intro_eyebrow') }}</div>
+	<el-config-provider :locale="elementLocale" size="large">
+		<main class="prediction-shell" :style="pageStyle">
+			<div class="prediction-surface">
+				<div class="prediction-topbar">
+					<el-tag class="prediction-pill" effect="plain" round>
+						{{ tr('intro_eyebrow') }}
+					</el-tag>
 
-				<div class="prediction-actions">
-					<button class="prediction-ghost-button" type="button" @click="toggleTheme">
-						{{ darkMode ? 'Light' : 'Dark' }}
-					</button>
-					<button class="prediction-ghost-button" type="button" @click="toggleLanguage">
-						{{ tr('switch_language') }}
-					</button>
+					<div class="prediction-actions">
+						<el-button class="prediction-ghost-button" @click="toggleTheme">
+							{{ darkMode ? 'Light' : 'Dark' }}
+						</el-button>
+						<el-button-group class="prediction-language-toggle">
+							<el-button
+								:type="currentLang === 'en' ? 'primary' : 'default'"
+								@click="setLanguage('en')"
+							>
+								EN
+							</el-button>
+							<el-button
+								:type="currentLang === 'zh' ? 'primary' : 'default'"
+								@click="setLanguage('zh')"
+							>
+								中文
+							</el-button>
+						</el-button-group>
+					</div>
+				</div>
+
+				<div class="prediction-layout">
+					<PredictionForm
+						:form="form"
+						:field-errors="fieldErrors"
+						:loading="loading"
+						:current-lang="currentLang"
+						:error-message="errorMessage"
+						@submit="handleSubmit"
+						@reset="resetForm"
+						@update-field="updateField"
+					/>
+
+					<PredictionResults
+						:output="output"
+						:loading="loading"
+						:summary-values="summaryValues"
+						:trend-data="trendData"
+						:theme="theme"
+						:is-mobile="isMobile"
+						:current-lang="currentLang"
+					/>
 				</div>
 			</div>
-
-			<div class="prediction-layout">
-				<PredictionForm
-					:form="form"
-					:field-errors="fieldErrors"
-					:loading="loading"
-					:current-lang="currentLang"
-					:error-message="errorMessage"
-					@submit="handleSubmit"
-					@reset="resetForm"
-					@update-field="updateField"
-				/>
-
-				<PredictionResults
-					:output="output"
-					:loading="loading"
-					:summary-values="summaryValues"
-					:trend-data="trendData"
-					:theme="theme"
-					:is-mobile="isMobile"
-					:current-lang="currentLang"
-				/>
-			</div>
-		</div>
-	</main>
+		</main>
+	</el-config-provider>
 </template>
