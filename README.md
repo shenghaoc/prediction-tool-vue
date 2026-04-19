@@ -24,7 +24,7 @@ Because of the way the original project data/model pipeline works, the tool does
 - TypeScript
 - ESLint
 - custom CSS
-- SVG-based trend chart rendering
+- Chart.js via `vue-chartjs` wrapper
 
 ## App Structure
 
@@ -71,7 +71,7 @@ bun run lint:fix
 
 - The prediction request is sent to `https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices`.
 - Theme, language, and form values are persisted locally in the browser.
-- The chart is rendered as SVG to avoid client-only canvas/chart bootstrapping issues in Nuxt.
+- The chart is rendered with `vue-chartjs` (framework-native Vue wrapper around Chart.js) instead of manual Chart.js lifecycle code.
 
 ## Status
 

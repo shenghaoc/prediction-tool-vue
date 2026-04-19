@@ -545,18 +545,6 @@ a {
 	display: block;
 }
 
-.prediction-chart-svg {
-	width: 100%;
-	height: 100%;
-	display: block;
-	overflow: visible;
-}
-
-.prediction-chart-axis text {
-	font-family: var(--font-body);
-	font-size: 11px;
-}
-
 @keyframes prediction-fade-up {
 	from {
 		transform: translateY(18px);

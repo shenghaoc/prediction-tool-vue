@@ -7,6 +7,7 @@
       "dependencies": {
         "chart.js": "^4.5.1",
         "dayjs": "^1.11.18",
+        "vue-chartjs": "^5.3.2",
       },
       "devDependencies": {
         "@element-plus/nuxt": "^1.1.4",
@@ -1585,6 +1586,8 @@
     "vue": ["vue@3.5.25", "", { "dependencies": { "@vue/compiler-dom": "3.5.25", "@vue/compiler-sfc": "3.5.25", "@vue/runtime-dom": "3.5.25", "@vue/server-renderer": "3.5.25", "@vue/shared": "3.5.25" }, "peerDependencies": { "typescript": "*" }, "optionalPeers": ["typescript"] }, "sha512-YLVdgv2K13WJ6n+kD5owehKtEXwdwXuj2TTyJMsO7pSeKw2bfRNZGjhB7YzrpbMYj5b5QsUebHpOqR3R3ziy/g=="],
 
     "vue-bundle-renderer": ["vue-bundle-renderer@2.2.0", "", { "dependencies": { "ufo": "^1.6.1" } }, "sha512-sz/0WEdYH1KfaOm0XaBmRZOWgYTEvUDt6yPYaUzl4E52qzgWLlknaPPTTZmp6benaPTlQAI/hN1x3tAzZygycg=="],
+
+    "vue-chartjs": ["vue-chartjs@5.3.3", "", { "peerDependencies": { "chart.js": "^4.1.1", "vue": "^3.0.0-0 || ^2.7.0" } }, "sha512-jqxtL8KZ6YJ5NTv6XzrzLS7osyegOi28UGNZW0h9OkDL7Sh1396ht4Dorh04aKrl2LiSalQ84WtqiG0RIJb0tA=="],
 
     "vue-component-type-helpers": ["vue-component-type-helpers@3.2.6", "", {}, "sha512-O02tnvIfOQVmnvoWwuSydwRoHjZVt8UEBR+2p4rT35p8GAy5VTlWP8o5qXfJR/GWCN0nVZoYWsVUvx2jwgdBmQ=="],
 
