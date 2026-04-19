@@ -32,7 +32,7 @@ export type ApiResponse = {
 
 export type PredictionTheme = ReturnType<typeof getPredictionTheme>;
 
-export const MAX_LEASE_COMMENCE_YEAR = new Date().getUTCFullYear();
+export const MAX_LEASE_COMMENCE_YEAR = Number.parseInt(MONTHS[MONTHS.length - 1].slice(0, 4), 10);
 export const YEAR_OPTIONS = Array.from(
 	{ length: MAX_LEASE_COMMENCE_YEAR - 1960 + 1 },
 	(_, index) => MAX_LEASE_COMMENCE_YEAR - index
