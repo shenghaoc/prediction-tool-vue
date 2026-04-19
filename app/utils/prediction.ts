@@ -26,11 +26,17 @@ export type TrendPoint = {
 
 export type SummaryValues = Pick<FieldType, 'ml_model' | 'town' | 'lease_commence_date'>;
 
-export type ApiResponse = Array<{ labels: string; data: number }>;
+export type ApiResponse = {
+	predictions: Array<{ month: string; predictedPrice: number }>;
+};
 
 export type PredictionTheme = ReturnType<typeof getPredictionTheme>;
 
-export const YEAR_OPTIONS = Array.from({ length: 2022 - 1960 + 1 }, (_, index) => 2022 - index);
+export const MAX_LEASE_COMMENCE_YEAR = new Date().getUTCFullYear();
+export const YEAR_OPTIONS = Array.from(
+	{ length: MAX_LEASE_COMMENCE_YEAR - 1960 + 1 },
+	(_, index) => MAX_LEASE_COMMENCE_YEAR - index
+);
 
 export const initialFormValues: FieldType = {
 	ml_model: ML_MODELS[0],
@@ -38,7 +44,7 @@ export const initialFormValues: FieldType = {
 	storey_range: STOREY_RANGES[0],
 	flat_model: FLAT_MODELS[0],
 	floor_area_sqm: 20,
-	lease_commence_date: 2022
+	lease_commence_date: MAX_LEASE_COMMENCE_YEAR
 };
 
 export function defaultTrendData(): TrendPoint[] {
@@ -48,10 +54,10 @@ export function defaultTrendData(): TrendPoint[] {
 	}));
 }
 
-export function getPredictionWindow(year: number) {
+export function getPredictionWindow() {
 	return {
-		monthStart: `${year - 1}-02`,
-		monthEnd: `${year}-02`
+		monthStart: MONTHS[MONTHS.length - 13] ?? MONTHS[0],
+		monthEnd: MONTHS[MONTHS.length - 1]
 	};
 }
 
@@ -64,9 +70,9 @@ export function normalizePrice(value: number) {
 }
 
 export function normalizeTrendData(data: ApiResponse): TrendPoint[] {
-	return data.map((entry) => ({
-		label: entry.labels,
-		value: normalizePrice(entry.data)
+	return data.predictions.map((entry) => ({
+		label: entry.month,
+		value: normalizePrice(entry.predictedPrice)
 	}));
 }
 

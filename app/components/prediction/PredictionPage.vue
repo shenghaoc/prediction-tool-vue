@@ -11,6 +11,7 @@ import {
 	getPredictionTheme,
 	getPredictionWindow,
 	initialFormValues,
+	MAX_LEASE_COMMENCE_YEAR,
 	normalizePrice,
 	normalizeTrendData,
 	type FieldType
@@ -155,7 +156,10 @@ function validateForm() {
 
 	if (!Number.isFinite(values.lease_commence_date)) {
 		fieldErrors.lease_commence_date = tr('missing_lease_commence_date');
-	} else if (values.lease_commence_date < 1960 || values.lease_commence_date > 2022) {
+	} else if (
+		values.lease_commence_date < 1960 ||
+		values.lease_commence_date > MAX_LEASE_COMMENCE_YEAR
+	) {
 		fieldErrors.lease_commence_date = tr('missing_lease_commence_date');
 	}
 
@@ -196,6 +200,40 @@ function resetForm() {
 	}
 }
 
+async function getApiErrorMessage(response: Response) {
+	const fallback = tr('error_fetch');
+	const body = await response.text();
+
+	if (!body) {
+		return fallback;
+	}
+
+	try {
+		const parsed = JSON.parse(body) as
+			| { error?: string }
+			| { error?: { message?: string } };
+
+		if (typeof parsed.error === 'string' && parsed.error.trim()) {
+			return parsed.error;
+		}
+
+		if (
+			typeof parsed.error === 'object' &&
+			parsed.error !== null &&
+			typeof parsed.error.message === 'string' &&
+			parsed.error.message.trim()
+		) {
+			return parsed.error.message;
+		}
+	} catch {
+		if (body.trim()) {
+			return body;
+		}
+	}
+
+	return fallback;
+}
+
 async function handleSubmit() {
 	errorMessage.value = '';
 
@@ -206,18 +244,18 @@ async function handleSubmit() {
 	loading.value = true;
 
 	try {
-		const { monthStart, monthEnd } = getPredictionWindow(form.value.lease_commence_date);
+		const { monthStart, monthEnd } = getPredictionWindow();
 		const floorArea = Math.max(20, Math.min(300, Math.round(form.value.floor_area_sqm)));
 		const formData = new FormData();
 
-		formData.append('ml_model', form.value.ml_model);
-		formData.append('month_start', monthStart);
-		formData.append('month_end', monthEnd);
+		formData.append('model', form.value.ml_model);
+		formData.append('monthStart', monthStart);
+		formData.append('monthEnd', monthEnd);
 		formData.append('town', form.value.town);
-		formData.append('storey_range', form.value.storey_range);
-		formData.append('flat_model', form.value.flat_model);
-		formData.append('floor_area_sqm', String(floorArea));
-		formData.append('lease_commence_date', String(form.value.lease_commence_date));
+		formData.append('storeyRange', form.value.storey_range);
+		formData.append('flatModel', form.value.flat_model);
+		formData.append('floorAreaSqm', String(floorArea));
+		formData.append('leaseCommenceYear', String(form.value.lease_commence_date));
 
 		const response = await fetch('https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices', {
 			method: 'POST',
@@ -225,8 +263,7 @@ async function handleSubmit() {
 		});
 
 		if (!response.ok) {
-			const errorText = await response.text();
-			throw new Error(errorText || tr('error_fetch'));
+			throw new Error(await getApiErrorMessage(response));
 		}
 
 		const serverData = normalizeTrendData(await response.json());
