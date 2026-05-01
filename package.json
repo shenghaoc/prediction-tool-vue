@@ -10,7 +10,7 @@
 	},
 	"devDependencies": {
 		"@element-plus/nuxt": "^1.1.4",
-		"@nuxt/eslint": "1.11.0",
+		"@nuxt/eslint": "1.15.2",
 		"element-plus": "^2.11.7",
 		"eslint": "9.39.1",
 		"nuxt": "^4.2.1",
