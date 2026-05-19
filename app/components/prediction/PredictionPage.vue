@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
-import en from 'element-plus/es/locale/lang/en';
-import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 
 import PredictionForm from '~/components/prediction/PredictionForm.vue';
 import PredictionResults from '~/components/prediction/PredictionResults.vue';
@@ -24,7 +22,6 @@ const loading = ref(false);
 const errorMessage = ref('');
 const darkMode = ref(false);
 const currentLang = ref<Language>('en');
-const isMobile = ref(false);
 const isHydrated = ref(false);
 const skipNextPersist = ref(false);
 
@@ -37,43 +34,19 @@ const fieldErrors = reactive<Record<keyof FieldType, string>>({
 	lease_commence_date: ''
 });
 
-const theme = computed(() => getPredictionTheme(darkMode.value));
-const summaryValues = computed(() => ({
+const summaryValues = ref({
 	ml_model: form.value.ml_model,
 	town: form.value.town,
 	lease_commence_date: form.value.lease_commence_date
-}));
-const elementLocale = computed(() => (currentLang.value === 'zh' ? zhCn : en));
+});
 
-const pageStyle = computed<Record<string, string>>(() => ({
-	'--page-bg': theme.value.pageBg,
-	'--text-color': theme.value.text,
-	'--text-muted': theme.value.textMuted,
-	'--primary-color': theme.value.primary,
-	'--accent-color': theme.value.accent,
-	'--line-soft': theme.value.lineSoft,
-	'--panel-bg': theme.value.panelBg,
-	'--panel-strong': theme.value.panelStrong,
-	'--results-bg': theme.value.resultsBg,
-	'--results-bg-2': theme.value.resultsBg2,
-	'--price-panel-bg': theme.value.pricePanelBg,
-	'--field-bg': theme.value.fieldBg,
-	'--pill-bg': theme.value.pillBg,
-	'--focus-ring': theme.value.focusRing,
-	'--panel-shadow': theme.value.shadow,
-	'--accent-shadow': theme.value.accentShadow,
-	'--mesh-line': theme.value.meshLine,
-	'--orb-color': theme.value.orbColor,
-	background: theme.value.background
-}));
+const theme = computed(() => getPredictionTheme(darkMode.value));
 
 useHead(() => ({
 	title: tr('price_prediction'),
 	htmlAttrs: {
 		lang: currentLang.value,
-		'data-lang': currentLang.value
-	},
-	bodyAttrs: {
+		'data-lang': currentLang.value,
 		'data-theme': darkMode.value ? 'dark' : 'light'
 	}
 }));
@@ -86,14 +59,6 @@ function clearErrors() {
 	for (const key of Object.keys(fieldErrors) as Array<keyof FieldType>) {
 		fieldErrors[key] = '';
 	}
-}
-
-function setViewportFlags() {
-	if (!import.meta.client) {
-		return;
-	}
-
-	isMobile.value = window.innerWidth < 900;
 }
 
 function restoreFromStorage() {
@@ -194,6 +159,11 @@ function resetForm() {
 	output.value = 0;
 	errorMessage.value = '';
 	clearErrors();
+	summaryValues.value = {
+		ml_model: form.value.ml_model,
+		town: form.value.town,
+		lease_commence_date: form.value.lease_commence_date
+	};
 
 	if (import.meta.client) {
 		localStorage.removeItem('form');
@@ -242,6 +212,11 @@ async function handleSubmit() {
 	}
 
 	loading.value = true;
+	summaryValues.value = {
+		ml_model: form.value.ml_model,
+		town: form.value.town,
+		lease_commence_date: form.value.lease_commence_date
+	};
 
 	try {
 		const { monthStart, monthEnd } = getPredictionWindow();
@@ -303,75 +278,61 @@ watch(form, (value) => {
 });
 
 onMounted(() => {
-	setViewportFlags();
 	restoreFromStorage();
 	isHydrated.value = true;
-
-	if (import.meta.client) {
-		window.addEventListener('resize', setViewportFlags);
-	}
-});
-
-onBeforeUnmount(() => {
-	if (import.meta.client) {
-		window.removeEventListener('resize', setViewportFlags);
-	}
 });
 </script>
 
 <template>
-	<el-config-provider :locale="elementLocale" size="large">
-		<main class="prediction-shell" :style="pageStyle">
-			<div class="prediction-surface">
-				<div class="prediction-topbar">
-					<el-tag class="prediction-pill" effect="plain" round>
-						{{ tr('intro_eyebrow') }}
-					</el-tag>
+	<main class="prediction-shell">
+		<div class="prediction-surface">
+			<div class="prediction-topbar">
+				<div class="prediction-pill">{{ tr('intro_eyebrow') }}</div>
 
-					<div class="prediction-actions">
-						<el-button class="prediction-ghost-button" @click="toggleTheme">
-							{{ darkMode ? 'Light' : 'Dark' }}
-						</el-button>
-						<el-button-group class="prediction-language-toggle">
-							<el-button
-								:type="currentLang === 'en' ? 'primary' : 'default'"
-								@click="setLanguage('en')"
-							>
-								EN
-							</el-button>
-							<el-button
-								:type="currentLang === 'zh' ? 'primary' : 'default'"
-								@click="setLanguage('zh')"
-							>
-								中文
-							</el-button>
-						</el-button-group>
-					</div>
-				</div>
-
-				<div class="prediction-layout">
-					<PredictionForm
-						:form="form"
-						:field-errors="fieldErrors"
-						:loading="loading"
-						:current-lang="currentLang"
-						:error-message="errorMessage"
-						@submit="handleSubmit"
-						@reset="resetForm"
-						@update-field="updateField"
-					/>
-
-					<PredictionResults
-						:output="output"
-						:loading="loading"
-						:summary-values="summaryValues"
-						:trend-data="trendData"
-						:theme="theme"
-						:is-mobile="isMobile"
-						:current-lang="currentLang"
-					/>
+				<div class="prediction-actions">
+					<button type="button" class="prediction-ghost-btn" @click="toggleTheme">
+						{{ darkMode ? 'Light' : 'Dark' }}
+					</button>
+					<button
+						type="button"
+						class="prediction-ghost-btn"
+						:class="{ 'is-active': currentLang === 'en' }"
+						@click="setLanguage('en')"
+					>
+						EN
+					</button>
+					<button
+						type="button"
+						class="prediction-ghost-btn"
+						:class="{ 'is-active': currentLang === 'zh' }"
+						@click="setLanguage('zh')"
+					>
+						中文
+					</button>
 				</div>
 			</div>
-		</main>
-	</el-config-provider>
+
+			<div class="prediction-layout">
+				<PredictionForm
+					:form="form"
+					:field-errors="fieldErrors"
+					:loading="loading"
+					:current-lang="currentLang"
+					:error-message="errorMessage"
+					@submit="handleSubmit"
+					@reset="resetForm"
+					@update-field="updateField"
+				/>
+
+				<PredictionResults
+					:output="output"
+					:loading="loading"
+					:summary-values="summaryValues"
+					:trend-data="trendData"
+					:theme="theme"
+					:current-lang="currentLang"
+				/>
+			</div>
+		</div>
+	</main>
 </template>
