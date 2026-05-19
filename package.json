@@ -9,7 +9,7 @@
     	"lint:fix": "eslint . --fix"
 	},
 	"devDependencies": {
-		"@nuxt/eslint": "1.11.0",
+		"@nuxt/eslint": "1.15.2",
 		"eslint": "9.39.1",
 		"nuxt": "^4.2.1",
 		"prettier": "3.7.4",
