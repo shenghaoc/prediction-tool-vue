@@ -20,3 +20,4 @@ This is a single Nuxt 4 / Vue 3 frontend application — an HDB resale flat pric
 - The `tsconfig.json` extends `.nuxt/tsconfig.json` — same requirement applies for TypeScript tooling.
 - The prediction API endpoint (`https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices`) is external and called from the browser at runtime. No local backend setup is needed.
 - No database or Docker is required for local development.
+

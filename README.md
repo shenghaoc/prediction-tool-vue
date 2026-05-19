@@ -39,16 +39,16 @@ This repo now follows the canonical Nuxt `app/` layout:
 
 ## Development
 
-Install dependencies with Bun:
+Install dependencies:
 
 ```bash
-bun install
+npm install
 ```
 
 Start the development server:
 
 ```bash
-bun run dev
+npm run dev
 ```
 
 The default local URL is usually:
@@ -60,11 +60,11 @@ http://localhost:3000
 ## Scripts
 
 ```bash
-bun run dev
-bun run build
-bun run preview
-bun run lint
-bun run lint:fix
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run lint:fix
 ```
 
 ## Notes
