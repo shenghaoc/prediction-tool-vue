@@ -8,14 +8,13 @@ import type { PredictionTheme, SummaryValues, TrendPoint } from '~/utils/predict
 
 const props = defineProps<{
 	output: number;
+	hasPrediction: boolean;
 	loading: boolean;
 	summaryValues: SummaryValues;
 	trendData: TrendPoint[];
 	theme: PredictionTheme;
 	currentLang: Language;
 }>();
-
-const hasPrediction = computed(() => props.output > 0);
 
 const latestValue = computed(() => props.trendData[props.trendData.length - 1]?.value ?? 0);
 const firstValue = computed(() => props.trendData[0]?.value ?? 0);

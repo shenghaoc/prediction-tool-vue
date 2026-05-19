@@ -17,6 +17,7 @@ import {
 
 const form = ref<FieldType>({ ...initialFormValues });
 const output = ref(0);
+const hasPrediction = ref(false);
 const trendData = ref(defaultTrendData());
 const loading = ref(false);
 const errorMessage = ref('');
@@ -157,6 +158,7 @@ function resetForm() {
 	form.value = { ...initialFormValues };
 	trendData.value = defaultTrendData();
 	output.value = 0;
+	hasPrediction.value = false;
 	errorMessage.value = '';
 	clearErrors();
 	summaryValues.value = {
@@ -244,6 +246,7 @@ async function handleSubmit() {
 		const serverData = normalizeTrendData(await response.json());
 		trendData.value = serverData;
 		output.value = normalizePrice(serverData[serverData.length - 1]?.value ?? 0);
+		hasPrediction.value = true;
 	} catch (error) {
 		errorMessage.value =
 			error instanceof Error && error.message ? error.message : tr('error_fetch');
@@ -326,6 +329,7 @@ onMounted(() => {
 
 				<PredictionResults
 					:output="output"
+					:has-prediction="hasPrediction"
 					:loading="loading"
 					:summary-values="summaryValues"
 					:trend-data="trendData"
