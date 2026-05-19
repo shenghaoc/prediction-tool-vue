@@ -69,6 +69,9 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Singapore"
     open-pull-requests-limit: 2
     labels:
       - "dependencies"
