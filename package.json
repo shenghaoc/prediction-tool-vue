@@ -11,7 +11,7 @@
 	"devDependencies": {
 		"@nuxt/eslint": "1.11.0",
 		"eslint": "9.39.1",
-		"nuxt": "^4.2.1",
+		"nuxt": "^4.4.6",
 		"prettier": "3.7.4",
 		"typescript": "^5.9.3"
 	},
