@@ -9,8 +9,9 @@ This is a single Nuxt 4 / Vue 3 frontend application — an HDB resale flat pric
 ### Running the app
 
 - **Package manager**: Bun (lockfile: `bun.lock`)
+- **Setup**: `bun install` && `bun run nuxt prepare`
 - **Dev server**: `bun run dev` → http://localhost:3000
-- **Lint**: `bun run lint` (requires `.nuxt/` generated files — run `bun run nuxt prepare` first if `.nuxt/` doesn't exist)
+- **Lint**: `bun run lint`
 - **Build**: `bun run build`
 
 ### Important caveats
