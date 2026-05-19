@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import {
 	CategoryScale,
 	Chart as ChartJS,
@@ -19,8 +19,28 @@ import { formatCurrencyTick, normalizePrice, type PredictionTheme, type TrendPoi
 const props = defineProps<{
 	data: TrendPoint[];
 	theme: PredictionTheme;
-	isMobile: boolean;
 }>();
+
+const isMobile = ref(false);
+
+function updateViewport() {
+	if (!import.meta.client) {
+		return;
+	}
+
+	isMobile.value = window.innerWidth < 900;
+}
+
+onMounted(() => {
+	updateViewport();
+	window.addEventListener('resize', updateViewport);
+});
+
+onBeforeUnmount(() => {
+	if (import.meta.client) {
+		window.removeEventListener('resize', updateViewport);
+	}
+});
 
 ChartJS.register(
 	CategoryScale,
@@ -37,8 +57,8 @@ const chartData = computed<ChartData<'line'>>(() => ({
 		{
 			data: props.data.map((entry) => entry.value),
 			fill: true,
-			tension: 0.32,
-			borderWidth: 2.75,
+			tension: 0.4,
+			borderWidth: 3,
 			pointRadius: 0,
 			pointHoverRadius: 4,
 			pointHoverBorderWidth: 2,
@@ -100,8 +120,8 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
 				maxRotation: 0,
 				autoSkipPadding: 18,
 				font: {
-					family: '"Avenir Next", "Segoe UI", sans-serif',
-					size: props.isMobile ? 11 : 12
+					family: "'DM Sans', 'Segoe UI', sans-serif",
+					size: isMobile.value ? 11 : 12
 				}
 			}
 		},
@@ -115,8 +135,8 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
 				color: props.theme.textMuted,
 				callback: (value) => formatCurrencyTick(Number(value)),
 				font: {
-					family: '"Avenir Next", "Segoe UI", sans-serif',
-					size: props.isMobile ? 11 : 12
+					family: "'DM Sans', 'Segoe UI', sans-serif",
+					size: isMobile.value ? 11 : 12
 				}
 			}
 		}

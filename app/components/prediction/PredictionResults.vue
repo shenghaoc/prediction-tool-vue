@@ -8,11 +8,11 @@ import type { PredictionTheme, SummaryValues, TrendPoint } from '~/utils/predict
 
 const props = defineProps<{
 	output: number;
+	hasPrediction: boolean;
 	loading: boolean;
 	summaryValues: SummaryValues;
 	trendData: TrendPoint[];
 	theme: PredictionTheme;
-	isMobile: boolean;
 	currentLang: Language;
 }>();
 
@@ -38,75 +38,91 @@ function tr(key: string) {
 function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models', value: string) {
 	return translate(props.currentLang, `${group}.${value}`);
 }
+
+function formatPrice(value: number) {
+	return `$${Math.round(value).toLocaleString()}`;
+}
 </script>
 
 <template>
-	<el-card class="prediction-results-card" shadow="never">
-		<div class="prediction-results-header">
-			<div>
-				<span class="prediction-results-label">{{ tr('predicted_trends') }}</span>
-				<h2 class="prediction-results-title">{{ tr('predicted_price') }}</h2>
+	<section>
+		<div class="prediction-results-card">
+			<div class="prediction-results-header">
+				<div>
+					<span class="prediction-results-label">{{ tr('predicted_trends') }}</span>
+					<h2 class="prediction-results-title">{{ tr('predicted_price') }}</h2>
+				</div>
+
+				<div class="prediction-price-panel" :class="{ 'prediction-loading-pulse': loading }">
+					<span class="prediction-results-label">{{ tr('prediction') }}</span>
+					<strong
+						:key="output"
+						:class="[
+							'prediction-price-value',
+							hasPrediction ? 'has-value' : 'awaiting'
+						]"
+					>
+						{{ hasPrediction ? formatCurrency(output) : tr('awaiting') }}
+					</strong>
+				</div>
 			</div>
 
-			<el-card :class="['prediction-price-panel', { 'prediction-pulse': loading }]" shadow="never">
-				<el-statistic :value="output" :formatter="() => formatCurrency(output)">
-					<template #title>
-						<span class="prediction-results-label">{{ tr('prediction') }}</span>
-					</template>
-				</el-statistic>
-			</el-card>
-		</div>
-
-		<el-descriptions
-			class="prediction-results-grid"
-			:column="isMobile ? 1 : 3"
-			border
-			direction="vertical"
-		>
-			<el-descriptions-item :label="tr('ml_model')">
-				{{ optionLabel('ml_models', summaryValues.ml_model) }}
-			</el-descriptions-item>
-			<el-descriptions-item :label="tr('town')">
-				{{ optionLabel('towns', summaryValues.town) }}
-			</el-descriptions-item>
-			<el-descriptions-item :label="tr('lease_commence_date')">
-				{{ summaryValues.lease_commence_date }}
-			</el-descriptions-item>
-		</el-descriptions>
-
-		<el-divider />
-
-		<div class="prediction-chart-shell">
-			<div class="prediction-chart-header">
-				<div class="prediction-chart-copy">
-					<span class="prediction-chart-kicker">{{ tr('predicted_trends') }}</span>
-					<h3 class="prediction-chart-title">{{ tr('chart_story_title') }}</h3>
+			<div class="prediction-metric-grid">
+				<div class="prediction-metric-card">
+					<span class="prediction-metric-label">{{ tr('ml_model') }}</span>
+					<strong class="prediction-metric-value">
+						{{ optionLabel('ml_models', summaryValues.ml_model) }}
+					</strong>
 				</div>
+				<div class="prediction-metric-card">
+					<span class="prediction-metric-label">{{ tr('town') }}</span>
+					<strong class="prediction-metric-value">
+						{{ optionLabel('towns', summaryValues.town) }}
+					</strong>
+				</div>
+				<div class="prediction-metric-card">
+					<span class="prediction-metric-label">{{ tr('lease_commence_date') }}</span>
+					<strong class="prediction-metric-value">
+						{{ summaryValues.lease_commence_date }}
+					</strong>
+				</div>
+			</div>
+
+			<div v-if="hasPrediction" class="prediction-chart-shell">
+				<span class="prediction-chart-kicker">{{ tr('predicted_trends') }}</span>
+				<h3 class="prediction-chart-title">{{ tr('chart_story_title') }}</h3>
 
 				<div class="prediction-chart-summary-grid">
-					<el-card class="prediction-chart-summary-card" shadow="never">
+					<div class="prediction-chart-summary-card">
 						<span>{{ tr('chart_latest') }}</span>
-						<strong>{{ `$${latestValue.toLocaleString()}` }}</strong>
-					</el-card>
-					<el-card class="prediction-chart-summary-card" shadow="never">
+						<strong class="prediction-chart-summary-val">
+							{{ formatPrice(latestValue) }}
+						</strong>
+					</div>
+					<div class="prediction-chart-summary-card">
 						<span>{{ tr('chart_range') }}</span>
-						<strong>
-							{{ `$${normalizedLowValue.toLocaleString()} - $${peakValue.toLocaleString()}` }}
+						<strong class="prediction-chart-summary-val">
+							{{ formatPrice(normalizedLowValue) }} – {{ formatPrice(peakValue) }}
 						</strong>
-					</el-card>
-					<el-card class="prediction-chart-summary-card" shadow="never">
+					</div>
+					<div class="prediction-chart-summary-card">
 						<span>{{ tr('chart_delta') }}</span>
-						<strong>
-							{{ `${deltaValue >= 0 ? '+' : '-'}$${Math.abs(deltaValue).toLocaleString()}` }}
+						<strong class="prediction-chart-summary-val">
+							{{ deltaValue >= 0 ? '+' : '-' }}{{ formatPrice(Math.abs(deltaValue)) }}
 						</strong>
-						<small>{{ tr('vs_12m_ago') }}</small>
-					</el-card>
+						<span class="prediction-chart-summary-sub">{{ tr('vs_12m_ago') }}</span>
+					</div>
 				</div>
+
+				<ClientOnly>
+					<PriceTrendChart :data="trendData" :theme="theme" />
+				</ClientOnly>
 			</div>
 
-			<ClientOnly fallback-tag="div">
-				<PriceTrendChart :data="trendData" :theme="theme" :is-mobile="isMobile" />
-			</ClientOnly>
+			<div v-else class="prediction-placeholder">
+				<h3 class="prediction-placeholder-title">{{ tr('placeholder_title') }}</h3>
+				<p class="prediction-placeholder-body">{{ tr('placeholder_body') }}</p>
+			</div>
 		</div>
-	</el-card>
+	</section>
 </template>

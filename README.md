@@ -23,7 +23,7 @@ Because of the way the original project data/model pipeline works, the tool does
 - Vue 3
 - TypeScript
 - ESLint
-- custom CSS
+- custom CSS design system (DM Sans + Lora, glassmorphic UI)
 - Chart.js via `vue-chartjs` wrapper
 
 ## App Structure

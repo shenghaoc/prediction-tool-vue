@@ -31,190 +31,236 @@ function updateField<K extends keyof FieldType>(key: K, value: FieldType[K]) {
 		value
 	});
 }
-
-function updateNumberField<K extends 'floor_area_sqm' | 'lease_commence_date'>(
-	key: K,
-	value: number | null | undefined
-) {
-	updateField(key, Number(value ?? 0) as FieldType[K]);
-}
 </script>
 
 <template>
-	<el-card class="prediction-card prediction-form-card" shadow="never">
-		<div class="prediction-card-inner">
-			<div class="prediction-intro-block">
-				<h1
-					:class="[
-						'prediction-headline',
-						currentLang === 'zh' ? 'prediction-headline-cjk' : ''
-					]"
-				>
-					{{ tr('price_prediction') }}
-				</h1>
-				<p class="prediction-lead">{{ tr('intro_blurb') }}</p>
-
-				<div class="prediction-figure-row">
-					<div class="prediction-figure">
-						<span class="prediction-figure-label">{{ tr('ml_model') }}</span>
-						<strong class="prediction-figure-value">
-							{{ String(ML_MODELS.length).padStart(2, '0') }}
-						</strong>
-					</div>
-					<div class="prediction-figure">
-						<span class="prediction-figure-label">{{ tr('town') }}</span>
-						<strong class="prediction-figure-value">
-							{{ String(TOWNS.length).padStart(2, '0') }}
-						</strong>
-					</div>
-					<div class="prediction-figure">
-						<span class="prediction-figure-label">{{ tr('flat_model') }}</span>
-						<strong class="prediction-figure-value">
-							{{ String(FLAT_MODELS.length).padStart(2, '0') }}
-						</strong>
-					</div>
-				</div>
-
-				<p class="prediction-caption">{{ tr('intro_caption') }}</p>
-			</div>
-
-			<el-form class="prediction-form-shell" label-position="top" @submit.prevent="emit('submit')">
-				<h2 class="prediction-section-title">{{ tr('prediction_form') }}</h2>
-
-				<div class="prediction-form-grid">
-					<el-form-item
-						class="prediction-field"
-						:label="tr('ml_model')"
-						:error="fieldErrors.ml_model"
+	<section>
+		<div class="prediction-card">
+			<div class="prediction-card-inner">
+				<div class="prediction-intro-block">
+					<h1
+						:class="[
+							'prediction-headline',
+							currentLang === 'zh' ? 'prediction-headline-cjk' : ''
+						]"
 					>
-						<el-select
-							:model-value="form.ml_model"
-							@update:model-value="updateField('ml_model', $event)"
-						>
-							<el-option
-								v-for="mlModel in ML_MODELS"
-								:key="mlModel"
-								:label="optionLabel('ml_models', mlModel)"
-								:value="mlModel"
-							/>
-						</el-select>
-					</el-form-item>
+						{{ tr('price_prediction') }}
+					</h1>
+					<p class="prediction-lead">{{ tr('intro_blurb') }}</p>
 
-					<el-form-item class="prediction-field" :label="tr('town')" :error="fieldErrors.town">
-						<el-select
-							:model-value="form.town"
-							@update:model-value="updateField('town', $event)"
-						>
-							<el-option
-								v-for="town in TOWNS"
-								:key="town"
-								:label="optionLabel('towns', town)"
-								:value="town"
-							/>
-						</el-select>
-					</el-form-item>
-
-					<el-form-item
-						class="prediction-field"
-						:label="tr('storey_range')"
-						:error="fieldErrors.storey_range"
-					>
-						<el-select
-							:model-value="form.storey_range"
-							@update:model-value="updateField('storey_range', $event)"
-						>
-							<el-option
-								v-for="storeyRange in STOREY_RANGES"
-								:key="storeyRange"
-								:label="optionLabel('storey_ranges', storeyRange)"
-								:value="storeyRange"
-							/>
-						</el-select>
-					</el-form-item>
-
-					<el-form-item
-						class="prediction-field"
-						:label="tr('flat_model')"
-						:error="fieldErrors.flat_model"
-					>
-						<el-select
-							:model-value="form.flat_model"
-							@update:model-value="updateField('flat_model', $event)"
-						>
-							<el-option
-								v-for="flatModel in FLAT_MODELS"
-								:key="flatModel"
-								:label="optionLabel('flat_models', flatModel)"
-								:value="flatModel"
-							/>
-						</el-select>
-					</el-form-item>
-
-					<el-form-item
-						class="prediction-field prediction-field-full"
-						:label="tr('floor_area')"
-						:error="fieldErrors.floor_area_sqm"
-					>
-						<div class="prediction-unit-wrap">
-							<el-input-number
-								:model-value="form.floor_area_sqm"
-								:min="20"
-								:max="300"
-								:step="1"
-								:precision="0"
-								:controls="false"
-								@update:model-value="updateNumberField('floor_area_sqm', $event)"
-							/>
-							<div class="prediction-unit-tag">m²</div>
+					<div class="prediction-figure-row">
+						<div class="prediction-figure">
+							<span class="prediction-figure-label">{{ tr('ml_model') }}</span>
+							<strong class="prediction-figure-value">
+								{{ String(ML_MODELS.length).padStart(2, '0') }}
+							</strong>
 						</div>
-					</el-form-item>
+						<div class="prediction-figure">
+							<span class="prediction-figure-label">{{ tr('town') }}</span>
+							<strong class="prediction-figure-value">
+								{{ String(TOWNS.length).padStart(2, '0') }}
+							</strong>
+						</div>
+						<div class="prediction-figure">
+							<span class="prediction-figure-label">{{ tr('flat_model') }}</span>
+							<strong class="prediction-figure-value">
+								{{ String(FLAT_MODELS.length).padStart(2, '0') }}
+							</strong>
+						</div>
+					</div>
 
-					<el-form-item
-						class="prediction-field prediction-field-full"
-						:label="tr('lease_commence_date')"
-						:error="fieldErrors.lease_commence_date"
-					>
-						<el-select
-							:model-value="form.lease_commence_date"
-							@update:model-value="updateNumberField('lease_commence_date', $event)"
-						>
-							<el-option
-								v-for="year in YEAR_OPTIONS"
-								:key="year"
-								:label="String(year)"
-								:value="year"
-							/>
-						</el-select>
-					</el-form-item>
+					<p class="prediction-caption">{{ tr('intro_caption') }}</p>
 				</div>
 
-				<div class="prediction-button-row">
-					<el-button
-						class="prediction-primary-button"
-						type="primary"
-						native-type="submit"
-						:loading="loading"
-					>
-						{{ tr('get_prediction') }}
-					</el-button>
-					<el-button
-						class="prediction-reset-button"
-						:disabled="loading"
-						@click="emit('reset')"
-					>
-						{{ tr('reset_form') }}
-					</el-button>
-				</div>
+				<div class="prediction-form-shell">
+					<h2 class="prediction-section-title">{{ tr('prediction_form') }}</h2>
 
-				<el-alert
-					v-if="errorMessage"
-					class="prediction-error-alert"
-					:title="errorMessage"
-					type="error"
-					:closable="false"
-					show-icon
-				/>
-			</el-form>
+					<form @submit.prevent="emit('submit')">
+						<div class="prediction-form-grid">
+							<div>
+								<label class="prediction-field-label" for="input-ml_model">
+									{{ tr('ml_model') }}
+								</label>
+								<select
+									id="input-ml_model"
+									class="prediction-field-select"
+									:value="form.ml_model"
+									@change="
+										updateField(
+											'ml_model',
+											($event.target as HTMLSelectElement).value as FieldType['ml_model']
+										)
+									"
+								>
+									<option v-for="mlModel in ML_MODELS" :key="mlModel" :value="mlModel">
+										{{ optionLabel('ml_models', mlModel) }}
+									</option>
+								</select>
+								<span v-if="fieldErrors.ml_model" class="prediction-field-error">
+									{{ fieldErrors.ml_model }}
+								</span>
+							</div>
+
+							<div>
+								<label class="prediction-field-label" for="input-town">
+									{{ tr('town') }}
+								</label>
+								<select
+									id="input-town"
+									class="prediction-field-select"
+									:value="form.town"
+									@change="
+										updateField(
+											'town',
+											($event.target as HTMLSelectElement).value as FieldType['town']
+										)
+									"
+								>
+									<option v-for="town in TOWNS" :key="town" :value="town">
+										{{ optionLabel('towns', town) }}
+									</option>
+								</select>
+								<span v-if="fieldErrors.town" class="prediction-field-error">
+									{{ fieldErrors.town }}
+								</span>
+							</div>
+
+							<div>
+								<label class="prediction-field-label" for="input-storey_range">
+									{{ tr('storey_range') }}
+								</label>
+								<select
+									id="input-storey_range"
+									class="prediction-field-select"
+									:value="form.storey_range"
+									@change="
+										updateField(
+											'storey_range',
+											($event.target as HTMLSelectElement)
+												.value as FieldType['storey_range']
+										)
+									"
+								>
+									<option
+										v-for="storeyRange in STOREY_RANGES"
+										:key="storeyRange"
+										:value="storeyRange"
+									>
+										{{ optionLabel('storey_ranges', storeyRange) }}
+									</option>
+								</select>
+								<span v-if="fieldErrors.storey_range" class="prediction-field-error">
+									{{ fieldErrors.storey_range }}
+								</span>
+							</div>
+
+							<div>
+								<label class="prediction-field-label" for="input-flat_model">
+									{{ tr('flat_model') }}
+								</label>
+								<select
+									id="input-flat_model"
+									class="prediction-field-select"
+									:value="form.flat_model"
+									@change="
+										updateField(
+											'flat_model',
+											($event.target as HTMLSelectElement)
+												.value as FieldType['flat_model']
+										)
+									"
+								>
+									<option
+										v-for="flatModel in FLAT_MODELS"
+										:key="flatModel"
+										:value="flatModel"
+									>
+										{{ optionLabel('flat_models', flatModel) }}
+									</option>
+								</select>
+								<span v-if="fieldErrors.flat_model" class="prediction-field-error">
+									{{ fieldErrors.flat_model }}
+								</span>
+							</div>
+
+							<div class="prediction-field-full">
+								<label class="prediction-field-label" for="input-floor_area">
+									{{ tr('floor_area') }}
+								</label>
+								<div class="prediction-unit-wrap">
+									<input
+										id="input-floor_area"
+										type="number"
+										class="prediction-field-input"
+										min="20"
+										max="300"
+										step="1"
+										:value="form.floor_area_sqm"
+										:placeholder="tr('enter_floor_area')"
+										@input="
+											updateField(
+												'floor_area_sqm',
+												Number(($event.target as HTMLInputElement).value)
+											)
+										"
+									>
+									<span class="prediction-unit-tag">m²</span>
+								</div>
+								<span v-if="fieldErrors.floor_area_sqm" class="prediction-field-error">
+									{{ fieldErrors.floor_area_sqm }}
+								</span>
+							</div>
+
+							<div class="prediction-field-full">
+								<label class="prediction-field-label" for="input-lease_year">
+									{{ tr('lease_commence_date') }}
+								</label>
+								<select
+									id="input-lease_year"
+									class="prediction-field-select"
+									:value="form.lease_commence_date"
+									@change="
+										updateField(
+											'lease_commence_date',
+											Number(($event.target as HTMLSelectElement).value)
+										)
+									"
+								>
+									<option v-for="year in YEAR_OPTIONS" :key="year" :value="year">
+										{{ year }}
+									</option>
+								</select>
+								<span v-if="fieldErrors.lease_commence_date" class="prediction-field-error">
+									{{ fieldErrors.lease_commence_date }}
+								</span>
+							</div>
+
+							<div class="prediction-button-row">
+								<button
+									type="submit"
+									class="prediction-btn-primary"
+									:class="{ 'prediction-loading-pulse': loading }"
+									:disabled="loading"
+								>
+									{{ loading ? tr('predicting') : tr('get_prediction') }}
+								</button>
+								<button
+									type="button"
+									class="prediction-btn-reset"
+									:disabled="loading"
+									@click="emit('reset')"
+								>
+									{{ tr('reset_form') }}
+								</button>
+							</div>
+						</div>
+
+						<p v-if="errorMessage" class="prediction-error-banner" role="alert">
+							{{ errorMessage }}
+						</p>
+					</form>
+				</div>
+			</div>
 		</div>
-	</el-card>
+	</section>
 </template>
