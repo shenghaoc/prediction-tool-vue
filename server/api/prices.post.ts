@@ -1,10 +1,12 @@
 /// <reference types="@cloudflare/workers-types" />
 
-import { FLAT_MODELS, ML_MODELS, STOREY_RANGES, TOWNS } from '~/utils/lists';
+import { FLAT_MODELS, ML_MODELS, MONTHS, STOREY_RANGES, TOWNS } from '~/utils/lists';
 import type { FlatModel, MLModel, StoreyRange, Town } from '~/utils/lists';
 
 const DEFAULT_PREDICTION_MONTH_START = '2021-02';
 const DEFAULT_PREDICTION_MONTH_END = '2022-02';
+const MAX_LEASE_COMMENCE_YEAR = Number.parseInt(MONTHS[MONTHS.length - 1].slice(0, 4), 10);
+const MIN_LEASE_COMMENCE_YEAR = 1960;
 
 type NormalizedRequest = {
 	mlModel: MLModel;
@@ -85,10 +87,13 @@ function normalizePredictionRequest(
 	if (
 		typeof leaseCommenceYear !== 'number' ||
 		!Number.isInteger(leaseCommenceYear) ||
-		leaseCommenceYear < 1960 ||
-		leaseCommenceYear > 2022
+		leaseCommenceYear < MIN_LEASE_COMMENCE_YEAR ||
+		leaseCommenceYear > MAX_LEASE_COMMENCE_YEAR
 	) {
-		return { ok: false, error: `Lease commence year must be between 1960 and 2022.` };
+		return {
+			ok: false,
+			error: `Lease commence year must be between ${MIN_LEASE_COMMENCE_YEAR} and ${MAX_LEASE_COMMENCE_YEAR}.`
+		};
 	}
 
 	return {
