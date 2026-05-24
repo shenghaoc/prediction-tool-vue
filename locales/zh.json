@@ -6,7 +6,7 @@
   "intro_caption": "快速测试不同城镇、户型、楼层与租约组合。",
   "prediction_form": "预测表单",
   "ml_model": "机器学习模型",
-  "choose_ml_model": "请选择机器学习模型！",
+  "missing_ml_model": "请选择机器学习模型！",
   "town": "镇",
   "missing_town": "请选择镇！",
   "storey_range": "楼层范围",

@@ -6,7 +6,7 @@
   "intro_caption": "Fast scenario testing for layout, lease, and town combinations.",
   "prediction_form": "Prediction Form",
   "ml_model": "ML Model",
-  "choose_ml_model": "Please choose an ML Model!",
+  "missing_ml_model": "Missing ML Model!",
   "town": "Town",
   "missing_town": "Missing Town!",
   "storey_range": "Storey Range",
