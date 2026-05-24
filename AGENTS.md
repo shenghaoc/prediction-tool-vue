@@ -4,20 +4,19 @@
 
 ### Overview
 
-This is a single Nuxt 4 / Vue 3 frontend application — an HDB resale flat price prediction tool. There is no backend service in this repo; predictions come from an external Cloudflare Worker API.
+This is a Nuxt 4 / Vue 3 HDB resale flat price prediction tool. Prediction logic runs in a Nuxt server route (`server/api/prices.post.ts`) that queries a Cloudflare D1 database directly — there is no external backend.
 
 ### Running the app
 
-- **Package manager**: Bun (lockfile: `bun.lock`)
-- **Setup**: `bun install` && `bun run nuxt prepare`
-- **Dev server**: `bun run dev` → http://localhost:3000
-- **Lint**: `bun run lint`
-- **Build**: `bun run build`
+- **Package manager**: npm (lockfile: `package-lock.json`)
+- **Setup**: `npm install` && `npm run dev`
+- **Dev server**: `npm run dev` → http://localhost:3000
+- **Lint**: `npm run lint`
+- **Build**: `npm run build`
 
 ### Important caveats
 
-- ESLint config imports from `.nuxt/eslint.config.mjs`. If you get `ERR_MODULE_NOT_FOUND` for that file, run `bun run nuxt prepare` to generate it.
+- ESLint config imports from `.nuxt/eslint.config.mjs`. If you get `ERR_MODULE_NOT_FOUND` for that file, run `npx nuxt prepare` to generate it.
 - The `tsconfig.json` extends `.nuxt/tsconfig.json` — same requirement applies for TypeScript tooling.
-- The prediction API endpoint (`https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices`) is external and called from the browser at runtime. No local backend setup is needed.
-- No database or Docker is required for local development.
-
+- The prediction API route (`/api/prices`) queries the Cloudflare D1 database (`ee4802-g20-tool-db`) directly via a Workers binding. In local dev without `wrangler`, the D1 binding is unavailable — use `npx wrangler dev` for full local integration, or run `npm run dev` for frontend-only work.
+- No Docker or external database setup is required for local development.

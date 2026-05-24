@@ -7,7 +7,6 @@ import { translate, type Language } from '~/utils/i18n';
 import {
 	defaultTrendData,
 	getPredictionTheme,
-	getPredictionWindow,
 	initialFormValues,
 	MAX_LEASE_COMMENCE_YEAR,
 	normalizePrice,
@@ -221,22 +220,19 @@ async function handleSubmit() {
 	};
 
 	try {
-		const { monthStart, monthEnd } = getPredictionWindow();
 		const floorArea = Math.max(20, Math.min(300, Math.round(form.value.floor_area_sqm)));
-		const formData = new FormData();
 
-		formData.append('model', form.value.ml_model);
-		formData.append('monthStart', monthStart);
-		formData.append('monthEnd', monthEnd);
-		formData.append('town', form.value.town);
-		formData.append('storeyRange', form.value.storey_range);
-		formData.append('flatModel', form.value.flat_model);
-		formData.append('floorAreaSqm', String(floorArea));
-		formData.append('leaseCommenceYear', String(form.value.lease_commence_date));
-
-		const response = await fetch('https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices', {
+		const response = await fetch('/api/prices', {
 			method: 'POST',
-			body: formData
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				mlModel: form.value.ml_model,
+				town: form.value.town,
+				storeyRange: form.value.storey_range,
+				flatModel: form.value.flat_model,
+				floorAreaSqm: floorArea,
+				leaseCommenceYear: form.value.lease_commence_date
+			})
 		});
 
 		if (!response.ok) {

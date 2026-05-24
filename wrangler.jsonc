@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "prediction-tool-vue",
+	"main": ".output/server/index.mjs",
+	"compatibility_date": "2026-05-24",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".output/public",
+		"binding": "ASSETS"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "ee4802-g20-tool-db",
+			"database_id": "4e17ff7b-2af8-40fe-bb1c-2a6bc5b4199f"
+		}
+	]
+}
