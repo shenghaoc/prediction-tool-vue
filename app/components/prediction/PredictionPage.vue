@@ -101,14 +101,21 @@ return;
 }
 
 try {
-const isDark = localStorage.getItem('theme') === 'dark';
-darkMode.value = isDark;
+darkMode.value = localStorage.getItem('theme') === 'dark';
+} catch {
+/* storage unavailable */
+}
 
+try {
 const savedLang = localStorage.getItem('lang');
 if (savedLang === 'en' || savedLang === 'zh') {
 currentLang.value = savedLang;
 }
+} catch {
+/* storage unavailable */
+}
 
+try {
 const savedForm = localStorage.getItem('form');
 if (!savedForm) {
 return;

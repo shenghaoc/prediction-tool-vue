@@ -159,7 +159,7 @@ const leaseYearOptions = computed(() =>
 			role="progressbar"
 			:aria-label="tr('predicting')"
 		>
-			<div class="progress-bar" style="width: 60%" />
+			<div class="progress-bar" />
 		</div>
 
 		<div
