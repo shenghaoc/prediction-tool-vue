@@ -2,9 +2,10 @@
 
 import { FLAT_MODELS, ML_MODELS, MONTHS, STOREY_RANGES, TOWNS } from '~/utils/lists';
 import type { FlatModel, MLModel, StoreyRange, Town } from '~/utils/lists';
+import { getPredictionWindow } from '~/utils/prediction';
 
-const DEFAULT_PREDICTION_MONTH_START = '2021-02';
-const DEFAULT_PREDICTION_MONTH_END = '2022-02';
+const { monthStart: DEFAULT_PREDICTION_MONTH_START, monthEnd: DEFAULT_PREDICTION_MONTH_END } =
+	getPredictionWindow();
 const MAX_LEASE_COMMENCE_YEAR = Number.parseInt(MONTHS[MONTHS.length - 1].slice(0, 4), 10);
 const MIN_LEASE_COMMENCE_YEAR = 1960;
 
@@ -173,7 +174,7 @@ export default defineEventHandler(async (event) => {
 		const [first] = results;
 		if (!first) {
 			throw createError({
-				statusCode: 500,
+				statusCode: 404,
 				statusMessage: 'No prediction data found for the given parameters.'
 			});
 		}
