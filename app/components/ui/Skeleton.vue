@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-	<div :class="cn('animate-pulse rounded-md bg-primary/10', $props.class)">
+	<div :class="cn('rounded-md bg-primary/10', !$props.class?.includes('animate-') && 'animate-pulse', $props.class)">
 		<slot />
 	</div>
 </template>

@@ -27,7 +27,7 @@ const tileClasses = computed(() =>
 		<template #content>
 			<span class="max-w-[220px] text-center leading-relaxed">{{ hint }}</span>
 		</template>
-		<div :class="tileClasses.value">
+		<div :class="tileClasses">
 			<div
 				class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15 transition-all duration-300 group-hover/tile:bg-primary/15 group-hover/tile:ring-primary/25"
 				aria-hidden
@@ -45,7 +45,7 @@ const tileClasses = computed(() =>
 		</div>
 	</Tooltip>
 
-	<div v-else :class="tileClasses.value">
+	<div v-else :class="tileClasses">
 		<div
 			class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15 transition-all duration-300 group-hover/tile:bg-primary/15 group-hover/tile:ring-primary/25"
 			aria-hidden

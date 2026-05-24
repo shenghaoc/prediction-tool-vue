@@ -4,7 +4,6 @@ import {
 	TooltipArrow,
 	TooltipContent,
 	TooltipPortal,
-	TooltipProvider,
 	TooltipRoot,
 	TooltipTrigger
 } from 'radix-vue';
@@ -22,25 +21,23 @@ defineSlots<{
 </script>
 
 <template>
-	<TooltipProvider :delay-duration="delayDuration ?? 300">
-		<TooltipRoot>
-			<TooltipTrigger as-child>
-				<slot />
-			</TooltipTrigger>
-			<TooltipPortal>
-				<TooltipContent
-					:class="
-						cn(
-							'z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground',
-							contentClass
-						)
-					"
-					:side-offset="4"
-				>
-					<slot name="content" />
-					<TooltipArrow class="fill-primary" :width="8" :height="4" />
-				</TooltipContent>
-			</TooltipPortal>
-		</TooltipRoot>
-	</TooltipProvider>
+	<TooltipRoot :delay-duration="delayDuration ?? 300">
+		<TooltipTrigger as-child>
+			<slot />
+		</TooltipTrigger>
+		<TooltipPortal>
+			<TooltipContent
+				:class="
+					cn(
+						'z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground',
+						contentClass
+					)
+				"
+				:side-offset="4"
+			>
+				<slot name="content" />
+				<TooltipArrow class="fill-primary" :width="8" :height="4" />
+			</TooltipContent>
+		</TooltipPortal>
+	</TooltipRoot>
 </template>
