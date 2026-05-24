@@ -16,6 +16,7 @@
   "floor_area": "Floor Area",
   "missing_floor_area": "Missing Floor Area!",
   "floor_area_range": "Floor area must be between 20 and 300 m²",
+  "enter_floor_area": "Enter floor area",
   "lease_commence_date": "Lease Commence Date",
   "missing_lease_commence_date": "Missing Lease Commence Date!",
   "get_prediction": "Get prediction",
