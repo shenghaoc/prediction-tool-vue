@@ -100,6 +100,7 @@ if (!import.meta.client) {
 return;
 }
 
+try {
 const isDark = localStorage.getItem('theme') === 'dark';
 darkMode.value = isDark;
 
@@ -113,7 +114,6 @@ if (!savedForm) {
 return;
 }
 
-try {
 const parsed = JSON.parse(savedForm) as Partial<FieldType>;
 form.value = {
 ...initialFormValues,
@@ -125,7 +125,11 @@ parsed.lease_commence_date ?? initialFormValues.lease_commence_date
 };
 } catch {
 form.value = { ...initialFormValues };
+try {
 localStorage.removeItem('form');
+} catch {
+/* storage unavailable */
+}
 }
 }
 
@@ -308,13 +312,21 @@ loading.value = false;
 
 watch(currentLang, (value) => {
 if (isHydrated.value && import.meta.client) {
-localStorage.setItem('lang', value);
+try {
+	localStorage.setItem('lang', value);
+} catch {
+	/* storage unavailable */
+}
 }
 });
 
 watch(darkMode, (value) => {
 if (isHydrated.value && import.meta.client) {
-localStorage.setItem('theme', value ? 'dark' : 'light');
+try {
+	localStorage.setItem('theme', value ? 'dark' : 'light');
+} catch {
+	/* storage unavailable */
+}
 }
 });
 
