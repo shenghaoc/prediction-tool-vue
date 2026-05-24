@@ -2,7 +2,17 @@ export default defineNuxtConfig({
 	css: ['~/assets/styles/prediction.css'],
 	modules: ['@nuxt/eslint'],
 	nitro: {
-		preset: 'cloudflare-module'
+		preset: 'cloudflare-module',
+		routeRules: {
+			'/api/prices': {
+				cors: true,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'POST, OPTIONS',
+					'Access-Control-Allow-Headers': 'Content-Type'
+				}
+			}
+		}
 	},
 	app: {
 		head: {
