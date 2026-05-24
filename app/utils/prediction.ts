@@ -88,6 +88,10 @@ export function formatCurrencyTick(value: number) {
 	return `$${Math.round(value)}`;
 }
 
+export function trendDataHasValidPrices(points: TrendPoint[]): boolean {
+	return points.some((point) => point.value > 0);
+}
+
 export function getPredictionTheme(darkMode: boolean) {
 	if (darkMode) {
 		return {
