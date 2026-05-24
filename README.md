@@ -13,9 +13,9 @@ The app lets a user enter a flat profile and get:
 
 `prediction-tool` is the original repository and the React / Next.js implementation of the project. This repository is the Nuxt / Vue port.
 
-The original project was built for an EE4802 minor project and uses regression models only. There is no Python model-serving backend in this repo. The frontend submits form data to the existing prediction API endpoint and renders the returned trend data.
+The original project was built for an EE4802 minor project and uses regression models only. There is no Python model-serving backend. The frontend submits a JSON request to the local `/api/prices` server route, which queries a Cloudflare D1 database directly using the pre-trained model coefficients and returns predicted prices.
 
-Because of the way the original project data/model pipeline works, the tool does not forecast arbitrary future dates. It works against the fixed prediction window exposed by the upstream API.
+Because of the way the original project data/model pipeline works, the tool does not forecast arbitrary future dates. It works against the fixed prediction window backed by the D1 database.
 
 ## Stack
 
@@ -25,17 +25,19 @@ Because of the way the original project data/model pipeline works, the tool does
 - ESLint
 - custom CSS design system (DM Sans + Lora, glassmorphic UI)
 - Chart.js via `vue-chartjs` wrapper
+- Cloudflare Workers (Nitro `cloudflare-module` preset)
+- Cloudflare D1 (prediction model coefficients)
 
 ## App Structure
 
-This repo now follows the canonical Nuxt `app/` layout:
-
+- [server/api/prices.post.ts](./server/api/prices.post.ts) — prediction API route (D1 query)
 - [app/app.vue](./app/app.vue)
 - [app/pages/index.vue](./app/pages/index.vue)
 - [app/components/prediction](./app/components/prediction)
 - [app/utils](./app/utils)
 - [app/assets/styles/prediction.css](./app/assets/styles/prediction.css)
 - [locales](./locales)
+- [wrangler.jsonc](./wrangler.jsonc) — Cloudflare Workers config with D1 binding
 
 ## Development
 
@@ -51,10 +53,16 @@ Start the development server:
 npm run dev
 ```
 
-The default local URL is usually:
+The default local URL is:
 
 ```text
 http://localhost:3000
+```
+
+For local development with D1 bindings, use wrangler:
+
+```bash
+npx wrangler dev
 ```
 
 ## Scripts
@@ -67,12 +75,19 @@ npm run lint
 npm run lint:fix
 ```
 
+## Deployment
+
+The app is deployed to Cloudflare Workers via the Nitro `cloudflare-module` preset:
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+The D1 database binding (`DB`) maps to `ee4802-g20-tool-db`.
+
 ## Notes
 
-- The prediction request is sent to `https://ee4802-g20-tool.shenghaoc.workers.dev/api/prices`.
+- The prediction request is sent to the local `/api/prices` server route, which queries D1 directly.
 - Theme, language, and form values are persisted locally in the browser.
-- The chart is rendered with `vue-chartjs` (framework-native Vue wrapper around Chart.js) instead of manual Chart.js lifecycle code.
-
-## Status
-
-This is no longer the default Nuxt starter. The repository has been converted into a project-specific Nuxt / Vue implementation of the original `prediction-tool` app.
+- The chart is rendered with `vue-chartjs` (framework-native Vue wrapper around Chart.js).
