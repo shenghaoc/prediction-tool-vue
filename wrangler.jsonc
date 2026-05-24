@@ -2,6 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "ee4802-g20-tool-vue",
 	"main": ".output/server/index.mjs",
+	"workers_dev": true,
 	"compatibility_date": "2026-05-24",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"assets": {
