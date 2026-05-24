@@ -23,11 +23,11 @@ const tileClasses = computed(() =>
 </script>
 
 <template>
-	<Tooltip v-if="hint">
-		<template #content>
+	<component :is="hint ? Tooltip : 'div'" v-bind="hint ? {} : { class: tileClasses.value }">
+		<template v-if="hint" #content>
 			<span class="max-w-[220px] text-center leading-relaxed">{{ hint }}</span>
 		</template>
-		<div :class="tileClasses.value">
+		<div :class="hint ? tileClasses.value : undefined">
 			<div
 				class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15 transition-all duration-300 group-hover/tile:bg-primary/15 group-hover/tile:ring-primary/25"
 				aria-hidden
@@ -43,22 +43,5 @@ const tileClasses = computed(() =>
 				</strong>
 			</div>
 		</div>
-	</Tooltip>
-
-	<div v-else :class="tileClasses.value">
-		<div
-			class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15 transition-all duration-300 group-hover/tile:bg-primary/15 group-hover/tile:ring-primary/25"
-			aria-hidden
-		>
-			<component :is="icon" class="size-5 text-primary" />
-		</div>
-		<div class="flex min-w-0 flex-col gap-0.5">
-			<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-				{{ label }}
-			</span>
-			<strong class="font-heading text-xl font-extrabold tabular-nums tracking-tight text-primary">
-				{{ value }}
-			</strong>
-		</div>
-	</div>
+	</component>
 </template>
