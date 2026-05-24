@@ -141,9 +141,3 @@ export const MONTHS = [
 	'2022-02'
 ] as const;
 export type Month = (typeof MONTHS)[number];
-
-export const ml_model_list = ML_MODELS;
-export const town_list = TOWNS;
-export const storey_range_list = STOREY_RANGES;
-export const flat_model_list = FLAT_MODELS;
-export const month_list = MONTHS;
