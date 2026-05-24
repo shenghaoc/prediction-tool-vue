@@ -98,7 +98,7 @@ function validateForm() {
 	const values = form.value;
 
 	if (!values.ml_model) {
-		fieldErrors.ml_model = tr('choose_ml_model');
+		fieldErrors.ml_model = tr('missing_ml_model');
 	}
 
 	if (!values.town) {
