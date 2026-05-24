@@ -104,7 +104,7 @@ const leaseYearOptions = computed(() =>
 						:min="20"
 						:max="300"
 						:step="1"
-						:model-value="String(form.floor_area_sqm)"
+						:model-value="Number.isNaN(form.floor_area_sqm) ? '' : String(form.floor_area_sqm)"
 						:placeholder="tr('enter_floor_area')"
 						class="h-10 rounded-r-none rounded-l-lg border border-border/60 bg-card px-3 shadow-none transition-colors duration-200 focus-visible:border-primary/40"
 						@input="

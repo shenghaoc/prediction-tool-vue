@@ -22,6 +22,7 @@ const emit = defineEmits<{
 <template>
 	<Field :label="label" :label-for="labelFor" :error="error" :hint="hint" :class="cn($props.class)">
 		<Select
+			:id="labelFor"
 			:model-value="modelValue"
 			:placeholder="placeholder"
 			:items="items"

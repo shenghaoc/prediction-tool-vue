@@ -109,6 +109,9 @@ html {
 		opacity: 0.55;
 	}
 	50% {
+		opacity: 0.8;
+	}
+	to {
 		opacity: 0.55;
 	}
 }
