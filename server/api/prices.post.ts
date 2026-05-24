@@ -215,10 +215,7 @@ export default defineEventHandler(async (event) => {
 		console.error(error);
 		throw createError({
 			statusCode: 500,
-			statusMessage:
-				error instanceof Error && error.message
-					? error.message
-					: 'Prediction service unavailable.'
+			statusMessage: 'Prediction service unavailable.'
 		});
 	}
 });
