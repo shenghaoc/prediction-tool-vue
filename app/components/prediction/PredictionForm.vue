@@ -107,7 +107,14 @@ const leaseYearOptions = computed(() =>
 						:model-value="String(form.floor_area_sqm)"
 						:placeholder="tr('enter_floor_area')"
 						class="h-10 rounded-r-none rounded-l-lg border border-border/60 bg-card px-3 shadow-none transition-colors duration-200 focus-visible:border-primary/40"
-						@input="updateField('floor_area_sqm', Number(($event.target as HTMLInputElement).value))"
+						@input="
+							updateField(
+								'floor_area_sqm',
+								($event.target as HTMLInputElement).value === ''
+									? Number.NaN
+									: Number(($event.target as HTMLInputElement).value)
+							)
+						"
 					/>
 					<span
 						class="inline-flex h-10 items-center rounded-r-lg border border-l-0 border-border/60 bg-muted px-3 text-xs font-semibold text-muted-foreground transition-colors duration-200"

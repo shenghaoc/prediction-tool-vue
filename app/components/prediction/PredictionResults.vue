@@ -14,7 +14,6 @@ import type { PredictionTheme, SummaryValues, TrendPoint } from '~/utils/predict
 
 const props = defineProps<{
 output: number;
-hasPrediction: boolean;
 loading: boolean;
 summaryValues: SummaryValues;
 trendData: TrendPoint[];

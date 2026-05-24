@@ -29,7 +29,6 @@ type FieldType
 
 const form = ref<FieldType>({ ...initialFormValues });
 const output = ref(0);
-const hasPrediction = computed(() => output.value > 0);
 const trendData = ref(defaultTrendData());
 const loading = ref(false);
 const errorMessage = ref('');
@@ -464,7 +463,6 @@ v-for="figure in figures"
 <div>
 <PredictionResults
 :output="output"
-:has-prediction="hasPrediction"
 :loading="loading"
 :summary-values="summaryValues"
 :trend-data="trendData"

@@ -12,10 +12,11 @@ defineProps<
 
 <template>
 	<Separator
+		:orientation="orientation ?? 'horizontal'"
 		:class="
 			cn(
 				'shrink-0 bg-border',
-				orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
+				(orientation ?? 'horizontal') === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
 				$props.class
 			)
 		"
