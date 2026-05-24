@@ -180,9 +180,19 @@ async function getApiErrorMessage(response: Response) {
 	}
 
 	try {
-		const parsed = JSON.parse(body) as
-			| { error?: string }
-			| { error?: { message?: string } };
+		const parsed = JSON.parse(body) as {
+			error?: string | { message?: string };
+			statusMessage?: string;
+			message?: string;
+		};
+
+		if (typeof parsed.statusMessage === 'string' && parsed.statusMessage.trim()) {
+			return parsed.statusMessage;
+		}
+
+		if (typeof parsed.message === 'string' && parsed.message.trim()) {
+			return parsed.message;
+		}
 
 		if (typeof parsed.error === 'string' && parsed.error.trim()) {
 			return parsed.error;

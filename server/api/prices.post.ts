@@ -204,6 +204,9 @@ export default defineEventHandler(async (event) => {
 
 		return { predictions };
 	} catch (error: unknown) {
+		if (error instanceof Error && 'statusCode' in error) {
+			throw error;
+		}
 		console.error(error);
 		throw createError({
 			statusCode: 500,
