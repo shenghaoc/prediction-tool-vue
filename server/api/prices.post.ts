@@ -110,7 +110,10 @@ export default defineEventHandler(async (event) => {
 	try {
 		requestBody = await readBody(event);
 	} catch {
-		return { error: 'Invalid JSON request body.' };
+		throw createError({
+			statusCode: 400,
+			statusMessage: 'Invalid JSON request body.'
+		});
 	}
 
 	const normalizedRequest = normalizePredictionRequest(requestBody);
@@ -125,7 +128,10 @@ export default defineEventHandler(async (event) => {
 		normalizedRequest.value;
 
 	try {
-		const db = event.context.cloudflare.env.DB as D1Database;
+		const db = event.context.cloudflare?.env?.DB as D1Database | undefined;
+		if (!db) {
+			throw new Error('Cloudflare D1 binding is not available.');
+		}
 		const { results } = await db
 			.prepare(
 				`SELECT
