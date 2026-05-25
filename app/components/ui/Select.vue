@@ -18,7 +18,6 @@ import {
 import { Check, ChevronDown, ChevronUp } from '@lucide/vue';
 
 defineProps<{
-	class?: string;
 	id?: string;
 	triggerClass?: string;
 	contentClass?: string;

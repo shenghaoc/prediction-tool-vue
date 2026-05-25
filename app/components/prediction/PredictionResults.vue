@@ -127,7 +127,8 @@ hasOutput && 'text-primary animate-settle'
 <div class="relative flex flex-col gap-5 px-6">
 <ResultsSkeleton v-if="showSkeleton" />
 <template v-else>
-<div class="grid grid-cols-3 gap-2.5 max-sm:grid-cols-1">
+<template v-if="hasOutput">
+	<div class="grid grid-cols-3 gap-2.5 max-sm:grid-cols-1">
 <div
 v-for="(item, i) in summaryItems"
 :key="item.label"
@@ -149,8 +150,7 @@ aria-hidden
 </div>
 </div>
 
-<template v-if="hasOutput">
-<Separator />
+	<Separator />
 <div class="animate-fade-in">
 <p class="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 {{ tr('predicted_trends') }}
