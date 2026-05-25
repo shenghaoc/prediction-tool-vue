@@ -76,6 +76,10 @@ hint: 'stat_types_hint'
 }
 ];
 
+function tr(key: string) {
+return translate(currentLang.value, key);
+}
+
 useHead(() => ({
 title: tr('price_prediction').replace('\n', ' '),
 htmlAttrs: {
@@ -83,10 +87,6 @@ lang: currentLang.value,
 class: darkMode.value ? 'dark' : ''
 }
 }));
-
-function tr(key: string) {
-return translate(currentLang.value, key);
-}
 
 function clearErrors() {
 for (const key of Object.keys(fieldErrors) as Array<keyof FieldType>) {

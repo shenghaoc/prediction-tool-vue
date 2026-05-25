@@ -45,7 +45,6 @@
   "chart_delta": "12个月变化",
   "vs_12m_ago": "对比12个月前",
   "prediction": "预测",
-  "prediction_success": "预测完成！向下滚动查看结果。",
   "predicted_price": "预测价格",
   "ml_models": {
     "Support Vector Regression": "支持向量回归",
