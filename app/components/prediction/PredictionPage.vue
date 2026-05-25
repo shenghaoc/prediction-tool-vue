@@ -120,15 +120,20 @@ if (!savedForm) {
 return;
 }
 
-const parsed = JSON.parse(savedForm) as Partial<FieldType>;
+const parsed = JSON.parse(savedForm);
+if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+const data = parsed as Partial<FieldType>;
 form.value = {
 ...initialFormValues,
-...parsed,
-floor_area_sqm: Number(parsed.floor_area_sqm ?? initialFormValues.floor_area_sqm),
+...data,
+floor_area_sqm: Number(data.floor_area_sqm ?? initialFormValues.floor_area_sqm),
 lease_commence_date: Number(
-parsed.lease_commence_date ?? initialFormValues.lease_commence_date
+	data.lease_commence_date ?? initialFormValues.lease_commence_date
 )
 };
+} else {
+throw new Error('Invalid stored form data');
+}
 } catch {
 form.value = { ...initialFormValues };
 try {
