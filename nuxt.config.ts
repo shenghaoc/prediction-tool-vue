@@ -1,6 +1,11 @@
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineNuxtConfig({
-	css: ['~/assets/styles/prediction.css'],
+	css: ['~/assets/styles/globals.css'],
 	modules: ['@nuxt/eslint'],
+	vite: {
+		plugins: [tailwindcss()]
+	},
 	nitro: {
 		preset: 'cloudflare-module'
 	},
