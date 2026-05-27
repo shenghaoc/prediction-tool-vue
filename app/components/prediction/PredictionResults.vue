@@ -76,9 +76,6 @@ icon: Home
 	<!-- Header: title + price badge -->
 	<div class="flex flex-row items-start justify-between gap-4 px-5 py-4 max-sm:flex-col">
 		<div>
-			<p class="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-				{{ tr('prediction') }}
-			</p>
 			<h2
 				id="prediction-results-heading"
 				class="font-sans text-xl font-extrabold tracking-tight normal-case"

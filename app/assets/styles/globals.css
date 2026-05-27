@@ -6,8 +6,6 @@
 	/* ── Font stacks — Source Sans 3 only (all-sans, TDesign-aligned) ── */
 	--font-sans: 'Source Sans 3', 'Source Sans Pro', 'Helvetica Neue', 'Segoe UI', Arial,
 		sans-serif;
-	/* heading uses same family at heavier weights — no serif */
-	--font-heading: 'Source Sans 3', 'Source Sans Pro', 'Helvetica Neue', sans-serif;
 	--font-cjk:
 		'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
 
