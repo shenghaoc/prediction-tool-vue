@@ -1,20 +1,7 @@
 /* ==========================================================
    Minimal custom CSS — only what Tailwind v4 cannot express.
-   @keyframes, scrollbar, ::selection, and @property.
+   @keyframes, scrollbar, and ::selection.
    ========================================================== */
-
-/* ── Typed custom properties ─────────────────────────────────────────── */
-@property --gap-multiplier {
-	syntax: '<number>';
-	inherits: false;
-	initial-value: 0.5;
-}
-
-@property --progress {
-	syntax: '<percentage>';
-	inherits: false;
-	initial-value: 0%;
-}
 
 /* ── Reset ───────────────────────────────────────────────────────────── */
 *,
@@ -147,16 +134,6 @@ html {
 	}
 }
 
-@keyframes float {
-	0%,
-	100% {
-		transform: translateY(0px);
-	}
-	50% {
-		transform: translateY(-6px);
-	}
-}
-
 @keyframes empty-float {
 	0%,
 	100% {
@@ -170,19 +147,10 @@ html {
 	}
 }
 
-/* ── Starting-style — CSS-only entrance animations ───────────────────── */
-@starting-style {
-	.animate-enter {
-		opacity: 0;
-		transform: translateY(8px);
-	}
-}
-
 /* ── Reduced motion ──────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
 	.animate-fade-in,
 	.animate-fade-in-deep,
-	.animate-enter,
 	.animate-pulse,
 	.animate-settle,
 	.animate-stagger {
@@ -295,48 +263,6 @@ html {
 		color-mix(in oklab, var(--primary) 70%, var(--chart-2))
 	);
 	animation: progress-indeterminate 1.8s ease-in-out infinite;
-}
-
-/* ── Chart tooltip ───────────────────────────────────────────────────── */
-.chart-tooltip {
-	position: absolute;
-	z-index: 10;
-	min-width: 8rem;
-	padding: 8px 12px;
-	border-radius: var(--radius-lg);
-	border: 1px solid color-mix(in oklab, var(--border) 50%, transparent);
-	background: var(--popover);
-	color: var(--popover-foreground);
-	box-shadow:
-		0 4px 6px color-mix(in oklab, var(--foreground) 4%, transparent),
-		0 12px 28px color-mix(in oklab, var(--foreground) 10%, transparent);
-	pointer-events: none;
-	white-space: nowrap;
-	transform: translate(-50%, calc(-100% - 12px));
-	opacity: 0;
-	transition:
-		opacity 120ms ease,
-		transform 120ms ease;
-}
-.chart-tooltip.visible {
-	transform: translate(-50%, calc(-100% - 14px));
-	opacity: 1;
-}
-
-.chart-tooltip-label {
-	display: block;
-	font-size: 10px;
-	font-weight: 700;
-	color: var(--muted-foreground);
-	text-transform: uppercase;
-	letter-spacing: 1.2px;
-}
-
-.chart-tooltip-value {
-	display: block;
-	margin-top: 4px;
-	font-size: 14px;
-	font-weight: 600;
 }
 
 /* ── Empty state float ───────────────────────────────────────────────── */
