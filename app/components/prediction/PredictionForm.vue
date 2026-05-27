@@ -166,6 +166,8 @@ const leaseYearOptions = computed(() =>
 			class="progress-track"
 			role="progressbar"
 			:aria-label="tr('predicting')"
+			aria-valuemin="0"
+			aria-valuemax="100"
 		>
 			<div class="progress-bar" />
 		</div>
