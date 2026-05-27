@@ -14,8 +14,8 @@ const props = defineProps<{
 
 const tileClasses = computed(() =>
 	cn(
-		'group/tile flex items-center gap-3 rounded-xl border border-border/60 bg-card/90 p-4 shadow-sm transition-all duration-300',
-		'hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md hover:shadow-primary/5',
+		'group/tile flex items-center gap-2.5 rounded-sm border border-border bg-card/90 px-3 py-2 transition-all duration-200',
+		'hover:-translate-y-px hover:border-primary/20',
 		props.hint && 'cursor-help',
 		props.class
 	)
@@ -29,16 +29,16 @@ const tileClasses = computed(() =>
 		</template>
 		<div :class="tileClasses">
 			<div
-				class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15 transition-all duration-300 group-hover/tile:bg-primary/15 group-hover/tile:ring-primary/25"
+				class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"
 				aria-hidden
 			>
-				<component :is="icon" class="size-5 text-primary" />
+				<component :is="icon" class="size-4 text-primary" />
 			</div>
 			<div class="flex min-w-0 flex-col gap-0.5">
 				<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 					{{ label }}
 				</span>
-				<strong class="font-heading text-xl font-extrabold tabular-nums tracking-tight text-primary">
+				<strong class="font-sans text-base font-extrabold tabular-nums tracking-tight text-primary">
 					{{ value }}
 				</strong>
 			</div>
@@ -47,16 +47,16 @@ const tileClasses = computed(() =>
 
 	<div v-else :class="tileClasses">
 		<div
-			class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/15 transition-all duration-300 group-hover/tile:bg-primary/15 group-hover/tile:ring-primary/25"
+			class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"
 			aria-hidden
 		>
-			<component :is="icon" class="size-5 text-primary" />
+			<component :is="icon" class="size-4 text-primary" />
 		</div>
 		<div class="flex min-w-0 flex-col gap-0.5">
 			<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 				{{ label }}
 			</span>
-			<strong class="font-heading text-xl font-extrabold tabular-nums tracking-tight text-primary">
+			<strong class="font-sans text-base font-extrabold tabular-nums tracking-tight text-primary">
 				{{ value }}
 			</strong>
 		</div>

@@ -52,7 +52,7 @@ const leaseYearOptions = computed(() =>
 </script>
 
 <template>
-	<form class="flex flex-col gap-6" @submit.prevent="emit('submit')">
+	<form class="flex flex-col gap-4" @submit.prevent="emit('submit')">
 		<FormSelect
 			:label="tr('ml_model')"
 			label-for="input-ml_model"
@@ -63,7 +63,7 @@ const leaseYearOptions = computed(() =>
 			@update:model-value="updateField('ml_model', $event as FieldType['ml_model'])"
 		/>
 
-		<div class="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
+		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
 			<FormSelect
 				:label="tr('town')"
 				label-for="input-town"
@@ -92,10 +92,10 @@ const leaseYearOptions = computed(() =>
 				@update:model-value="updateField('flat_model', $event as FieldType['flat_model'])"
 			/>
 			<div class="grid gap-1.5">
-				<label for="input-floor_area" class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+				<label for="input-floor_area" class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 					{{ tr('floor_area') }}
 				</label>
-				<div class="flex rounded-lg shadow-sm transition-shadow duration-200 focus-within:shadow-md focus-within:shadow-primary/10">
+				<div class="flex">
 					<Input
 						id="input-floor_area"
 						type="number"
@@ -107,7 +107,7 @@ const leaseYearOptions = computed(() =>
 						:model-value="Number.isNaN(form.floor_area_sqm) ? '' : String(form.floor_area_sqm)"
 						:placeholder="tr('enter_floor_area')"
 						:error="fieldErrors.floor_area_sqm"
-						class="h-10 rounded-r-none rounded-l-lg border border-border/60 bg-card px-3 shadow-none transition-colors duration-200 focus-visible:border-primary/40"
+						class="relative rounded-r-none border-r-0 focus-visible:z-10"
 						@input="
 							updateField(
 								'floor_area_sqm',
@@ -118,7 +118,7 @@ const leaseYearOptions = computed(() =>
 						"
 					/>
 					<span
-						class="inline-flex h-10 items-center rounded-r-lg border border-l-0 border-border/60 bg-muted px-3 text-xs font-semibold text-muted-foreground transition-colors duration-200"
+						class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
 					>
 						<span class="sr-only">{{ tr('floor_area_unit') }}</span>
 						<span aria-hidden>m²</span>
@@ -140,11 +140,11 @@ const leaseYearOptions = computed(() =>
 			@update:model-value="updateField('lease_commence_date', Number($event))"
 		/>
 
-		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
+		<div class="grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
 			<Button
 				type="submit"
-				size="lg"
-				class="w-full normal-case tracking-normal shadow-md shadow-primary/20 transition-all duration-200 hover:shadow-lg hover:shadow-primary/25 hover:brightness-110"
+				size="default"
+				class="w-full normal-case tracking-normal"
 				:disabled="loading"
 			>
 				<Loader2 v-if="loading" class="size-4 animate-spin" aria-hidden />
@@ -153,8 +153,8 @@ const leaseYearOptions = computed(() =>
 			<Button
 				type="button"
 				variant="outline"
-				size="lg"
-				class="w-full normal-case tracking-normal transition-all duration-200 hover:bg-muted/80"
+				size="default"
+				class="w-full normal-case tracking-normal"
 				@click="emit('reset')"
 			>
 				{{ tr('reset_form') }}
@@ -166,13 +166,15 @@ const leaseYearOptions = computed(() =>
 			class="progress-track"
 			role="progressbar"
 			:aria-label="tr('predicting')"
+			aria-valuemin="0"
+			aria-valuemax="100"
 		>
 			<div class="progress-bar" />
 		</div>
 
 		<div
 			v-if="errorMessage && !loading"
-			class="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+			class="rounded-sm border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm text-destructive"
 			role="alert"
 		>
 			{{ errorMessage }}

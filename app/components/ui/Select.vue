@@ -37,7 +37,7 @@ const emit = defineEmits<{
 			:id="id"
 			:class="
 				cn(
-					'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:truncate',
+					'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-card px-3 py-1 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:truncate',
 					triggerClass
 				)
 			"
@@ -50,7 +50,7 @@ const emit = defineEmits<{
 			<SelectContent
 				:class="
 					cn(
-						'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-md',
+						'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md',
 						contentClass
 					)
 				"

@@ -120,7 +120,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
 				maxRotation: 0,
 				autoSkipPadding: 18,
 				font: {
-					family: "'DM Sans', 'Segoe UI', sans-serif",
+					family: "'Source Sans 3', 'Segoe UI', sans-serif",
 					size: isMobile.value ? 11 : 12
 				}
 			}
@@ -135,7 +135,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
 				color: props.theme.textMuted,
 				callback: (value) => formatCurrencyTick(Number(value)),
 				font: {
-					family: "'DM Sans', 'Segoe UI', sans-serif",
+					family: "'Source Sans 3', 'Segoe UI', sans-serif",
 					size: isMobile.value ? 11 : 12
 				}
 			}
