@@ -185,7 +185,7 @@ icon: Home
 					</div>
 
 					<!-- Chart -->
-					<div class="min-h-[240px] overflow-hidden rounded-sm border border-border/60 bg-secondary/20 p-2">
+					<div class="min-h-[240px] overflow-hidden rounded-sm border border-border bg-secondary/20 p-2">
 						<ClientOnly>
 							<PriceTrendChart :data="trendData" :theme="theme" />
 							<template #fallback>
