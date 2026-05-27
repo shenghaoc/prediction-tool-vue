@@ -474,9 +474,16 @@ document.documentElement.classList.add('theme-ready');
 
 <!-- Pre-hydration skeleton — plain, no animations to prevent flash -->
 <main v-else class="min-h-screen px-6 pb-10 pt-4" aria-busy="true">
-<div class="mx-auto max-w-7xl space-y-4">
-	<Skeleton class="animate-shimmer h-9 w-full max-w-sm rounded-sm" />
-	<div class="grid grid-cols-2 gap-4 max-[860px]:grid-cols-1">
+<div class="mx-auto max-w-7xl">
+	<!-- Header skeleton — matches real header dimensions to prevent CLS -->
+	<div class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-border bg-background/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0">
+		<Skeleton class="animate-shimmer h-5 w-24 rounded-sm" />
+		<div class="flex items-center gap-2">
+			<Skeleton class="animate-shimmer h-7 w-24 rounded-sm" />
+			<Skeleton class="animate-shimmer h-7 w-7 rounded-sm" />
+		</div>
+	</div>
+	<div class="grid grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] gap-4 max-[860px]:grid-cols-1">
 		<Skeleton class="animate-shimmer h-56 rounded-sm" />
 		<Skeleton class="animate-shimmer h-80 rounded-sm" />
 	</div>

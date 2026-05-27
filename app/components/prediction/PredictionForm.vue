@@ -107,7 +107,7 @@ const leaseYearOptions = computed(() =>
 						:model-value="Number.isNaN(form.floor_area_sqm) ? '' : String(form.floor_area_sqm)"
 						:placeholder="tr('enter_floor_area')"
 						:error="fieldErrors.floor_area_sqm"
-						class="rounded-r-none border-r-0"
+						class="relative rounded-r-none border-r-0 focus-visible:z-10"
 						@input="
 							updateField(
 								'floor_area_sqm',
