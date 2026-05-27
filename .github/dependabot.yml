@@ -35,26 +35,35 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      tailwind:
+        patterns:
+          - "*tailwind*"
+        update-types:
+          - "minor"
+          - "patch"
       typescript:
         patterns:
           - "typescript"
           - "typescript-eslint"
           - "@typescript-eslint/*"
-        update-types:
-          - "minor"
-          - "patch"
-      types:
-        patterns:
           - "@types/*"
         update-types:
           - "minor"
           - "patch"
-      eslint:
+      linting:
         patterns:
           - "eslint"
           - "eslint-*"
           - "@eslint/*"
-          - "globals"
+          - "prettier"
+          - "prettier-*"
+        update-types:
+          - "minor"
+          - "patch"
+      cloudflare:
+        patterns:
+          - "@cloudflare/*"
+          - "wrangler"
         update-types:
           - "minor"
           - "patch"
