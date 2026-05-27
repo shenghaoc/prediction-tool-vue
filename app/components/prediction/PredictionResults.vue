@@ -126,10 +126,9 @@ icon: Home
 				<!-- Summary tiles -->
 				<div class="grid grid-cols-3 gap-2 max-sm:grid-cols-1">
 					<div
-						v-for="(item, i) in summaryItems"
+						v-for="item in summaryItems"
 						:key="item.label"
 						class="flex items-center gap-2.5 rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
-						:style="{ animationDelay: `${i * 0.05}s` }"
 					>
 						<div
 							class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"

@@ -118,7 +118,7 @@ const leaseYearOptions = computed(() =>
 						"
 					/>
 					<span
-						class="inline-flex h-8 items-center rounded-r-sm border border-border/60 bg-secondary px-3 text-xs font-semibold text-muted-foreground"
+						class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
 					>
 						<span class="sr-only">{{ tr('floor_area_unit') }}</span>
 						<span aria-hidden>m²</span>
