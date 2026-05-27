@@ -18,12 +18,12 @@
 		"wrangler": "^4.94.0"
 	},
 	"dependencies": {
+		"@js-temporal/polyfill": "^0.5.1",
 		"@lucide/vue": "^1.16.0",
 		"@tailwindcss/vite": "^4.3.0",
 		"chart.js": "^4.5.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
-		"dayjs": "^1.11.18",
 		"radix-vue": "^1.9.17",
 		"tailwind-merge": "^3.6.0",
 		"tailwindcss": "^4.3.0",
