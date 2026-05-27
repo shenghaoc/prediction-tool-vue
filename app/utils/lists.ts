@@ -1,3 +1,5 @@
+import { Temporal } from '@js-temporal/polyfill';
+
 export const ML_MODELS = ['Support Vector Regression', 'Ridge Regression'] as const;
 export type MLModel = (typeof ML_MODELS)[number];
 
@@ -75,8 +77,6 @@ export const FLAT_MODELS = [
 	'Type S2'
 ] as const;
 export type FlatModel = (typeof FLAT_MODELS)[number];
-
-import { Temporal } from '@js-temporal/polyfill';
 
 const PREDICTION_MONTH_START = Temporal.PlainYearMonth.from('2017-01');
 const PREDICTION_MONTH_END = Temporal.PlainYearMonth.from('2022-02');

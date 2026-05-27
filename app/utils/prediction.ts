@@ -35,7 +35,7 @@ export type ApiResponse = {
 export type PredictionTheme = ReturnType<typeof getPredictionTheme>;
 
 export const MAX_LEASE_COMMENCE_YEAR = Temporal.PlainYearMonth.from(
-	MONTHS[MONTHS.length - 1]
+	MONTHS[MONTHS.length - 1]!
 ).year;
 export const YEAR_OPTIONS = Array.from(
 	{ length: MAX_LEASE_COMMENCE_YEAR - 1960 + 1 },
