@@ -9,13 +9,13 @@
 		"lint:fix": "eslint . --fix"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260524.1",
+		"@cloudflare/workers-types": "^4.20260527.1",
 		"@nuxt/eslint": "1.11.0",
 		"eslint": "9.39.1",
 		"nuxt": "^4.2.1",
 		"prettier": "3.7.4",
 		"typescript": "^5.9.3",
-		"wrangler": "^4.94.0"
+		"wrangler": "^4.95.0"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
