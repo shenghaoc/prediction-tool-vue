@@ -19,7 +19,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	submit: [];
 	reset: [];
-	updateField: [payload: { [K in keyof FieldType]: { key: K; value: FieldType[K] } }[keyof FieldType]];
+	updateField: [payload: import('~/composables/usePredictionForm').FieldUpdate];
 }>();
 
 function tr(key: string) {

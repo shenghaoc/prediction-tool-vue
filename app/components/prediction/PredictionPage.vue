@@ -119,7 +119,7 @@ localStorage.removeItem('form');
 }
 }
 
-function updateField(payload: { [K in keyof FieldType]: { key: K; value: FieldType[K] } }[keyof FieldType]) {
+function updateField(payload: import('~/composables/usePredictionForm').FieldUpdate) {
 applyFieldUpdate(payload);
 clearError();
 }

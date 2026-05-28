@@ -39,13 +39,11 @@ function extractErrorMessage(error: unknown, fallback: string): string {
 			if (typeof errorField === 'string' && errorField.trim()) {
 				return errorField;
 			}
-			if (
-				typeof errorField === 'object' &&
-				errorField !== null &&
-				typeof (errorField as Record<string, unknown>).message === 'string' &&
-				((errorField as Record<string, unknown>).message as string).trim()
-			) {
-				return (errorField as Record<string, unknown>).message as string;
+			if (typeof errorField === 'object' && errorField !== null) {
+				const errObj = errorField as Record<string, unknown>;
+				if (typeof errObj.message === 'string' && errObj.message.trim()) {
+					return errObj.message;
+				}
 			}
 		}
 
