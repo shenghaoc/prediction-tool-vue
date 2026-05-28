@@ -1,4 +1,5 @@
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
+import { useStorage } from '@vueuse/core';
 import { initialFormValues, MAX_LEASE_COMMENCE_YEAR, type FieldType } from '~/utils/prediction';
 
 export type FieldUpdate = {
@@ -6,7 +7,14 @@ export type FieldUpdate = {
 }[keyof FieldType];
 
 export function usePredictionForm() {
-	const form = ref<FieldType>({ ...initialFormValues });
+	const { t } = useI18n();
+
+	// Persisted to localStorage; `mergeDefaults` reconciles older/partial stored
+	// shapes against the current field set. SSR-safe: returns defaults on the
+	// server and hydrates from storage on the client.
+	const form = useStorage<FieldType>('form', { ...initialFormValues }, undefined, {
+		mergeDefaults: true
+	});
 	const fieldErrors = reactive<Record<keyof FieldType, string>>({
 		ml_model: '',
 		town: '',
@@ -22,39 +30,39 @@ export function usePredictionForm() {
 		}
 	}
 
-	function validate(tr: (key: string) => string) {
+	function validate() {
 		clearErrors();
 		const values = form.value;
 
 		if (!values.ml_model) {
-			fieldErrors.ml_model = tr('missing_ml_model');
+			fieldErrors.ml_model = t('missing_ml_model');
 		}
 
 		if (!values.town) {
-			fieldErrors.town = tr('missing_town');
+			fieldErrors.town = t('missing_town');
 		}
 
 		if (!values.storey_range) {
-			fieldErrors.storey_range = tr('missing_storey_range');
+			fieldErrors.storey_range = t('missing_storey_range');
 		}
 
 		if (!values.flat_model) {
-			fieldErrors.flat_model = tr('missing_flat_model');
+			fieldErrors.flat_model = t('missing_flat_model');
 		}
 
 		if (!Number.isFinite(values.floor_area_sqm)) {
-			fieldErrors.floor_area_sqm = tr('missing_floor_area');
+			fieldErrors.floor_area_sqm = t('missing_floor_area');
 		} else if (values.floor_area_sqm < 20 || values.floor_area_sqm > 300) {
-			fieldErrors.floor_area_sqm = tr('floor_area_range');
+			fieldErrors.floor_area_sqm = t('floor_area_range');
 		}
 
 		if (!Number.isFinite(values.lease_commence_date)) {
-			fieldErrors.lease_commence_date = tr('missing_lease_commence_date');
+			fieldErrors.lease_commence_date = t('missing_lease_commence_date');
 		} else if (
 			values.lease_commence_date < 1960 ||
 			values.lease_commence_date > MAX_LEASE_COMMENCE_YEAR
 		) {
-			fieldErrors.lease_commence_date = tr('lease_commence_date_range');
+			fieldErrors.lease_commence_date = t('lease_commence_date_range');
 		}
 
 		return !Object.values(fieldErrors).some(Boolean);

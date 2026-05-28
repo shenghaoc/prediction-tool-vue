@@ -77,6 +77,8 @@ function extractErrorMessage(error: unknown, fallback: string): string {
 }
 
 export function usePrediction() {
+	const { t } = useI18n();
+
 	const output = ref(0);
 	const trendData = ref<TrendPoint[]>(defaultTrendData());
 	const loading = ref(false);
@@ -98,7 +100,7 @@ export function usePrediction() {
 		summaryValues.value = summaryFrom(initialFormValues);
 	}
 
-	async function predict(values: FieldType, tr: (key: string) => string) {
+	async function predict(values: FieldType) {
 		// Supersede any in-flight request so its response can't overwrite this one.
 		activeController?.abort();
 		const controller = new AbortController();
@@ -115,7 +117,7 @@ export function usePrediction() {
 			// this before predict() runs. Bail out loudly rather than silently
 			// substituting defaults, which would produce a confident, wrong prediction.
 			if (!Number.isFinite(values.floor_area_sqm) || !Number.isFinite(values.lease_commence_date)) {
-				throw new Error(tr('error_invalid_input'));
+				throw new Error(t('error_invalid_input'));
 			}
 
 			const floorAreaSqm = Math.max(20, Math.min(300, Math.round(values.floor_area_sqm)));
@@ -135,12 +137,12 @@ export function usePrediction() {
 			});
 
 			if (!data || !Array.isArray(data.predictions)) {
-				throw new Error(tr('error_invalid_prediction'));
+				throw new Error(t('error_invalid_prediction'));
 			}
 
 			const serverData = normalizeTrendData(data);
 			if (!trendDataHasValidPrices(serverData)) {
-				throw new Error(tr('error_invalid_prediction'));
+				throw new Error(t('error_invalid_prediction'));
 			}
 
 			trendData.value = serverData;
@@ -153,7 +155,7 @@ export function usePrediction() {
 
 			trendData.value = defaultTrendData();
 			output.value = 0;
-			errorMessage.value = extractErrorMessage(error, tr('error_fetch'));
+			errorMessage.value = extractErrorMessage(error, t('error_fetch'));
 		} finally {
 			// Only the latest request clears the loading flag and releases the controller.
 			if (activeController === controller) {

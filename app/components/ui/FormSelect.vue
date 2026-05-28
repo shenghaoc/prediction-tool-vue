@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string">
 import { cn } from '~/lib/utils';
 import Field from './Field.vue';
 import Select from './Select.vue';
@@ -10,12 +10,12 @@ defineProps<{
 	error?: string;
 	hint?: string;
 	placeholder?: string;
-	items: Array<{ value: string; label: string }>;
-	modelValue?: string;
+	items: Array<{ value: T; label: string }>;
+	modelValue?: T;
 }>();
 
 const emit = defineEmits<{
-	'update:modelValue': [value: string];
+	'update:modelValue': [value: T];
 }>();
 </script>
 
@@ -26,7 +26,7 @@ const emit = defineEmits<{
 			:model-value="modelValue"
 			:placeholder="placeholder"
 			:items="items"
-			@update:model-value="emit('update:modelValue', $event)"
+			@update:model-value="emit('update:modelValue', $event as T)"
 		/>
 	</Field>
 </template>

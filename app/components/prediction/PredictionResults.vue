@@ -8,8 +8,9 @@ import Separator from '~/components/ui/Separator.vue';
 import Skeleton from '~/components/ui/Skeleton.vue';
 import { cn } from '~/lib/utils';
 import { formatCurrency } from '~/utils/format';
-import { translate, type Language } from '~/utils/i18n';
 import type { PredictionTheme, SummaryValues, TrendPoint } from '~/utils/prediction';
+
+const { t } = useI18n();
 
 const props = defineProps<{
 output: number;
@@ -17,7 +18,6 @@ loading: boolean;
 summaryValues: SummaryValues;
 trendData: TrendPoint[];
 theme: PredictionTheme;
-currentLang: Language;
 }>();
 
 const hasOutput = computed(() => props.output > 0);
@@ -39,12 +39,8 @@ Number.isFinite(lowValue.value) ? lowValue.value : 0
 );
 const deltaPositive = computed(() => deltaValue.value >= 0);
 
-function tr(key: string) {
-return translate(props.currentLang, key);
-}
-
 function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models', value: string) {
-return translate(props.currentLang, `${group}.${value}`);
+return t(`${group}.${value}`);
 }
 
 function formatPrice(value: number) {
@@ -53,17 +49,17 @@ return formatCurrency(value);
 
 const summaryItems = computed(() => [
 {
-label: tr('ml_model'),
+label: t('ml_model'),
 value: optionLabel('ml_models', props.summaryValues.ml_model),
 icon: Layers
 },
 {
-label: tr('town'),
+label: t('town'),
 value: optionLabel('towns', props.summaryValues.town),
 icon: MapPin
 },
 {
-label: tr('lease_commence_date'),
+label: t('lease_commence_date'),
 value: String(props.summaryValues.lease_commence_date),
 icon: Home
 }
@@ -80,7 +76,7 @@ icon: Home
 				id="prediction-results-heading"
 				class="font-sans text-xl font-extrabold tracking-tight normal-case"
 			>
-				{{ tr('predicted_price') }}
+				{{ t('predicted_price') }}
 			</h2>
 		</div>
 
@@ -96,7 +92,7 @@ icon: Home
 			"
 		>
 			<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-				{{ tr('prediction') }}
+				{{ t('prediction') }}
 			</p>
 			<Skeleton v-if="showSkeleton" class="animate-shimmer mt-2 h-8 w-32 rounded-sm" />
 			<p
@@ -110,7 +106,7 @@ icon: Home
 					)
 				"
 			>
-				{{ hasOutput ? formatPrice(output) : tr('awaiting') }}
+				{{ hasOutput ? formatPrice(output) : t('awaiting') }}
 			</p>
 		</div>
 	</div>
@@ -147,24 +143,24 @@ icon: Home
 				<!-- Chart section -->
 				<div>
 					<p class="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-						{{ tr('predicted_trends') }}
+						{{ t('predicted_trends') }}
 					</p>
 					<h3 class="mb-3 font-sans text-sm font-semibold normal-case">
-						{{ tr('chart_story_title') }}
+						{{ t('chart_story_title') }}
 					</h3>
 
 					<!-- Stats row -->
 					<div class="mb-3 grid grid-cols-3 gap-2 max-sm:grid-cols-1">
 						<div class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20">
-							<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{{ tr('chart_latest') }}</p>
+							<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{{ t('chart_latest') }}</p>
 							<p class="mt-0.5 text-sm font-semibold tabular-nums text-foreground">{{ formatPrice(latestValue) }}</p>
 						</div>
 						<div class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20">
-							<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{{ tr('chart_range') }}</p>
+							<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{{ t('chart_range') }}</p>
 							<p class="mt-0.5 text-sm font-semibold tabular-nums text-foreground">{{ formatPrice(normalizedLowValue) }} – {{ formatPrice(peakValue) }}</p>
 						</div>
 						<div class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20">
-							<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{{ tr('chart_delta') }}</p>
+							<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{{ t('chart_delta') }}</p>
 							<p
 								:class="
 									cn(
@@ -179,7 +175,7 @@ icon: Home
 								{{ deltaPositive ? '+' : '-' }}{{ formatPrice(Math.abs(deltaValue)) }}
 							</p>
 							<p class="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
-								{{ tr('vs_12m_ago') }}
+								{{ t('vs_12m_ago') }}
 							</p>
 						</div>
 					</div>
@@ -210,10 +206,10 @@ icon: Home
 					/>
 				</div>
 				<h3 class="font-sans text-sm font-semibold text-foreground">
-					{{ tr('placeholder_title') }}
+					{{ t('placeholder_title') }}
 				</h3>
 				<p class="mx-auto max-w-[32ch] text-sm leading-relaxed text-muted-foreground">
-					{{ tr('placeholder_body') }}
+					{{ t('placeholder_body') }}
 				</p>
 			</div>
 		</template>

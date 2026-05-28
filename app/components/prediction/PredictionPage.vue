@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useColorMode } from '@vueuse/core';
 import { Home, Layers, MapPin, Moon, Sparkles, Sun } from '@lucide/vue';
 
 import PredictionForm from '~/components/prediction/PredictionForm.vue';
@@ -12,9 +13,10 @@ import CardHeader from '~/components/ui/CardHeader.vue';
 import CardTitle from '~/components/ui/CardTitle.vue';
 import Skeleton from '~/components/ui/Skeleton.vue';
 import { FLAT_MODELS, ML_MODELS, TOWNS } from '~/utils/lists';
-import { translate, type Language } from '~/utils/i18n';
-import { getPredictionTheme, initialFormValues, type FieldType } from '~/utils/prediction';
+import { getPredictionTheme } from '~/utils/prediction';
 import type { FieldUpdate } from '~/composables/usePredictionForm';
+
+const { t, locale, setLocale } = useI18n();
 
 const {
 	form,
@@ -34,13 +36,18 @@ const {
 	predict
 } = usePrediction();
 
-const darkMode = ref(false);
-const currentLang = ref<Language>('en');
-const isHydrated = ref(false);
-const skipNextPersist = ref(false);
+// VueUse owns the `dark` class on <html> and persists the choice to localStorage.
+const colorMode = useColorMode({
+	storageKey: 'theme',
+	initialValue: 'light',
+	modes: { light: 'light', dark: 'dark' }
+});
 
-const theme = computed(() => getPredictionTheme(darkMode.value));
-const isZh = computed(() => currentLang.value === 'zh');
+const isHydrated = ref(false);
+
+const theme = computed(() => getPredictionTheme(colorMode.value === 'dark'));
+const darkMode = computed(() => colorMode.value === 'dark');
+const isZh = computed(() => locale.value === 'zh');
 
 const figures = [
 	{
@@ -63,67 +70,12 @@ const figures = [
 	}
 ];
 
-function tr(key: string) {
-	return translate(currentLang.value, key);
-}
-
 useHead(() => ({
-	title: tr('price_prediction').replace('\n', ' '),
+	title: t('price_prediction').replace('\n', ' '),
 	htmlAttrs: {
-		lang: currentLang.value,
-		class: darkMode.value ? 'dark' : ''
+		lang: locale.value
 	}
 }));
-
-function restoreFromStorage() {
-	if (!import.meta.client) {
-		return;
-	}
-
-	try {
-		darkMode.value = localStorage.getItem('theme') === 'dark';
-	} catch {
-		/* storage unavailable */
-	}
-
-	try {
-		const savedLang = localStorage.getItem('lang');
-		if (savedLang === 'en' || savedLang === 'zh') {
-			currentLang.value = savedLang;
-		}
-	} catch {
-		/* storage unavailable */
-	}
-
-	try {
-		const savedForm = localStorage.getItem('form');
-		if (!savedForm) {
-			return;
-		}
-
-		const parsed = JSON.parse(savedForm);
-		if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-			const data = parsed as Partial<FieldType>;
-			form.value = {
-				...initialFormValues,
-				...data,
-				floor_area_sqm: Number(data.floor_area_sqm ?? initialFormValues.floor_area_sqm),
-				lease_commence_date: Number(
-					data.lease_commence_date ?? initialFormValues.lease_commence_date
-				)
-			};
-		} else {
-			throw new Error('Invalid stored form data');
-		}
-	} catch {
-		form.value = { ...initialFormValues };
-		try {
-			localStorage.removeItem('form');
-		} catch {
-			/* storage unavailable */
-		}
-	}
-}
 
 function updateField(payload: FieldUpdate) {
 	applyFieldUpdate(payload);
@@ -131,74 +83,27 @@ function updateField(payload: FieldUpdate) {
 }
 
 function toggleTheme() {
-	darkMode.value = !darkMode.value;
+	colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark';
 }
 
-function setLanguage(language: Language) {
-	currentLang.value = language;
+function setLanguage(language: 'en' | 'zh') {
+	setLocale(language);
 }
 
 function resetForm() {
-	skipNextPersist.value = true;
 	resetFields();
 	resetResults();
-
-	if (import.meta.client) {
-		try {
-			localStorage.removeItem('form');
-		} catch {
-			/* storage unavailable */
-		}
-	}
 }
 
 async function handleSubmit() {
-	if (!validate(tr)) {
+	if (!validate()) {
 		return;
 	}
 
-	await predict(form.value, tr);
+	await predict(form.value);
 }
 
-watch(currentLang, (value) => {
-	if (isHydrated.value && import.meta.client) {
-		try {
-			localStorage.setItem('lang', value);
-		} catch {
-			/* storage unavailable */
-		}
-	}
-});
-
-watch(darkMode, (value) => {
-	if (isHydrated.value && import.meta.client) {
-		try {
-			localStorage.setItem('theme', value ? 'dark' : 'light');
-		} catch {
-			/* storage unavailable */
-		}
-	}
-});
-
-watch(form, (value) => {
-	if (!isHydrated.value || !import.meta.client) {
-		return;
-	}
-
-	if (skipNextPersist.value) {
-		skipNextPersist.value = false;
-		return;
-	}
-
-	try {
-		localStorage.setItem('form', JSON.stringify(value));
-	} catch {
-		/* storage unavailable */
-	}
-});
-
 onMounted(() => {
-	restoreFromStorage();
 	isHydrated.value = true;
 	document.documentElement.classList.add('theme-ready');
 });
@@ -217,7 +122,7 @@ onMounted(() => {
 					>
 						<span class="size-2 rounded-full bg-primary" aria-hidden />
 						<Sparkles class="size-3" aria-hidden />
-						{{ tr('brand') }}
+						{{ t('brand') }}
 					</span>
 				</div>
 
@@ -227,15 +132,15 @@ onMounted(() => {
 						variant="outline"
 						size="sm"
 						class="normal-case tracking-normal max-sm:flex-1"
-						@click="setLanguage(currentLang === 'en' ? 'zh' : 'en')"
+						@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
 					>
-						{{ tr('switch_language') }}
+						{{ t('switch_language') }}
 					</Button>
 					<Button
 						type="button"
 						variant="outline"
 						size="icon"
-						:aria-label="darkMode ? tr('switch_to_light_mode') : tr('switch_to_dark_mode')"
+						:aria-label="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')"
 						@click="toggleTheme"
 					>
 						<Sun v-if="darkMode" class="size-4" />
@@ -259,10 +164,10 @@ onMounted(() => {
 									isZh ? 'font-cjk' : 'font-sans'
 								]"
 							>
-								{{ tr('price_prediction') }}
+								{{ t('price_prediction') }}
 							</CardTitle>
 							<p class="mt-1.5 max-w-prose text-sm leading-relaxed text-secondary-foreground">
-								{{ tr('intro_blurb') }}
+								{{ t('intro_blurb') }}
 							</p>
 						</CardHeader>
 						<CardContent class="px-5 pt-4">
@@ -271,9 +176,9 @@ onMounted(() => {
 									v-for="figure in figures"
 									:key="figure.label"
 									:icon="figure.icon"
-									:label="tr(figure.label)"
+									:label="t(figure.label)"
 									:value="figure.value"
-									:hint="tr(figure.hint)"
+									:hint="t(figure.hint)"
 								/>
 							</div>
 						</CardContent>
@@ -283,7 +188,7 @@ onMounted(() => {
 					<Card class="py-4">
 						<CardHeader class="px-5 pb-2">
 							<CardTitle class="text-sm text-primary normal-case">
-								{{ tr('prediction_form') }}
+								{{ t('prediction_form') }}
 							</CardTitle>
 						</CardHeader>
 						<CardContent class="px-5">
@@ -291,7 +196,6 @@ onMounted(() => {
 								:form="form"
 								:field-errors="fieldErrors"
 								:loading="loading"
-								:current-lang="currentLang"
 								:error-message="errorMessage"
 								@submit="handleSubmit"
 								@reset="resetForm"
@@ -309,7 +213,6 @@ onMounted(() => {
 						:summary-values="summaryValues"
 						:trend-data="trendData"
 						:theme="theme"
-						:current-lang="currentLang"
 					/>
 				</div>
 			</div>

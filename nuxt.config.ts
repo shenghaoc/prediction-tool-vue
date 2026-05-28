@@ -2,7 +2,20 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
 	css: ['~/assets/styles/globals.css'],
-	modules: ['@nuxt/eslint'],
+	modules: ['@nuxt/eslint', '@nuxtjs/i18n', '@vueuse/nuxt'],
+	i18n: {
+		strategy: 'no_prefix',
+		defaultLocale: 'en',
+		locales: [
+			{ code: 'en', language: 'en-SG', name: 'English', file: 'en.json' },
+			{ code: 'zh', language: 'zh-Hans-SG', name: '中文', file: 'zh.json' }
+		],
+		detectBrowserLanguage: {
+			useCookie: true,
+			cookieKey: 'i18n_redirected',
+			redirectOn: 'root'
+		}
+	},
 	vite: {
 		plugins: [tailwindcss()]
 	},

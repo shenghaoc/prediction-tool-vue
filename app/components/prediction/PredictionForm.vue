@@ -2,18 +2,18 @@
 import { computed } from 'vue';
 import { Loader2 } from '@lucide/vue';
 import { FLAT_MODELS, ML_MODELS, STOREY_RANGES, TOWNS } from '~/utils/lists';
-import { translate, type Language } from '~/utils/i18n';
 import { YEAR_OPTIONS, type FieldType } from '~/utils/prediction';
 import type { FieldUpdate } from '~/composables/usePredictionForm';
 import Button from '~/components/ui/Button.vue';
 import Input from '~/components/ui/Input.vue';
 import FormSelect from '~/components/ui/FormSelect.vue';
 
-const props = defineProps<{
+const { t } = useI18n();
+
+defineProps<{
 	form: FieldType;
 	fieldErrors: Record<keyof FieldType, string>;
 	loading: boolean;
-	currentLang: Language;
 	errorMessage: string;
 }>();
 
@@ -23,19 +23,18 @@ const emit = defineEmits<{
 	updateField: [payload: FieldUpdate];
 }>();
 
-function tr(key: string) {
-	return translate(props.currentLang, key);
-}
-
 function optionLabel(
 	group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models',
 	value: string
 ) {
-	return translate(props.currentLang, `${group}.${value}`);
+	return t(`${group}.${value}`);
 }
 
 function updateField<K extends keyof FieldType>(key: K, value: FieldType[K]) {
-	emit('updateField', { key, value });
+	// `key`/`value` are correlated through `K`, but TypeScript cannot express that
+	// the constructed object is a single member of the `FieldUpdate` union — the
+	// assertion is the standard, unavoidable bridge for correlated unions.
+	emit('updateField', { key, value } as FieldUpdate);
 }
 
 const mlModelOptions = computed(() =>
@@ -58,49 +57,49 @@ const leaseYearOptions = computed(() =>
 <template>
 	<form class="flex flex-col gap-4" @submit.prevent="emit('submit')">
 		<FormSelect
-			:label="tr('ml_model')"
+			:label="t('ml_model')"
 			label-for="input-ml_model"
 			:error="fieldErrors.ml_model"
 			:model-value="form.ml_model"
-			:placeholder="tr('select_ml_model')"
+			:placeholder="t('select_ml_model')"
 			:items="mlModelOptions"
-			@update:model-value="updateField('ml_model', $event as FieldType['ml_model'])"
+			@update:model-value="updateField('ml_model', $event)"
 		/>
 
 		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
 			<FormSelect
-				:label="tr('town')"
+				:label="t('town')"
 				label-for="input-town"
 				:error="fieldErrors.town"
 				:model-value="form.town"
-				:placeholder="tr('select_town')"
+				:placeholder="t('select_town')"
 				:items="townOptions"
-				@update:model-value="updateField('town', $event as FieldType['town'])"
+				@update:model-value="updateField('town', $event)"
 			/>
 			<FormSelect
-				:label="tr('storey_range')"
+				:label="t('storey_range')"
 				label-for="input-storey_range"
 				:error="fieldErrors.storey_range"
 				:model-value="form.storey_range"
-				:placeholder="tr('select_storey_range')"
+				:placeholder="t('select_storey_range')"
 				:items="storeyOptions"
-				@update:model-value="updateField('storey_range', $event as FieldType['storey_range'])"
+				@update:model-value="updateField('storey_range', $event)"
 			/>
 			<FormSelect
-				:label="tr('flat_model')"
+				:label="t('flat_model')"
 				label-for="input-flat_model"
 				:error="fieldErrors.flat_model"
 				:model-value="form.flat_model"
-				:placeholder="tr('select_flat_model')"
+				:placeholder="t('select_flat_model')"
 				:items="flatModelOptions"
-				@update:model-value="updateField('flat_model', $event as FieldType['flat_model'])"
+				@update:model-value="updateField('flat_model', $event)"
 			/>
 			<div class="grid gap-1.5">
 				<label
 					for="input-floor_area"
 					class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 				>
-					{{ tr('floor_area') }}
+					{{ t('floor_area') }}
 				</label>
 				<div class="flex">
 					<Input
@@ -112,7 +111,7 @@ const leaseYearOptions = computed(() =>
 						:max="300"
 						:step="1"
 						:model-value="Number.isNaN(form.floor_area_sqm) ? '' : String(form.floor_area_sqm)"
-						:placeholder="tr('enter_floor_area')"
+						:placeholder="t('enter_floor_area')"
 						:error="fieldErrors.floor_area_sqm"
 						class="relative rounded-r-none border-r-0 focus-visible:z-10"
 						@input="
@@ -127,7 +126,7 @@ const leaseYearOptions = computed(() =>
 					<span
 						class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
 					>
-						<span class="sr-only">{{ tr('floor_area_unit') }}</span>
+						<span class="sr-only">{{ t('floor_area_unit') }}</span>
 						<span aria-hidden>m²</span>
 					</span>
 				</div>
@@ -138,11 +137,11 @@ const leaseYearOptions = computed(() =>
 		</div>
 
 		<FormSelect
-			:label="tr('lease_commence_date')"
+			:label="t('lease_commence_date')"
 			label-for="input-lease_commence_date"
 			:error="fieldErrors.lease_commence_date"
 			:model-value="String(form.lease_commence_date)"
-			:placeholder="tr('select_year')"
+			:placeholder="t('select_year')"
 			:items="leaseYearOptions"
 			@update:model-value="updateField('lease_commence_date', Number($event))"
 		/>
@@ -155,7 +154,7 @@ const leaseYearOptions = computed(() =>
 				:disabled="loading"
 			>
 				<Loader2 v-if="loading" class="size-4 animate-spin" aria-hidden />
-				{{ loading ? tr('predicting') : tr('get_prediction') }}
+				{{ loading ? t('predicting') : t('get_prediction') }}
 			</Button>
 			<Button
 				type="button"
@@ -164,7 +163,7 @@ const leaseYearOptions = computed(() =>
 				class="w-full normal-case tracking-normal"
 				@click="emit('reset')"
 			>
-				{{ tr('reset_form') }}
+				{{ t('reset_form') }}
 			</Button>
 		</div>
 
@@ -172,7 +171,7 @@ const leaseYearOptions = computed(() =>
 			v-if="loading"
 			class="progress-track"
 			role="progressbar"
-			:aria-label="tr('predicting')"
+			:aria-label="t('predicting')"
 			aria-valuemin="0"
 			aria-valuemax="100"
 		>
