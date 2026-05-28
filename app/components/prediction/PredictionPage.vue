@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { Home, Layers, MapPin, Moon, Sparkles, Sun } from '@lucide/vue';
 
 import PredictionForm from '~/components/prediction/PredictionForm.vue';
@@ -13,41 +13,25 @@ import CardTitle from '~/components/ui/CardTitle.vue';
 import Skeleton from '~/components/ui/Skeleton.vue';
 import { FLAT_MODELS, ML_MODELS, TOWNS } from '~/utils/lists';
 import { translate, type Language } from '~/utils/i18n';
-import {
-defaultTrendData,
-getPredictionTheme,
-initialFormValues,
-MAX_LEASE_COMMENCE_YEAR,
-normalizePrice,
-normalizeTrendData,
-trendDataHasValidPrices,
-type FieldType
-} from '~/utils/prediction';
+import { getPredictionTheme, initialFormValues, type FieldType } from '~/utils/prediction';
 
-const form = ref<FieldType>({ ...initialFormValues });
-const output = ref(0);
-const trendData = ref(defaultTrendData());
-const loading = ref(false);
-const errorMessage = ref('');
+const { form, fieldErrors, validate, updateField: applyFieldUpdate, reset: resetFields } =
+usePredictionForm();
+const {
+output,
+trendData,
+loading,
+errorMessage,
+summaryValues,
+clearError,
+reset: resetResults,
+predict
+} = usePrediction();
+
 const darkMode = ref(false);
 const currentLang = ref<Language>('en');
 const isHydrated = ref(false);
 const skipNextPersist = ref(false);
-
-const fieldErrors = reactive<Record<keyof FieldType, string>>({
-ml_model: '',
-town: '',
-storey_range: '',
-flat_model: '',
-floor_area_sqm: '',
-lease_commence_date: ''
-});
-
-const summaryValues = ref({
-ml_model: form.value.ml_model,
-town: form.value.town,
-lease_commence_date: form.value.lease_commence_date
-});
 
 const theme = computed(() => getPredictionTheme(darkMode.value));
 const isZh = computed(() => currentLang.value === 'zh');
@@ -84,12 +68,6 @@ lang: currentLang.value,
 class: darkMode.value ? 'dark' : ''
 }
 }));
-
-function clearErrors() {
-for (const key of Object.keys(fieldErrors) as Array<keyof FieldType>) {
-fieldErrors[key] = '';
-}
-}
 
 function restoreFromStorage() {
 if (!import.meta.client) {
@@ -141,55 +119,9 @@ localStorage.removeItem('form');
 }
 }
 
-function validateForm() {
-clearErrors();
-const values = form.value;
-
-if (!values.ml_model) {
-fieldErrors.ml_model = tr('missing_ml_model');
-}
-
-if (!values.town) {
-fieldErrors.town = tr('missing_town');
-}
-
-if (!values.storey_range) {
-fieldErrors.storey_range = tr('missing_storey_range');
-}
-
-if (!values.flat_model) {
-fieldErrors.flat_model = tr('missing_flat_model');
-}
-
-if (!Number.isFinite(values.floor_area_sqm)) {
-fieldErrors.floor_area_sqm = tr('missing_floor_area');
-} else if (values.floor_area_sqm < 20 || values.floor_area_sqm > 300) {
-fieldErrors.floor_area_sqm = tr('floor_area_range');
-}
-
-if (!Number.isFinite(values.lease_commence_date)) {
-fieldErrors.lease_commence_date = tr('missing_lease_commence_date');
-} else if (
-values.lease_commence_date < 1960 ||
-values.lease_commence_date > MAX_LEASE_COMMENCE_YEAR
-) {
-fieldErrors.lease_commence_date = tr('missing_lease_commence_date');
-}
-
-return !Object.values(fieldErrors).some(Boolean);
-}
-
 function updateField(payload: { key: keyof FieldType; value: FieldType[keyof FieldType] }) {
-form.value = {
-...form.value,
-[payload.key]:
-payload.key === 'floor_area_sqm' || payload.key === 'lease_commence_date'
-? Number(payload.value)
-: payload.value
-} as FieldType;
-
-fieldErrors[payload.key] = '';
-errorMessage.value = '';
+applyFieldUpdate(payload);
+clearError();
 }
 
 function toggleTheme() {
@@ -202,16 +134,8 @@ currentLang.value = language;
 
 function resetForm() {
 skipNextPersist.value = true;
-form.value = { ...initialFormValues };
-trendData.value = defaultTrendData();
-output.value = 0;
-errorMessage.value = '';
-clearErrors();
-summaryValues.value = {
-ml_model: form.value.ml_model,
-town: form.value.town,
-lease_commence_date: form.value.lease_commence_date
-};
+resetFields();
+resetResults();
 
 if (import.meta.client) {
 try {
@@ -222,100 +146,14 @@ localStorage.removeItem('form');
 }
 }
 
-async function getApiErrorMessage(response: Response) {
-const fallback = tr('error_fetch');
-const body = await response.text();
-
-if (!body) {
-return fallback;
-}
-
-try {
-const parsed = JSON.parse(body) as {
-error?: string | { message?: string };
-statusMessage?: string;
-message?: string;
-};
-
-if (typeof parsed.statusMessage === 'string' && parsed.statusMessage.trim()) {
-return parsed.statusMessage;
-}
-
-if (typeof parsed.message === 'string' && parsed.message.trim()) {
-return parsed.message;
-}
-
-if (typeof parsed.error === 'string' && parsed.error.trim()) {
-return parsed.error;
-}
-
-if (
-typeof parsed.error === 'object' &&
-parsed.error !== null &&
-typeof parsed.error.message === 'string' &&
-parsed.error.message.trim()
-) {
-return parsed.error.message;
-}
-} catch {
-if (body.trim()) {
-return body;
-}
-}
-
-return fallback;
-}
-
 async function handleSubmit() {
-errorMessage.value = '';
+clearError();
 
-if (!validateForm()) {
+if (!validate(tr)) {
 return;
 }
 
-loading.value = true;
-output.value = 0;
-trendData.value = defaultTrendData();
-summaryValues.value = {
-ml_model: form.value.ml_model,
-town: form.value.town,
-lease_commence_date: form.value.lease_commence_date
-};
-
-try {
-const floorArea = Math.max(20, Math.min(300, Math.round(form.value.floor_area_sqm)));
-
-const response = await fetch('/api/prices', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({
-mlModel: form.value.ml_model,
-town: form.value.town,
-storeyRange: form.value.storey_range,
-flatModel: form.value.flat_model,
-floorAreaSqm: floorArea,
-leaseCommenceYear: form.value.lease_commence_date
-})
-});
-
-if (!response.ok) {
-throw new Error(await getApiErrorMessage(response));
-}
-
-const serverData = normalizeTrendData(await response.json());
-if (!trendDataHasValidPrices(serverData)) {
-throw new Error(tr('error_invalid_prediction'));
-}
-trendData.value = serverData;
-output.value = normalizePrice(serverData[serverData.length - 1]?.value ?? 0);
-} catch (error) {
-trendData.value = defaultTrendData();
-output.value = 0;
-errorMessage.value =
-error instanceof Error && error.message ? error.message : tr('error_fetch');
-} finally {
-loading.value = false;
-}
+await predict(form.value, tr);
 }
 
 watch(currentLang, (value) => {
