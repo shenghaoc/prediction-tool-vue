@@ -1,7 +1,9 @@
 import { reactive, ref } from 'vue';
 import { initialFormValues, MAX_LEASE_COMMENCE_YEAR, type FieldType } from '~/utils/prediction';
 
-type FieldUpdate = { key: keyof FieldType; value: FieldType[keyof FieldType] };
+type FieldUpdate = {
+	[K in keyof FieldType]: { key: K; value: FieldType[K] }
+}[keyof FieldType];
 
 export function usePredictionForm() {
 	const form = ref<FieldType>({ ...initialFormValues });

@@ -19,7 +19,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	submit: [];
 	reset: [];
-	updateField: [payload: { key: keyof FieldType; value: FieldType[keyof FieldType] }];
+	updateField: [payload: { [K in keyof FieldType]: { key: K; value: FieldType[K] } }[keyof FieldType]];
 }>();
 
 function tr(key: string) {

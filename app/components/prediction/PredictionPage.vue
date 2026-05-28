@@ -119,7 +119,7 @@ localStorage.removeItem('form');
 }
 }
 
-function updateField(payload: { key: keyof FieldType; value: FieldType[keyof FieldType] }) {
+function updateField(payload: { [K in keyof FieldType]: { key: K; value: FieldType[K] } }[keyof FieldType]) {
 applyFieldUpdate(payload);
 clearError();
 }

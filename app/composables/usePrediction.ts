@@ -63,6 +63,10 @@ function extractErrorMessage(error: unknown, fallback: string): string {
 		return error.message;
 	}
 
+	if (typeof error === 'string' && error.trim()) {
+		return error;
+	}
+
 	return fallback;
 }
 
@@ -105,6 +109,10 @@ export function usePrediction() {
 					leaseCommenceYear: values.lease_commence_date
 				}
 			});
+
+			if (!data || !Array.isArray(data.predictions)) {
+				throw new Error(tr('error_invalid_prediction'));
+			}
 
 			const serverData = normalizeTrendData(data);
 			if (!trendDataHasValidPrices(serverData)) {
