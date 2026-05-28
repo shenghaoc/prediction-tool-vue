@@ -12,7 +12,7 @@ import {
 	type TrendPoint
 } from '~/utils/prediction';
 
-function summaryFrom(values: Pick<FieldType, 'ml_model' | 'town' | 'lease_commence_date'>): SummaryValues {
+function summaryFrom(values: SummaryValues): SummaryValues {
 	return {
 		ml_model: values.ml_model,
 		town: values.town,
@@ -23,14 +23,35 @@ function summaryFrom(values: Pick<FieldType, 'ml_model' | 'town' | 'lease_commen
 function extractErrorMessage(error: unknown, fallback: string): string {
 	if (error instanceof FetchError) {
 		const data = error.data;
+
 		if (data && typeof data === 'object') {
 			const record = data as Record<string, unknown>;
+
 			if (typeof record.statusMessage === 'string' && record.statusMessage.trim()) {
 				return record.statusMessage;
 			}
 			if (typeof record.message === 'string' && record.message.trim()) {
 				return record.message;
 			}
+
+			// Handle { error: "..." } and { error: { message: "..." } } shapes
+			const errorField = record.error;
+			if (typeof errorField === 'string' && errorField.trim()) {
+				return errorField;
+			}
+			if (
+				typeof errorField === 'object' &&
+				errorField !== null &&
+				typeof (errorField as Record<string, unknown>).message === 'string' &&
+				((errorField as Record<string, unknown>).message as string).trim()
+			) {
+				return (errorField as Record<string, unknown>).message as string;
+			}
+		}
+
+		// Raw string body (e.g., non-JSON error page)
+		if (typeof data === 'string' && data.trim()) {
+			return data;
 		}
 
 		if (typeof error.statusMessage === 'string' && error.statusMessage.trim()) {
