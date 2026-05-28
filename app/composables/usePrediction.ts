@@ -22,6 +22,10 @@ function summaryFrom(values: SummaryValues): SummaryValues {
 
 function extractErrorMessage(error: unknown, fallback: string): string {
 	if (error instanceof FetchError) {
+		// `error.data` is the parsed response body. For an H3/Nitro `createError`,
+		// that body is `{ statusCode, statusMessage, message, data?, stack? }`, so
+		// `data.statusMessage` is the server-authored message — prefer it, then
+		// fall back to `data.message`.
 		const data = error.data;
 
 		if (data && typeof data === 'object') {
@@ -34,7 +38,8 @@ function extractErrorMessage(error: unknown, fallback: string): string {
 				return record.message;
 			}
 
-			// Handle { error: "..." } and { error: { message: "..." } } shapes
+			// Other backends nest the message under `error`: handle both
+			// `{ error: "..." }` and `{ error: { message: "..." } }` shapes.
 			const errorField = record.error;
 			if (typeof errorField === 'string' && errorField.trim()) {
 				return errorField;
@@ -47,11 +52,14 @@ function extractErrorMessage(error: unknown, fallback: string): string {
 			}
 		}
 
-		// Raw string body (e.g., non-JSON error page)
+		// Raw string body (e.g., a non-JSON error page).
 		if (typeof data === 'string' && data.trim()) {
 			return data;
 		}
 
+		// Last resort: `error.statusMessage` here is the HTTP reason phrase
+		// (status text on the FetchError itself), distinct from the body's
+		// `data.statusMessage` handled above.
 		if (typeof error.statusMessage === 'string' && error.statusMessage.trim()) {
 			return error.statusMessage;
 		}
@@ -75,6 +83,10 @@ export function usePrediction() {
 	const errorMessage = ref('');
 	const summaryValues = ref<SummaryValues>(summaryFrom(initialFormValues));
 
+	// Tracks the in-flight request so a rapid re-submit can supersede the
+	// previous one — guards against out-of-order responses clobbering state.
+	let activeController: AbortController | null = null;
+
 	function clearError() {
 		errorMessage.value = '';
 	}
@@ -87,6 +99,11 @@ export function usePrediction() {
 	}
 
 	async function predict(values: FieldType, tr: (key: string) => string) {
+		// Supersede any in-flight request so its response can't overwrite this one.
+		activeController?.abort();
+		const controller = new AbortController();
+		activeController = controller;
+
 		errorMessage.value = '';
 		loading.value = true;
 		output.value = 0;
@@ -94,14 +111,19 @@ export function usePrediction() {
 		summaryValues.value = summaryFrom(values);
 
 		try {
-			const validFloorArea = Number.isFinite(values.floor_area_sqm) ? values.floor_area_sqm : 20;
-			const floorAreaSqm = Math.max(20, Math.min(300, Math.round(validFloorArea)));
-			const leaseCommenceYear = Number.isFinite(values.lease_commence_date)
-				? values.lease_commence_date
-				: 1960;
+			// Numeric fields must be finite — `usePredictionForm.validate()` guarantees
+			// this before predict() runs. Bail out loudly rather than silently
+			// substituting defaults, which would produce a confident, wrong prediction.
+			if (!Number.isFinite(values.floor_area_sqm) || !Number.isFinite(values.lease_commence_date)) {
+				throw new Error(tr('error_invalid_input'));
+			}
+
+			const floorAreaSqm = Math.max(20, Math.min(300, Math.round(values.floor_area_sqm)));
+			const leaseCommenceYear = values.lease_commence_date;
 
 			const data = await $fetch<ApiResponse>('/api/prices', {
 				method: 'POST',
+				signal: controller.signal,
 				body: {
 					mlModel: values.ml_model,
 					town: values.town,
@@ -124,11 +146,20 @@ export function usePrediction() {
 			trendData.value = serverData;
 			output.value = normalizePrice(serverData[serverData.length - 1]?.value ?? 0);
 		} catch (error) {
+			// A newer submit aborted this request; let that newer call own the state.
+			if (controller.signal.aborted) {
+				return;
+			}
+
 			trendData.value = defaultTrendData();
 			output.value = 0;
 			errorMessage.value = extractErrorMessage(error, tr('error_fetch'));
 		} finally {
-			loading.value = false;
+			// Only the latest request clears the loading flag and releases the controller.
+			if (activeController === controller) {
+				loading.value = false;
+				activeController = null;
+			}
 		}
 	}
 

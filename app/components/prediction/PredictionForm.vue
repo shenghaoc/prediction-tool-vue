@@ -4,6 +4,7 @@ import { Loader2 } from '@lucide/vue';
 import { FLAT_MODELS, ML_MODELS, STOREY_RANGES, TOWNS } from '~/utils/lists';
 import { translate, type Language } from '~/utils/i18n';
 import { YEAR_OPTIONS, type FieldType } from '~/utils/prediction';
+import type { FieldUpdate } from '~/composables/usePredictionForm';
 import Button from '~/components/ui/Button.vue';
 import Input from '~/components/ui/Input.vue';
 import FormSelect from '~/components/ui/FormSelect.vue';
@@ -19,14 +20,17 @@ const props = defineProps<{
 const emit = defineEmits<{
 	submit: [];
 	reset: [];
-	updateField: [payload: import('~/composables/usePredictionForm').FieldUpdate];
+	updateField: [payload: FieldUpdate];
 }>();
 
 function tr(key: string) {
 	return translate(props.currentLang, key);
 }
 
-function optionLabel(group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models', value: string) {
+function optionLabel(
+	group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models',
+	value: string
+) {
 	return translate(props.currentLang, `${group}.${value}`);
 }
 
@@ -92,7 +96,10 @@ const leaseYearOptions = computed(() =>
 				@update:model-value="updateField('flat_model', $event as FieldType['flat_model'])"
 			/>
 			<div class="grid gap-1.5">
-				<label for="input-floor_area" class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+				<label
+					for="input-floor_area"
+					class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+				>
 					{{ tr('floor_area') }}
 				</label>
 				<div class="flex">
