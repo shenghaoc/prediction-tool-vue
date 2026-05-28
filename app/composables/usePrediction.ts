@@ -94,7 +94,11 @@ export function usePrediction() {
 		summaryValues.value = summaryFrom(values);
 
 		try {
-			const floorAreaSqm = Math.max(20, Math.min(300, Math.round(values.floor_area_sqm)));
+			const validFloorArea = Number.isFinite(values.floor_area_sqm) ? values.floor_area_sqm : 20;
+			const floorAreaSqm = Math.max(20, Math.min(300, Math.round(validFloorArea)));
+			const leaseCommenceYear = Number.isFinite(values.lease_commence_date)
+				? values.lease_commence_date
+				: 1960;
 
 			const data = await $fetch<ApiResponse>('/api/prices', {
 				method: 'POST',
@@ -104,7 +108,7 @@ export function usePrediction() {
 					storeyRange: values.storey_range,
 					flatModel: values.flat_model,
 					floorAreaSqm,
-					leaseCommenceYear: values.lease_commence_date
+					leaseCommenceYear
 				}
 			});
 
