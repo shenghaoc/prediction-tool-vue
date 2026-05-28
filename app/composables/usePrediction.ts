@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { FetchError } from 'ofetch';
 import {
 	defaultTrendData,
 	initialFormValues,
@@ -20,8 +21,8 @@ function summaryFrom(values: Pick<FieldType, 'ml_model' | 'town' | 'lease_commen
 }
 
 function extractErrorMessage(error: unknown, fallback: string): string {
-	if (error && typeof error === 'object') {
-		const data = (error as { data?: unknown }).data;
+	if (error instanceof FetchError) {
+		const data = error.data;
 		if (data && typeof data === 'object') {
 			const record = data as Record<string, unknown>;
 			if (typeof record.statusMessage === 'string' && record.statusMessage.trim()) {
@@ -32,9 +33,8 @@ function extractErrorMessage(error: unknown, fallback: string): string {
 			}
 		}
 
-		const statusMessage = (error as { statusMessage?: unknown }).statusMessage;
-		if (typeof statusMessage === 'string' && statusMessage.trim()) {
-			return statusMessage;
+		if (typeof error.statusMessage === 'string' && error.statusMessage.trim()) {
+			return error.statusMessage;
 		}
 	}
 

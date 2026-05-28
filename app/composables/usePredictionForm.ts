@@ -52,7 +52,7 @@ export function usePredictionForm() {
 			values.lease_commence_date < 1960 ||
 			values.lease_commence_date > MAX_LEASE_COMMENCE_YEAR
 		) {
-			fieldErrors.lease_commence_date = tr('missing_lease_commence_date');
+			fieldErrors.lease_commence_date = tr('lease_commence_date_range');
 		}
 
 		return !Object.values(fieldErrors).some(Boolean);

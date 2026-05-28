@@ -35,6 +35,7 @@
   "select_year": "Select a year",
   "lease_commence_date": "Lease Commence Date",
   "missing_lease_commence_date": "Missing Lease Commence Date!",
+  "lease_commence_date_range": "Lease commence year is out of the supported range.",
   "get_prediction": "Get prediction",
   "reset_form": "Reset",
   "predicted_trends": "Predicted Trends for Past 12 Months",

@@ -147,8 +147,6 @@ localStorage.removeItem('form');
 }
 
 async function handleSubmit() {
-clearError();
-
 if (!validate(tr)) {
 return;
 }
