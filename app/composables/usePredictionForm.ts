@@ -1,5 +1,4 @@
 import { reactive } from 'vue';
-import { useStorage } from '@vueuse/core';
 import { initialFormValues, MAX_LEASE_COMMENCE_YEAR, type FieldType } from '~/utils/prediction';
 
 export type FieldUpdate = {
@@ -12,7 +11,7 @@ export function usePredictionForm() {
 	// Persisted to localStorage; `mergeDefaults` reconciles older/partial stored
 	// shapes against the current field set. SSR-safe: returns defaults on the
 	// server and hydrates from storage on the client.
-	const form = useStorage<FieldType>('form', { ...initialFormValues }, undefined, {
+	const form = useLocalStorage<FieldType>('form', { ...initialFormValues }, {
 		mergeDefaults: true
 	});
 	const fieldErrors = reactive<Record<keyof FieldType, string>>({
