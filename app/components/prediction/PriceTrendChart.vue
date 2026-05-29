@@ -145,7 +145,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
 </script>
 
 <template>
-	<div class="prediction-chart-frame">
+	<div class="prediction-chart-frame" role="img" aria-label="Line chart showing the estimated 12-month price trend">
 		<Line :data="chartData" :options="chartOptions" />
 	</div>
 </template>

@@ -11,6 +11,7 @@ import CardContent from '~/components/ui/CardContent.vue';
 import CardHeader from '~/components/ui/CardHeader.vue';
 import CardTitle from '~/components/ui/CardTitle.vue';
 import Skeleton from '~/components/ui/Skeleton.vue';
+import Tooltip from '~/components/ui/Tooltip.vue';
 import { FLAT_MODELS, ML_MODELS, TOWNS } from '~/utils/lists';
 import { getPredictionTheme } from '~/utils/prediction';
 import type { FieldUpdate } from '~/composables/usePredictionForm';
@@ -135,16 +136,21 @@ onMounted(() => {
 					>
 						{{ t('switch_language') }}
 					</Button>
-					<Button
-						type="button"
-						variant="outline"
-						size="icon"
-						:aria-label="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')"
-						@click="toggleTheme"
-					>
-						<Sun v-if="darkMode" class="size-4" />
-						<Moon v-else class="size-4" />
-					</Button>
+					<Tooltip>
+						<template #content>
+							{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}
+						</template>
+						<Button
+							type="button"
+							variant="outline"
+							size="icon"
+							:aria-label="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')"
+							@click="toggleTheme"
+						>
+							<Sun v-if="darkMode" class="size-4" />
+							<Moon v-else class="size-4" />
+						</Button>
+					</Tooltip>
 				</div>
 			</header>
 
