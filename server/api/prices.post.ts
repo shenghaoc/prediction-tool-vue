@@ -6,7 +6,7 @@ import { getPredictionWindow } from '~/utils/prediction';
 
 const { monthStart: DEFAULT_PREDICTION_MONTH_START, monthEnd: DEFAULT_PREDICTION_MONTH_END } =
 	getPredictionWindow();
-const MAX_LEASE_COMMENCE_YEAR = Number.parseInt(MONTHS[MONTHS.length - 1].slice(0, 4), 10);
+const MAX_LEASE_COMMENCE_YEAR = Number.parseInt(MONTHS[MONTHS.length - 1]!.slice(0, 4), 10);
 const MIN_LEASE_COMMENCE_YEAR = 1960;
 
 type NormalizedRequest = {

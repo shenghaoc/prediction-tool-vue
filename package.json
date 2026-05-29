@@ -6,7 +6,8 @@
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
 		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
+		"lint:fix": "eslint . --fix",
+		"typecheck": "nuxt typecheck"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20260527.1",
@@ -15,12 +16,15 @@
 		"nuxt": "^4.2.1",
 		"prettier": "3.7.4",
 		"typescript": "^6.0.3",
+		"vue-tsc": "^3.3.2",
 		"wrangler": "^4.95.0"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
 		"@lucide/vue": "^1.16.0",
+		"@nuxtjs/i18n": "^10.4.0",
 		"@tailwindcss/vite": "^4.3.0",
+		"@vueuse/nuxt": "^14.3.0",
 		"chart.js": "^4.5.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",

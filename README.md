@@ -23,6 +23,8 @@ Because of the way the original project data/model pipeline works, the tool does
 - Vue 3
 - TypeScript
 - ESLint
+- `@nuxtjs/i18n` (bilingual `en` / `zh`)
+- `@vueuse/nuxt` (color mode + persisted form state)
 - custom CSS design system (DM Sans + Lora, glassmorphic UI)
 - Chart.js via `vue-chartjs` wrapper
 - Cloudflare Workers (Nitro `cloudflare-module` preset)
@@ -36,7 +38,8 @@ Because of the way the original project data/model pipeline works, the tool does
 - [app/components/prediction](./app/components/prediction)
 - [app/utils](./app/utils)
 - [app/assets/styles/prediction.css](./app/assets/styles/prediction.css)
-- [locales](./locales)
+- [i18n/locales](./i18n/locales) — `@nuxtjs/i18n` message catalogs (`en`, `zh`)
+- [i18n/i18n.config.ts](./i18n/i18n.config.ts) — vue-i18n runtime options
 - [wrangler.jsonc](./wrangler.jsonc) — Cloudflare Workers config with D1 binding
 
 ## Development
