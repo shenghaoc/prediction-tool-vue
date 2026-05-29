@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { useColorMode } from '@vueuse/core';
 import { Home, Layers, MapPin, Moon, Sparkles, Sun } from '@lucide/vue';
 
 import PredictionForm from '~/components/prediction/PredictionForm.vue';
