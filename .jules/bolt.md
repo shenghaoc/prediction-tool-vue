@@ -1,0 +1,3 @@
+## 2023-11-20 - Removed @js-temporal/polyfill
+**Learning:** The `@js-temporal/polyfill` dependency was being used solely for simple string manipulation to generate a list of months and parse years. This added unnecessary weight to the client bundle without leveraging the library's more complex features.
+**Action:** Replace `Temporal` usage with standard JavaScript operations (like string splitting and loops) when only basic parsing or sequence generation is needed. This reduces bundle size while achieving the same results. Let the bundler handle tree-shaking rather than modifying `package.json` manually when dependencies shouldn't be altered according to issue instructions.
