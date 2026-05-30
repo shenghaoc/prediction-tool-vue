@@ -1,5 +1,3 @@
-import { Temporal } from '@js-temporal/polyfill';
-
 export const ML_MODELS = ['Support Vector Regression', 'Ridge Regression'] as const;
 export type MLModel = (typeof ML_MODELS)[number];
 
@@ -78,15 +76,21 @@ export const FLAT_MODELS = [
 ] as const;
 export type FlatModel = (typeof FLAT_MODELS)[number];
 
-const PREDICTION_MONTH_START = Temporal.PlainYearMonth.from('2017-01');
-const PREDICTION_MONTH_END = Temporal.PlainYearMonth.from('2022-02');
+const PREDICTION_MONTH_START = '2017-01';
+const PREDICTION_MONTH_END = '2022-02';
 
-function generateMonths(start: Temporal.PlainYearMonth, end: Temporal.PlainYearMonth): string[] {
+function generateMonths(start: string, end: string): string[] {
 	const months: string[] = [];
-	let current = start;
-	while (Temporal.PlainYearMonth.compare(current, end) <= 0) {
-		months.push(current.toString());
-		current = current.add({ months: 1 });
+	let [startYear, startMonth] = start.split('-').map(Number) as [number, number];
+	const [endYear, endMonth] = end.split('-').map(Number) as [number, number];
+
+	while (startYear < endYear || (startYear === endYear && startMonth <= endMonth)) {
+		months.push(`${startYear}-${startMonth.toString().padStart(2, '0')}`);
+		startMonth++;
+		if (startMonth > 12) {
+			startMonth = 1;
+			startYear++;
+		}
 	}
 	return months;
 }

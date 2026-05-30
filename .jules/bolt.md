@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid Heavy Polyfills for Simple Date Manipulations
+**Learning:** The `@js-temporal/polyfill` library is extremely heavy (adding over 150KB to the client bundle) and slow for simple operations. When used to generate a small array of YYYY-MM strings and extracting a year, it caused significant bundle bloat and ran 60x slower than basic string manipulation.
+**Action:** For simple string-based date manipulation or formatting, stick to native JavaScript string methods or `Date` objects instead of pulling in large polyfills or libraries like Temporal unless complex time zone math or strict immutability is actually required.
