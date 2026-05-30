@@ -127,19 +127,21 @@ onMounted(() => {
 				</div>
 
 				<div class="flex items-center gap-2 max-sm:w-full max-sm:[&>*]:flex-1">
-					<Button
-						type="button"
-						variant="outline"
-						size="sm"
-						class="normal-case tracking-normal max-sm:flex-1"
-						@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
-					>
-						{{ t('switch_language') }}
-					</Button>
 					<Tooltip>
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							class="normal-case tracking-normal max-sm:flex-1"
+							@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
+						>
+							{{ t('switch_language') }}
+						</Button>
 						<template #content>
-							{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}
+							<p>{{ t('switch_language') }}</p>
 						</template>
+					</Tooltip>
+					<Tooltip>
 						<Button
 							type="button"
 							variant="outline"
@@ -150,6 +152,9 @@ onMounted(() => {
 							<Sun v-if="darkMode" class="size-4" />
 							<Moon v-else class="size-4" />
 						</Button>
+						<template #content>
+							<p>{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}</p>
+						</template>
 					</Tooltip>
 				</div>
 			</header>
