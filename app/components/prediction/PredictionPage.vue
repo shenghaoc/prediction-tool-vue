@@ -16,7 +16,6 @@ import { FLAT_MODELS, ML_MODELS, TOWNS } from '~/utils/lists';
 
 const { t, locale, setLocale } = useI18n();
 
-const { form, validate, reset: resetFields } = usePredictionForm();
 const {
 	output,
 	trendData,
@@ -26,6 +25,10 @@ const {
 	reset: resetResults,
 	predict
 } = usePrediction();
+
+const { form, reset: resetFields } = usePredictionForm({
+	onSubmit: (values) => predict(values)
+});
 
 const colorMode = useColorMode({
 	storageKey: 'theme',
@@ -77,14 +80,6 @@ function setLanguage(language: 'en' | 'zh') {
 function resetForm() {
 	resetFields();
 	resetResults();
-}
-
-async function handleSubmit() {
-	if (!(await validate())) {
-		return;
-	}
-
-	await predict(form.value);
 }
 
 onMounted(() => {
@@ -177,9 +172,9 @@ onMounted(() => {
 						</CardHeader>
 						<CardContent class="px-5">
 							<PredictionForm
+								:form="form"
 								:loading="loading"
 								:error-message="errorMessage"
-								@submit="handleSubmit"
 								@reset="resetForm"
 							/>
 						</CardContent>

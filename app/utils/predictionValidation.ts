@@ -2,11 +2,27 @@ import type { FieldType } from '~/utils/prediction';
 
 type TranslateFn = (key: string) => string;
 
+function errorMessage(error: unknown): string | undefined {
+	if (typeof error === 'string') {
+		return error;
+	}
+
+	if (error && typeof error === 'object' && 'message' in error) {
+		const message = (error as { message?: unknown }).message;
+		if (typeof message === 'string') {
+			return message;
+		}
+	}
+
+	return undefined;
+}
+
 export function translatePredictionFieldError(
 	field: keyof FieldType,
-	message: string | undefined,
+	errors: unknown[] | undefined,
 	t: TranslateFn
 ): string {
+	const message = errorMessage(errors?.[0]);
 	if (!message) {
 		return '';
 	}
