@@ -8,16 +8,16 @@ import Separator from '~/components/ui/Separator.vue';
 import Skeleton from '~/components/ui/Skeleton.vue';
 import { cn } from '~/lib/utils';
 import { formatCurrency } from '~/utils/format';
-import type { PredictionTheme, SummaryValues, TrendPoint } from '~/utils/prediction';
+import type { SummaryValues, TrendPoint } from '~/utils/prediction';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const props = defineProps<{
 	output: number;
 	loading: boolean;
 	summaryValues: SummaryValues;
 	trendData: TrendPoint[];
-	theme: PredictionTheme;
+	darkMode: boolean;
 }>();
 
 const hasOutput = computed(() => props.output > 0);
@@ -45,7 +45,7 @@ function optionLabel(
 }
 
 function formatPrice(value: number) {
-	return formatCurrency(value);
+	return formatCurrency(value, locale.value);
 }
 
 const summaryItems = computed(() => [
@@ -70,7 +70,6 @@ const summaryItems = computed(() => [
 <template>
 	<section aria-labelledby="prediction-results-heading" :aria-busy="loading">
 		<div class="rounded-lg border border-border bg-card">
-			<!-- Header: title + price badge -->
 			<div class="flex flex-row items-start justify-between gap-4 px-5 py-4 max-sm:flex-col">
 				<div>
 					<h2
@@ -81,7 +80,6 @@ const summaryItems = computed(() => [
 					</h2>
 				</div>
 
-				<!-- Price badge -->
 				<div
 					:class="
 						cn(
@@ -110,12 +108,10 @@ const summaryItems = computed(() => [
 				</div>
 			</div>
 
-			<!-- Body -->
 			<div class="flex flex-col gap-4 px-5 pb-5">
 				<ResultsSkeleton v-if="showSkeleton" />
 				<template v-else>
 					<template v-if="hasOutput">
-						<!-- Summary tiles -->
 						<div class="grid grid-cols-3 gap-2 max-sm:grid-cols-1">
 							<div
 								v-for="item in summaryItems"
@@ -139,7 +135,6 @@ const summaryItems = computed(() => [
 
 						<Separator />
 
-						<!-- Chart section -->
 						<div>
 							<p
 								class="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
@@ -150,7 +145,6 @@ const summaryItems = computed(() => [
 								{{ t('chart_story_title') }}
 							</h3>
 
-							<!-- Stats row -->
 							<div class="mb-3 grid grid-cols-3 gap-2 max-sm:grid-cols-1">
 								<div
 									class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
@@ -199,12 +193,11 @@ const summaryItems = computed(() => [
 								</div>
 							</div>
 
-							<!-- Chart -->
 							<div
 								class="min-h-[240px] overflow-hidden rounded-sm border border-border bg-secondary/20 p-2"
 							>
 								<ClientOnly>
-									<PriceTrendChart :data="trendData" :theme="theme" />
+									<PriceTrendChart :data="trendData" :dark-mode="darkMode" />
 									<template #fallback>
 										<div class="animate-shimmer min-h-[240px] w-full rounded-sm bg-muted" />
 									</template>
@@ -213,7 +206,6 @@ const summaryItems = computed(() => [
 						</div>
 					</template>
 
-					<!-- Empty state -->
 					<div
 						v-else
 						class="flex flex-col items-center justify-center gap-3 rounded-sm border border-dashed border-border bg-secondary/20 px-4 py-12 text-center"

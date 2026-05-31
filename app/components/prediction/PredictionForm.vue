@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Loader2 } from '@lucide/vue';
+import { useField } from 'vee-validate';
+
 import { FLAT_MODELS, ML_MODELS, STOREY_RANGES, TOWNS } from '~/utils/lists';
-import { YEAR_OPTIONS, type FieldType } from '~/utils/prediction';
-import type { FieldUpdate } from '~/composables/usePredictionForm';
+import { YEAR_OPTIONS } from '~/utils/prediction';
+import { translatePredictionFieldError } from '~/utils/predictionValidation';
 import Button from '~/components/ui/Button.vue';
 import Input from '~/components/ui/Input.vue';
 import FormSelect from '~/components/ui/FormSelect.vue';
@@ -11,8 +13,6 @@ import FormSelect from '~/components/ui/FormSelect.vue';
 const { t } = useI18n();
 
 defineProps<{
-	form: FieldType;
-	fieldErrors: Record<keyof FieldType, string>;
 	loading: boolean;
 	errorMessage: string;
 }>();
@@ -20,21 +20,34 @@ defineProps<{
 const emit = defineEmits<{
 	submit: [];
 	reset: [];
-	updateField: [payload: FieldUpdate];
 }>();
+
+const { value: mlModel, errorMessage: mlModelError } = useField<string>('ml_model');
+const { value: town, errorMessage: townError } = useField<string>('town');
+const { value: storeyRange, errorMessage: storeyRangeError } = useField<string>('storey_range');
+const { value: flatModel, errorMessage: flatModelError } = useField<string>('flat_model');
+const { value: floorAreaSqm, errorMessage: floorAreaError } = useField<number>('floor_area_sqm');
+const { value: leaseCommenceDate, errorMessage: leaseCommenceDateError } =
+	useField<number>('lease_commence_date');
+
+function fieldError(
+	field:
+		| 'ml_model'
+		| 'town'
+		| 'storey_range'
+		| 'flat_model'
+		| 'floor_area_sqm'
+		| 'lease_commence_date',
+	message: string | undefined
+) {
+	return translatePredictionFieldError(field, message, t);
+}
 
 function optionLabel(
 	group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models',
 	value: string
 ) {
 	return t(`${group}.${value}`);
-}
-
-function updateField<K extends keyof FieldType>(key: K, value: FieldType[K]) {
-	// `key`/`value` are correlated through `K`, but TypeScript cannot express that
-	// the constructed object is a single member of the `FieldUpdate` union — the
-	// assertion is the standard, unavoidable bridge for correlated unions.
-	emit('updateField', { key, value } as FieldUpdate);
 }
 
 const mlModelOptions = computed(() =>
@@ -59,40 +72,40 @@ const leaseYearOptions = computed(() =>
 		<FormSelect
 			:label="t('ml_model')"
 			label-for="input-ml_model"
-			:error="fieldErrors.ml_model"
-			:model-value="form.ml_model"
+			:error="fieldError('ml_model', mlModelError)"
+			:model-value="mlModel"
 			:placeholder="t('select_ml_model')"
 			:items="mlModelOptions"
-			@update:model-value="updateField('ml_model', $event)"
+			@update:model-value="mlModel = $event"
 		/>
 
 		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
 			<FormSelect
 				:label="t('town')"
 				label-for="input-town"
-				:error="fieldErrors.town"
-				:model-value="form.town"
+				:error="fieldError('town', townError)"
+				:model-value="town"
 				:placeholder="t('select_town')"
 				:items="townOptions"
-				@update:model-value="updateField('town', $event)"
+				@update:model-value="town = $event"
 			/>
 			<FormSelect
 				:label="t('storey_range')"
 				label-for="input-storey_range"
-				:error="fieldErrors.storey_range"
-				:model-value="form.storey_range"
+				:error="fieldError('storey_range', storeyRangeError)"
+				:model-value="storeyRange"
 				:placeholder="t('select_storey_range')"
 				:items="storeyOptions"
-				@update:model-value="updateField('storey_range', $event)"
+				@update:model-value="storeyRange = $event"
 			/>
 			<FormSelect
 				:label="t('flat_model')"
 				label-for="input-flat_model"
-				:error="fieldErrors.flat_model"
-				:model-value="form.flat_model"
+				:error="fieldError('flat_model', flatModelError)"
+				:model-value="flatModel"
 				:placeholder="t('select_flat_model')"
 				:items="flatModelOptions"
-				@update:model-value="updateField('flat_model', $event)"
+				@update:model-value="flatModel = $event"
 			/>
 			<div class="grid gap-1.5">
 				<label
@@ -110,17 +123,15 @@ const leaseYearOptions = computed(() =>
 						:min="20"
 						:max="300"
 						:step="1"
-						:model-value="Number.isNaN(form.floor_area_sqm) ? '' : String(form.floor_area_sqm)"
+						:model-value="Number.isNaN(floorAreaSqm) ? '' : String(floorAreaSqm)"
 						:placeholder="t('enter_floor_area')"
-						:error="fieldErrors.floor_area_sqm"
+						:error="fieldError('floor_area_sqm', floorAreaError)"
 						class="relative rounded-r-none border-r-0 focus-visible:z-10"
 						@input="
-							updateField(
-								'floor_area_sqm',
+							floorAreaSqm =
 								($event.target as HTMLInputElement).value === ''
 									? Number.NaN
 									: Number(($event.target as HTMLInputElement).value)
-							)
 						"
 					/>
 					<span
@@ -130,8 +141,8 @@ const leaseYearOptions = computed(() =>
 						<span aria-hidden>m²</span>
 					</span>
 				</div>
-				<p v-if="fieldErrors.floor_area_sqm" class="text-xs text-destructive">
-					{{ fieldErrors.floor_area_sqm }}
+				<p v-if="fieldError('floor_area_sqm', floorAreaError)" class="text-xs text-destructive">
+					{{ fieldError('floor_area_sqm', floorAreaError) }}
 				</p>
 			</div>
 		</div>
@@ -139,11 +150,11 @@ const leaseYearOptions = computed(() =>
 		<FormSelect
 			:label="t('lease_commence_date')"
 			label-for="input-lease_commence_date"
-			:error="fieldErrors.lease_commence_date"
-			:model-value="String(form.lease_commence_date)"
+			:error="fieldError('lease_commence_date', leaseCommenceDateError)"
+			:model-value="String(leaseCommenceDate)"
 			:placeholder="t('select_year')"
 			:items="leaseYearOptions"
-			@update:model-value="updateField('lease_commence_date', Number($event))"
+			@update:model-value="leaseCommenceDate = Number($event)"
 		/>
 
 		<div class="grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">

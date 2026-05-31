@@ -13,30 +13,20 @@ import CardTitle from '~/components/ui/CardTitle.vue';
 import Skeleton from '~/components/ui/Skeleton.vue';
 import Tooltip from '~/components/ui/Tooltip.vue';
 import { FLAT_MODELS, ML_MODELS, TOWNS } from '~/utils/lists';
-import { getPredictionTheme } from '~/utils/prediction';
-import type { FieldUpdate } from '~/composables/usePredictionForm';
 
 const { t, locale, setLocale } = useI18n();
 
-const {
-	form,
-	fieldErrors,
-	validate,
-	updateField: applyFieldUpdate,
-	reset: resetFields
-} = usePredictionForm();
+const { form, validate, reset: resetFields } = usePredictionForm();
 const {
 	output,
 	trendData,
 	loading,
 	errorMessage,
 	summaryValues,
-	clearError,
 	reset: resetResults,
 	predict
 } = usePrediction();
 
-// VueUse owns the `dark` class on <html> and persists the choice to localStorage.
 const colorMode = useColorMode({
 	storageKey: 'theme',
 	initialValue: 'light',
@@ -45,7 +35,6 @@ const colorMode = useColorMode({
 
 const isHydrated = ref(false);
 
-const theme = computed(() => getPredictionTheme(colorMode.value === 'dark'));
 const darkMode = computed(() => colorMode.value === 'dark');
 const isZh = computed(() => locale.value === 'zh');
 
@@ -77,11 +66,6 @@ useHead(() => ({
 	}
 }));
 
-function updateField(payload: FieldUpdate) {
-	applyFieldUpdate(payload);
-	clearError();
-}
-
 function toggleTheme() {
 	colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark';
 }
@@ -96,7 +80,7 @@ function resetForm() {
 }
 
 async function handleSubmit() {
-	if (!validate()) {
+	if (!(await validate())) {
 		return;
 	}
 
@@ -112,7 +96,6 @@ onMounted(() => {
 <template>
 	<main v-if="isHydrated" class="min-h-screen px-6 pb-10 pt-4 max-sm:px-3 max-sm:pb-6">
 		<div class="mx-auto max-w-7xl">
-			<!-- Sticky header — blurred background, no flash -->
 			<header
 				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-border bg-background/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
 			>
@@ -154,13 +137,10 @@ onMounted(() => {
 				</div>
 			</header>
 
-			<!-- Two-column layout — stacks at 860px -->
 			<div
 				class="grid grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] items-start gap-4 max-[860px]:grid-cols-1"
 			>
-				<!-- Left column: intro + form -->
 				<div class="flex flex-col gap-4">
-					<!-- Intro card -->
 					<Card class="py-5">
 						<CardHeader class="px-5 pb-0">
 							<CardTitle
@@ -189,7 +169,6 @@ onMounted(() => {
 						</CardContent>
 					</Card>
 
-					<!-- Form card -->
 					<Card class="py-4">
 						<CardHeader class="px-5 pb-2">
 							<CardTitle class="text-sm text-primary normal-case">
@@ -198,36 +177,30 @@ onMounted(() => {
 						</CardHeader>
 						<CardContent class="px-5">
 							<PredictionForm
-								:form="form"
-								:field-errors="fieldErrors"
 								:loading="loading"
 								:error-message="errorMessage"
 								@submit="handleSubmit"
 								@reset="resetForm"
-								@update-field="updateField"
 							/>
 						</CardContent>
 					</Card>
 				</div>
 
-				<!-- Right column: results -->
 				<div>
 					<PredictionResults
 						:output="output"
 						:loading="loading"
 						:summary-values="summaryValues"
 						:trend-data="trendData"
-						:theme="theme"
+						:dark-mode="darkMode"
 					/>
 				</div>
 			</div>
 		</div>
 	</main>
 
-	<!-- Pre-hydration skeleton — shimmer placeholders sized to the real layout to prevent flash/CLS -->
 	<main v-else class="min-h-screen px-6 pb-10 pt-4" aria-busy="true">
 		<div class="mx-auto max-w-7xl">
-			<!-- Header skeleton — matches real header dimensions to prevent CLS -->
 			<div
 				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-border bg-background/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
 			>
