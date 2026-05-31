@@ -104,48 +104,50 @@ const leaseYearOptions = computed(() =>
 			</FormField>
 
 			<FormField v-slot="{ field }" name="floor_area_sqm">
-				<div class="grid gap-1.5">
-					<label
-						for="input-floor_area"
-						class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
-					>
-						{{ t('floor_area') }}
-					</label>
-					<div class="flex">
-						<Input
-							id="input-floor_area"
-							type="number"
-							inputmode="numeric"
-							enterkeyhint="done"
-							:min="20"
-							:max="300"
-							:step="1"
-							:model-value="Number.isNaN(field.state.value) ? '' : String(field.state.value)"
-							:placeholder="t('enter_floor_area')"
-							:error="fieldError('floor_area_sqm', field.state.meta.errors)"
-							class="relative rounded-r-none border-r-0 focus-visible:z-10"
-							@input="
-								field.handleChange(
-									($event.target as HTMLInputElement).value === ''
-										? Number.NaN
-										: Number(($event.target as HTMLInputElement).value)
-								)
-							"
-						/>
-						<span
-							class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
+				<template
+					v-for="floorAreaError in [fieldError('floor_area_sqm', field.state.meta.errors)]"
+					:key="floorAreaError || 'floor-area'"
+				>
+					<div class="grid gap-1.5">
+						<label
+							for="input-floor_area"
+							class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 						>
-							<span class="sr-only">{{ t('floor_area_unit') }}</span>
-							<span aria-hidden>m²</span>
-						</span>
+							{{ t('floor_area') }}
+						</label>
+						<div class="flex">
+							<Input
+								id="input-floor_area"
+								type="number"
+								inputmode="decimal"
+								enterkeyhint="done"
+								:min="20"
+								:max="300"
+								step="any"
+								:model-value="Number.isNaN(field.state.value) ? '' : String(field.state.value)"
+								:placeholder="t('enter_floor_area')"
+								:error="floorAreaError"
+								class="relative rounded-r-none border-r-0 focus-visible:z-10"
+								@input="
+									field.handleChange(
+										($event.target as HTMLInputElement).value === ''
+											? Number.NaN
+											: Number(($event.target as HTMLInputElement).value)
+									)
+								"
+							/>
+							<span
+								class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
+							>
+								<span class="sr-only">{{ t('floor_area_unit') }}</span>
+								<span aria-hidden>m²</span>
+							</span>
+						</div>
+						<p v-if="floorAreaError" class="text-xs text-destructive">
+							{{ floorAreaError }}
+						</p>
 					</div>
-					<p
-						v-if="fieldError('floor_area_sqm', field.state.meta.errors)"
-						class="text-xs text-destructive"
-					>
-						{{ fieldError('floor_area_sqm', field.state.meta.errors) }}
-					</p>
-				</div>
+				</template>
 			</FormField>
 		</div>
 
