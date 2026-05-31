@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TooltipProvider } from 'radix-vue';
+import { TooltipProvider } from 'reka-ui';
 </script>
 
 <template>

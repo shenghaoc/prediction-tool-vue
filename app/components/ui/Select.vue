@@ -14,7 +14,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 	SelectViewport
-} from 'radix-vue';
+} from 'reka-ui';
 import { Check, ChevronDown, ChevronUp } from '@lucide/vue';
 
 defineProps<{
