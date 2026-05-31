@@ -3,9 +3,6 @@
 import type { NormalizedPredictionRequest } from '#shared/predictionSchema';
 import { getPredictionWindow } from '~/utils/prediction';
 
-const { monthStart: DEFAULT_PREDICTION_MONTH_START, monthEnd: DEFAULT_PREDICTION_MONTH_END } =
-	getPredictionWindow();
-
 type PriceQueryRow = {
 	intercept_map: number;
 	month_map: number;
@@ -36,6 +33,7 @@ export async function runPrediction(
 	request: NormalizedPredictionRequest
 ): Promise<{ predictions: Array<{ month: string; predictedPrice: number }> }> {
 	const { mlModel, town, flatModel, storeyRange, floorAreaSqm, leaseCommenceYear } = request;
+	const { monthStart, monthEnd } = getPredictionWindow();
 
 	const { results } = await db
 		.prepare(
@@ -64,8 +62,8 @@ export async function runPrediction(
 			mlModel,
 			town,
 			flatModel,
-			DEFAULT_PREDICTION_MONTH_START,
-			DEFAULT_PREDICTION_MONTH_END,
+			monthStart,
+			monthEnd,
 			storeyRange
 		)
 		.all<PriceQueryRow>();
