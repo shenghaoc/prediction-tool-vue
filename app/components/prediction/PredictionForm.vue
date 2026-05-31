@@ -1,40 +1,38 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Loader2 } from '@lucide/vue';
+
+import type { PredictionFormHandle } from '~/composables/usePredictionForm';
 import { FLAT_MODELS, ML_MODELS, STOREY_RANGES, TOWNS } from '~/utils/lists';
 import { YEAR_OPTIONS, type FieldType } from '~/utils/prediction';
-import type { FieldUpdate } from '~/composables/usePredictionForm';
+import { translatePredictionFieldError } from '~/utils/predictionValidation';
 import Button from '~/components/ui/Button.vue';
 import Input from '~/components/ui/Input.vue';
 import FormSelect from '~/components/ui/FormSelect.vue';
 
 const { t } = useI18n();
 
-defineProps<{
-	form: FieldType;
-	fieldErrors: Record<keyof FieldType, string>;
+const props = defineProps<{
+	form: PredictionFormHandle;
 	loading: boolean;
 	errorMessage: string;
 }>();
 
+const FormField = props.form.Field;
+
 const emit = defineEmits<{
-	submit: [];
 	reset: [];
-	updateField: [payload: FieldUpdate];
 }>();
+
+function fieldError(field: keyof FieldType, errors: unknown[] | undefined) {
+	return translatePredictionFieldError(field, errors, t);
+}
 
 function optionLabel(
 	group: 'ml_models' | 'towns' | 'storey_ranges' | 'flat_models',
 	value: string
 ) {
 	return t(`${group}.${value}`);
-}
-
-function updateField<K extends keyof FieldType>(key: K, value: FieldType[K]) {
-	// `key`/`value` are correlated through `K`, but TypeScript cannot express that
-	// the constructed object is a single member of the `FieldUpdate` union — the
-	// assertion is the standard, unavoidable bridge for correlated unions.
-	emit('updateField', { key, value } as FieldUpdate);
 }
 
 const mlModelOptions = computed(() =>
@@ -55,96 +53,110 @@ const leaseYearOptions = computed(() =>
 </script>
 
 <template>
-	<form class="flex flex-col gap-4" @submit.prevent="emit('submit')">
-		<FormSelect
-			:label="t('ml_model')"
-			label-for="input-ml_model"
-			:error="fieldErrors.ml_model"
-			:model-value="form.ml_model"
-			:placeholder="t('select_ml_model')"
-			:items="mlModelOptions"
-			@update:model-value="updateField('ml_model', $event)"
-		/>
+	<form class="flex flex-col gap-4" @submit.prevent="props.form.handleSubmit">
+		<FormField v-slot="{ field }" name="ml_model">
+			<FormSelect
+				:label="t('ml_model')"
+				label-for="input-ml_model"
+				:error="fieldError('ml_model', field.state.meta.errors)"
+				:model-value="field.state.value"
+				:placeholder="t('select_ml_model')"
+				:items="mlModelOptions"
+				@update:model-value="field.handleChange"
+			/>
+		</FormField>
 
 		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
-			<FormSelect
-				:label="t('town')"
-				label-for="input-town"
-				:error="fieldErrors.town"
-				:model-value="form.town"
-				:placeholder="t('select_town')"
-				:items="townOptions"
-				@update:model-value="updateField('town', $event)"
-			/>
-			<FormSelect
-				:label="t('storey_range')"
-				label-for="input-storey_range"
-				:error="fieldErrors.storey_range"
-				:model-value="form.storey_range"
-				:placeholder="t('select_storey_range')"
-				:items="storeyOptions"
-				@update:model-value="updateField('storey_range', $event)"
-			/>
-			<FormSelect
-				:label="t('flat_model')"
-				label-for="input-flat_model"
-				:error="fieldErrors.flat_model"
-				:model-value="form.flat_model"
-				:placeholder="t('select_flat_model')"
-				:items="flatModelOptions"
-				@update:model-value="updateField('flat_model', $event)"
-			/>
-			<div class="grid gap-1.5">
-				<label
-					for="input-floor_area"
-					class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
-				>
-					{{ t('floor_area') }}
-				</label>
-				<div class="flex">
-					<Input
-						id="input-floor_area"
-						type="number"
-						inputmode="numeric"
-						enterkeyhint="done"
-						:min="20"
-						:max="300"
-						:step="1"
-						:model-value="Number.isNaN(form.floor_area_sqm) ? '' : String(form.floor_area_sqm)"
-						:placeholder="t('enter_floor_area')"
-						:error="fieldErrors.floor_area_sqm"
-						class="relative rounded-r-none border-r-0 focus-visible:z-10"
-						@input="
-							updateField(
-								'floor_area_sqm',
-								($event.target as HTMLInputElement).value === ''
-									? Number.NaN
-									: Number(($event.target as HTMLInputElement).value)
-							)
-						"
-					/>
-					<span
-						class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
+			<FormField v-slot="{ field }" name="town">
+				<FormSelect
+					:label="t('town')"
+					label-for="input-town"
+					:error="fieldError('town', field.state.meta.errors)"
+					:model-value="field.state.value"
+					:placeholder="t('select_town')"
+					:items="townOptions"
+					@update:model-value="field.handleChange"
+				/>
+			</FormField>
+
+			<FormField v-slot="{ field }" name="storey_range">
+				<FormSelect
+					:label="t('storey_range')"
+					label-for="input-storey_range"
+					:error="fieldError('storey_range', field.state.meta.errors)"
+					:model-value="field.state.value"
+					:placeholder="t('select_storey_range')"
+					:items="storeyOptions"
+					@update:model-value="field.handleChange"
+				/>
+			</FormField>
+
+			<FormField v-slot="{ field }" name="flat_model">
+				<FormSelect
+					:label="t('flat_model')"
+					label-for="input-flat_model"
+					:error="fieldError('flat_model', field.state.meta.errors)"
+					:model-value="field.state.value"
+					:placeholder="t('select_flat_model')"
+					:items="flatModelOptions"
+					@update:model-value="field.handleChange"
+				/>
+			</FormField>
+
+			<FormField v-slot="{ field }" name="floor_area_sqm">
+				<div class="grid gap-1.5">
+					<label
+						for="input-floor_area"
+						class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 					>
-						<span class="sr-only">{{ t('floor_area_unit') }}</span>
-						<span aria-hidden>m²</span>
-					</span>
+						{{ t('floor_area') }}
+					</label>
+					<div class="flex">
+						<Input
+							id="input-floor_area"
+							type="number"
+							inputmode="decimal"
+							enterkeyhint="done"
+							:min="20"
+							:max="300"
+							step="any"
+							:model-value="field.state.value == null || Number.isNaN(field.state.value) ? '' : String(field.state.value)"
+							:placeholder="t('enter_floor_area')"
+							:error="fieldError('floor_area_sqm', field.state.meta.errors)"
+							class="relative rounded-r-none border-r-0 focus-visible:z-10"
+							@input="
+								field.handleChange(
+									($event.target as HTMLInputElement).value === ''
+										? Number.NaN
+										: Number(($event.target as HTMLInputElement).value)
+								)
+							"
+						/>
+						<span
+							class="inline-flex h-8 items-center rounded-r-sm border border-input bg-secondary px-3 text-xs font-semibold text-muted-foreground"
+						>
+							<span class="sr-only">{{ t('floor_area_unit') }}</span>
+							<span aria-hidden>m²</span>
+						</span>
+					</div>
+					<p v-if="fieldError('floor_area_sqm', field.state.meta.errors)" class="text-xs text-destructive">
+						{{ fieldError('floor_area_sqm', field.state.meta.errors) }}
+					</p>
 				</div>
-				<p v-if="fieldErrors.floor_area_sqm" class="text-xs text-destructive">
-					{{ fieldErrors.floor_area_sqm }}
-				</p>
-			</div>
+			</FormField>
 		</div>
 
-		<FormSelect
-			:label="t('lease_commence_date')"
-			label-for="input-lease_commence_date"
-			:error="fieldErrors.lease_commence_date"
-			:model-value="String(form.lease_commence_date)"
-			:placeholder="t('select_year')"
-			:items="leaseYearOptions"
-			@update:model-value="updateField('lease_commence_date', Number($event))"
-		/>
+		<FormField v-slot="{ field }" name="lease_commence_date">
+			<FormSelect
+				:label="t('lease_commence_date')"
+				label-for="input-lease_commence_date"
+				:error="fieldError('lease_commence_date', field.state.meta.errors)"
+				:model-value="field.state.value == null || Number.isNaN(field.state.value) ? '' : String(field.state.value)"
+				:placeholder="t('select_year')"
+				:items="leaseYearOptions"
+				@update:model-value="field.handleChange($event ? Number($event) : NaN)"
+			/>
+		</FormField>
 
 		<div class="grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
 			<Button

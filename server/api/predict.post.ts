@@ -1,9 +1,7 @@
-/// <reference types="@cloudflare/workers-types" />
-
 import {
-	apiToNormalizedRequest,
 	formatApiValidationError,
-	predictionApiSchema
+	predictionFormSchema,
+	toNormalizedRequest
 } from '#shared/predictionSchema';
 import { getPredictionDatabase, runPrediction } from '../utils/runPrediction';
 
@@ -19,7 +17,7 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	const parsed = predictionApiSchema.safeParse(requestBody);
+	const parsed = predictionFormSchema.safeParse(requestBody);
 	if (!parsed.success) {
 		throw createError({
 			statusCode: 400,
@@ -29,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
 	try {
 		const db = getPredictionDatabase(event);
-		return await runPrediction(db, apiToNormalizedRequest(parsed.data));
+		return await runPrediction(db, toNormalizedRequest(parsed.data));
 	} catch (error: unknown) {
 		if (error instanceof Error && 'statusCode' in error) {
 			throw error;
