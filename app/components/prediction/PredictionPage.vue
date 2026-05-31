@@ -148,7 +148,7 @@ onMounted(() => {
 							<Moon v-else class="size-4" />
 						</Button>
 						<template #content>
-							<p>{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}</p>
+							<p aria-hidden="true">{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}</p>
 						</template>
 					</Tooltip>
 				</div>
