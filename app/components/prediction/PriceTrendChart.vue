@@ -5,6 +5,7 @@ import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent } from 'echarts/components';
 import { SVGRenderer } from 'echarts/renderers';
 import VChart from 'vue-echarts';
+import 'echarts/theme/dark.js';
 
 import { formatCurrency } from '~/utils/format';
 import { formatCurrencyTick, normalizePrice, type TrendPoint } from '~/utils/prediction';

@@ -28,7 +28,6 @@ export const predictionFormSchema = z.object({
 	floor_area_sqm: z
 		.number({ invalid_type_error: 'invalid_floor_area' })
 		.finite('invalid_floor_area')
-		.int('invalid_floor_area')
 		.min(MIN_FLOOR_AREA_SQM, 'floor_area_out_of_range')
 		.max(MAX_FLOOR_AREA_SQM, 'floor_area_out_of_range'),
 	lease_commence_date: z
@@ -106,11 +105,14 @@ const API_FIELD_ERRORS: Record<string, string> = {
 	lease_commence_date_out_of_range: `Lease commence year must be between ${MIN_LEASE_COMMENCE_YEAR} and ${MAX_LEASE_COMMENCE_YEAR}.`
 };
 
-const API_ENUM_FIELD_ERRORS: Partial<Record<keyof PredictionApiInput, string>> = {
+const API_ENUM_FIELD_ERRORS: Record<string, string> = {
 	mlModel: 'Invalid ML model.',
+	ml_model: 'Invalid ML model.',
 	town: 'Invalid town.',
 	storeyRange: 'Invalid storey range.',
-	flatModel: 'Invalid flat model.'
+	storey_range: 'Invalid storey range.',
+	flatModel: 'Invalid flat model.',
+	flat_model: 'Invalid flat model.'
 };
 
 export function formatApiValidationError(error: z.ZodError): string {
@@ -126,7 +128,7 @@ export function formatApiValidationError(error: z.ZodError): string {
 
 	const field = issue.path[0];
 	if (typeof field === 'string' && field in API_ENUM_FIELD_ERRORS) {
-		return API_ENUM_FIELD_ERRORS[field as keyof PredictionApiInput]!;
+		return API_ENUM_FIELD_ERRORS[field]!;
 	}
 
 	return 'Invalid request body.';
