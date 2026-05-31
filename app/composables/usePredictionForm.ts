@@ -49,7 +49,7 @@ export function usePredictionForm(options: UsePredictionFormOptions) {
 
 	function reset() {
 		const defaults = { ...initialFormValues };
-		form.reset(defaults);
+		form.reset();
 		formState.value = defaults;
 		storedForm.value = defaults;
 	}
