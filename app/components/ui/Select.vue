@@ -37,7 +37,7 @@ const emit = defineEmits<{
 			:id="id"
 			:class="
 				cn(
-					'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-card px-3 py-1 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:truncate',
+					'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-sm border border-input bg-card px-3 py-1 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:truncate',
 					triggerClass
 				)
 			"

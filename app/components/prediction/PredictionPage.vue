@@ -137,9 +137,6 @@ onMounted(() => {
 						{{ t('switch_language') }}
 					</Button>
 					<Tooltip>
-						<template #content>
-							{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}
-						</template>
 						<Button
 							type="button"
 							variant="outline"
@@ -150,6 +147,9 @@ onMounted(() => {
 							<Sun v-if="darkMode" class="size-4" />
 							<Moon v-else class="size-4" />
 						</Button>
+						<template #content>
+							<p aria-hidden="true">{{ darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode') }}</p>
+						</template>
 					</Tooltip>
 				</div>
 			</header>
