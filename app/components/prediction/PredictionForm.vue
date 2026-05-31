@@ -151,10 +151,10 @@ const leaseYearOptions = computed(() =>
 				:label="t('lease_commence_date')"
 				label-for="input-lease_commence_date"
 				:error="fieldError('lease_commence_date', field.state.meta.errors)"
-				:model-value="field.state.value ? String(field.state.value) : ''"
+				:model-value="field.state.value == null || Number.isNaN(field.state.value) ? '' : String(field.state.value)"
 				:placeholder="t('select_year')"
 				:items="leaseYearOptions"
-				@update:model-value="field.handleChange(Number($event))"
+				@update:model-value="field.handleChange($event ? Number($event) : NaN)"
 			/>
 		</FormField>
 

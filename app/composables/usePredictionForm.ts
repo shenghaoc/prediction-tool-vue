@@ -23,7 +23,6 @@ function createPredictionForm({ onSubmit }: UsePredictionFormOptions) {
 export type PredictionFormHandle = ReturnType<typeof createPredictionForm>;
 
 export function usePredictionForm(options: UsePredictionFormOptions) {
-	const formState = useState<FieldType>('prediction-form', () => ({ ...initialFormValues }));
 	const storedForm = useLocalStorage<FieldType>('form', { ...initialFormValues }, {
 		mergeDefaults: true
 	});
@@ -33,25 +32,20 @@ export function usePredictionForm(options: UsePredictionFormOptions) {
 
 	onMounted(() => {
 		const merged = { ...initialFormValues, ...storedForm.value };
-		formState.value = merged;
 		form.reset(merged);
 	});
 
 	watch(
 		formValues,
 		(next) => {
-			const snapshot = { ...next } as FieldType;
-			formState.value = snapshot;
-			storedForm.value = snapshot;
+			storedForm.value = { ...next } as FieldType;
 		},
 		{ deep: true }
 	);
 
 	function reset() {
-		const defaults = { ...initialFormValues };
 		form.reset();
-		formState.value = defaults;
-		storedForm.value = defaults;
+		storedForm.value = { ...initialFormValues };
 	}
 
 	return { form, reset };

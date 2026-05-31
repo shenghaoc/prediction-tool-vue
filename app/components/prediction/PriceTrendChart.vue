@@ -61,7 +61,7 @@ const chartOption = computed(() => ({
 <template>
 	<div class="prediction-chart-frame" role="img" :aria-label="t('price_trend_chart_aria')">
 		<VChart
-			class="h-[240px] w-full"
+			style="height: 240px; width: 100%"
 			:theme="chartTheme"
 			:option="chartOption"
 			:init-options="{ renderer: 'svg' }"
