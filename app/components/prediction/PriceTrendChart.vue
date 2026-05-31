@@ -16,6 +16,8 @@ import { Line } from 'vue-chartjs';
 import { formatCurrency } from '~/utils/format';
 import { formatCurrencyTick, normalizePrice, type PredictionTheme, type TrendPoint } from '~/utils/prediction';
 
+const { t } = useI18n();
+
 const props = defineProps<{
 	data: TrendPoint[];
 	theme: PredictionTheme;
@@ -145,7 +147,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
 </script>
 
 <template>
-	<div class="prediction-chart-frame" role="img" aria-label="Line chart showing the estimated 12-month price trend">
+	<div class="prediction-chart-frame" role="img" :aria-label="t('price_trend_chart_aria')">
 		<Line :data="chartData" :options="chartOptions" />
 	</div>
 </template>

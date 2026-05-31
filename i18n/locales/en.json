@@ -39,6 +39,7 @@
   "lease_commence_date_range": "Lease commence year is out of the supported range.",
   "get_prediction": "Get prediction",
   "reset_form": "Reset",
+  "price_trend_chart_aria": "Line chart showing the estimated 12-month price trend",
   "predicted_trends": "Predicted Trends for Past 12 Months",
   "chart_story_title": "How the estimate has moved over the last year",
   "chart_latest": "Latest",

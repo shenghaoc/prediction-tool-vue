@@ -39,6 +39,7 @@
   "lease_commence_date_range": "租约开始年份超出支持范围。",
   "get_prediction": "获取预测",
   "reset_form": "重置",
+  "price_trend_chart_aria": "显示估计12个月价格趋势的折线图",
   "predicted_trends": "过去12个月预测趋势",
   "chart_story_title": "过去一年估值变化",
   "chart_latest": "最新估值",
