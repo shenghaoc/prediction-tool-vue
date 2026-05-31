@@ -127,20 +127,15 @@ onMounted(() => {
 				</div>
 
 				<div class="flex items-center gap-2 max-sm:w-full max-sm:[&>*]:flex-1">
-					<Tooltip>
-						<Button
-							type="button"
-							variant="outline"
-							size="sm"
-							class="normal-case tracking-normal max-sm:flex-1"
-							@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
-						>
-							{{ t('switch_language') }}
-						</Button>
-						<template #content>
-							<p>{{ t('switch_language') }}</p>
-						</template>
-					</Tooltip>
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						class="normal-case tracking-normal max-sm:flex-1"
+						@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
+					>
+						{{ t('switch_language') }}
+					</Button>
 					<Tooltip>
 						<Button
 							type="button"
