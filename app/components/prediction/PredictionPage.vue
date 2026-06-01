@@ -80,11 +80,11 @@ onMounted(() => {
 	<main v-if="isHydrated" class="min-h-screen px-6 pb-10 pt-4 max-sm:px-3 max-sm:pb-6">
 		<div class="mx-auto max-w-7xl">
 			<header
-				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-border bg-background/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
+				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-default bg-default/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
 			>
 				<div class="flex items-center gap-2">
 					<span
-						class="inline-flex items-center gap-1.5 rounded-sm border border-primary/20 bg-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent-foreground"
+						class="inline-flex items-center gap-1.5 rounded-sm border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary"
 					>
 						<span class="size-2 rounded-full bg-primary" aria-hidden />
 						<UIcon name="i-heroicons-sparkles" class="size-3" aria-hidden />
@@ -132,7 +132,7 @@ onMounted(() => {
 							>
 								{{ t('price_prediction') }}
 							</h1>
-							<p class="mt-1.5 max-w-prose text-sm leading-relaxed text-secondary-foreground">
+							<p class="mt-1.5 max-w-prose text-sm leading-relaxed text-toned">
 								{{ t('intro_blurb') }}
 							</p>
 						</template>
@@ -179,7 +179,7 @@ onMounted(() => {
 	<main v-else class="min-h-screen px-6 pb-10 pt-4" aria-busy="true">
 		<div class="mx-auto max-w-7xl">
 			<div
-				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-border bg-background/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
+				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-default bg-default/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
 			>
 				<USkeleton class="h-5 w-24 rounded-sm" />
 				<div class="flex items-center gap-2">

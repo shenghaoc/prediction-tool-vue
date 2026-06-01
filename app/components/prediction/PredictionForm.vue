@@ -54,7 +54,7 @@ const leaseYearOptions = computed(() =>
 			<UFormField
 				:label="t('ml_model')"
 				:error="fieldError('ml_model', field.state.meta.errors)"
-				:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted-foreground' }"
+				:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
 			>
 				<USelect
 					:model-value="field.state.value"
@@ -72,7 +72,7 @@ const leaseYearOptions = computed(() =>
 				<UFormField
 					:label="t('town')"
 					:error="fieldError('town', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted-foreground' }"
+					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -89,7 +89,7 @@ const leaseYearOptions = computed(() =>
 				<UFormField
 					:label="t('storey_range')"
 					:error="fieldError('storey_range', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted-foreground' }"
+					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -106,7 +106,7 @@ const leaseYearOptions = computed(() =>
 				<UFormField
 					:label="t('flat_model')"
 					:error="fieldError('flat_model', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted-foreground' }"
+					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -123,7 +123,7 @@ const leaseYearOptions = computed(() =>
 				<UFormField
 					:label="t('floor_area')"
 					:error="fieldError('floor_area_sqm', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted-foreground' }"
+					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
 				>
 					<UInput
 						type="number"
@@ -142,7 +142,7 @@ const leaseYearOptions = computed(() =>
 						"
 					>
 						<template #trailing>
-							<span class="text-xs font-semibold text-muted-foreground">
+							<span class="text-xs font-semibold text-muted">
 								<span class="sr-only">{{ t('floor_area_unit') }}</span>
 								<span aria-hidden>m²</span>
 							</span>
@@ -156,7 +156,7 @@ const leaseYearOptions = computed(() =>
 			<UFormField
 				:label="t('lease_commence_date')"
 				:error="fieldError('lease_commence_date', field.state.meta.errors)"
-				:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted-foreground' }"
+				:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
 			>
 				<USelect
 					:model-value="field.state.value == null || Number.isNaN(field.state.value) ? '' : String(field.state.value)"

@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const tileClasses = computed(() =>
 	cn(
-		'group/tile flex items-center gap-2.5 rounded-sm border border-border bg-card/90 px-3 py-2 transition-all duration-200',
+		'group/tile flex items-center gap-2.5 rounded-sm border border-default bg-default/90 px-3 py-2 transition-all duration-200',
 		'hover:-translate-y-px hover:border-primary/20',
 		props.hint && 'cursor-help',
 		props.class
@@ -30,7 +30,7 @@ const tileClasses = computed(() =>
 				<UIcon :name="icon" class="size-4 text-primary" />
 			</div>
 			<div class="flex min-w-0 flex-col gap-0.5">
-				<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+				<span class="text-[10px] font-bold uppercase tracking-wider text-muted">
 					{{ label }}
 				</span>
 				<strong class="font-sans text-base font-extrabold tabular-nums tracking-tight text-primary">
@@ -48,7 +48,7 @@ const tileClasses = computed(() =>
 			<UIcon :name="icon" class="size-4 text-primary" />
 		</div>
 		<div class="flex min-w-0 flex-col gap-0.5">
-			<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+			<span class="text-[10px] font-bold uppercase tracking-wider text-muted">
 				{{ label }}
 			</span>
 			<strong class="font-sans text-base font-extrabold tabular-nums tracking-tight text-primary">

@@ -1,106 +1,17 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
-	/* ── Font stacks — Source Sans 3 only (all-sans, TDesign-aligned) ── */
 	--font-sans: 'Source Sans 3', 'Source Sans Pro', 'Helvetica Neue', 'Segoe UI', Arial,
 		sans-serif;
 	--font-cjk:
 		'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
-
-	/* ── Color aliases ── */
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
-	--color-card: var(--card);
-	--color-card-foreground: var(--card-foreground);
-	--color-popover: var(--popover);
-	--color-popover-foreground: var(--popover-foreground);
-	--color-primary: var(--primary);
-	--color-primary-foreground: var(--primary-foreground);
-	--color-secondary: var(--secondary);
-	--color-secondary-foreground: var(--secondary-foreground);
-	--color-muted: var(--muted);
-	--color-muted-foreground: var(--muted-foreground);
-	--color-accent: var(--accent);
-	--color-accent-foreground: var(--accent-foreground);
-	--color-destructive: var(--destructive);
-	--color-destructive-foreground: var(--destructive-foreground);
-	--color-border: var(--border);
-	--color-input: var(--input);
-	--color-ring: var(--ring);
-	--color-chart-1: var(--chart-1);
-	--color-chart-2: var(--chart-2);
-	--color-chart-3: var(--chart-3);
-	--color-chart-4: var(--chart-4);
-	--color-chart-5: var(--chart-5);
-
-	/* ── Radius scale — TDesign-inspired restraint (3–6px) ── */
-	--radius-sm: calc(var(--radius) * 0.5);   /* ~3px */
-	--radius-md: calc(var(--radius) * 0.75);  /* ~4.5px */
-	--radius-lg: var(--radius);               /* 6px */
-	--radius-xl: calc(var(--radius) * 1.33);  /* ~8px */
-	--radius-2xl: calc(var(--radius) * 1.67); /* ~10px */
-}
-
-:root {
-	color-scheme: light;
-
-	/* ── v6 Color tokens (Indigo / cool-neutral) ── */
-	--background: light-dark(#f4f5f7, #0f1117);
-	--foreground: light-dark(#1a1a2e, #e8eaf0);
-	--card: light-dark(#ffffff, #1a1c25);
-	--card-foreground: light-dark(#1a1a2e, #e8eaf0);
-	--popover: light-dark(#ffffff, #1a1c25);
-	--popover-foreground: light-dark(#1a1a2e, #e8eaf0);
-	--primary: light-dark(#4f46e5, #818cf8);
-	--primary-foreground: light-dark(#ffffff, #0f172a);
-	--secondary: light-dark(#eef0f4, #1e2029);
-	--secondary-foreground: light-dark(#475569, #94a3b8);
-	--muted: light-dark(#eef0f4, #1e2029);
-	--muted-foreground: light-dark(#64748b, #94a3b8);
-	--accent: light-dark(#eef2ff, rgba(129, 140, 248, 0.12));
-	--accent-foreground: light-dark(#4338ca, #e0e7ff);
-	--destructive: light-dark(#dc2626, #f87171);
-	--destructive-foreground: light-dark(#ffffff, #2a0c0c);
-	--border: light-dark(#dde1e8, #2a2d3a);
-	--input: light-dark(#dde1e8, #353a55);
-	--ring: var(--primary);
-	--chart-1: var(--primary);
-	--chart-2: light-dark(#6366f1, #a5b4fc);
-	--chart-3: light-dark(#8b5cf6, #c4b5fd);
-	--chart-4: light-dark(#10b981, #4ade80);
-	--chart-5: light-dark(#f59e0b, #fbbf24);
-
-	/* ── Base radius — 6px (TDesign compact) ── */
-	--radius: 6px;
-
-	/* ── Legacy aliases (PriceTrendChart + styles.css) ── */
-	--color-page: var(--background);
-	--color-surface: var(--card);
-	--color-input-bg: var(--secondary);
-	--color-text: var(--foreground);
-	--color-text-secondary: var(--secondary-foreground);
-	--color-text-muted: var(--muted-foreground);
-	--color-chart: var(--chart-1);
-	--color-on-primary: var(--primary-foreground);
-}
-
-.dark {
-	color-scheme: dark;
 }
 
 @layer base {
-	* {
-		@apply border-border outline-ring/50;
-		box-sizing: border-box;
-	}
-
 	html,
 	body {
-		/* Flat background — no dot grid, no gradient glow (v6 design) */
-		@apply min-h-screen bg-background font-sans text-foreground antialiased;
+		@apply min-h-screen bg-default font-sans text-default antialiased;
 	}
 
 	button,

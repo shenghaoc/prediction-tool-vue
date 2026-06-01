@@ -66,7 +66,7 @@ const summaryItems = computed(() => [
 
 <template>
 	<section aria-labelledby="prediction-results-heading" :aria-busy="loading">
-		<div class="rounded-lg border border-border bg-card">
+		<div class="rounded-lg border border-default bg-default">
 			<div class="flex flex-row items-start justify-between gap-4 px-5 py-4 max-sm:flex-col">
 				<div>
 					<h2
@@ -81,11 +81,11 @@ const summaryItems = computed(() => [
 					:class="
 						cn(
 							'min-w-[180px] rounded-sm border px-4 py-3 transition-all duration-300 max-sm:w-full',
-							hasOutput ? 'border-primary/25 bg-primary/5' : 'border-border bg-secondary/50'
+							hasOutput ? 'border-primary/25 bg-primary/5' : 'border-default bg-muted/50'
 						)
 					"
 				>
-					<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+					<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
 						{{ t('prediction') }}
 					</p>
 					<USkeleton v-if="showSkeleton" class="mt-2 h-8 w-32 rounded-sm" />
@@ -95,7 +95,7 @@ const summaryItems = computed(() => [
 						:class="
 							cn(
 								'mt-1 font-sans text-2xl font-extrabold tabular-nums tracking-tight transition-all duration-300',
-								!hasOutput && 'text-sm font-semibold text-muted-foreground',
+								!hasOutput && 'text-sm font-semibold text-muted',
 								hasOutput && 'text-primary animate-settle'
 							)
 						"
@@ -113,7 +113,7 @@ const summaryItems = computed(() => [
 							<div
 								v-for="item in summaryItems"
 								:key="item.label"
-								class="flex items-center gap-2.5 rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
+								class="flex items-center gap-2.5 rounded-sm border border-default bg-muted/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
 							>
 								<div
 									class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"
@@ -122,10 +122,10 @@ const summaryItems = computed(() => [
 									<UIcon :name="item.icon" class="size-4 text-primary" />
 								</div>
 								<div class="min-w-0">
-									<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+									<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
 										{{ item.label }}
 									</p>
-									<p class="truncate text-sm font-semibold text-foreground">{{ item.value }}</p>
+									<p class="truncate text-sm font-semibold text-default">{{ item.value }}</p>
 								</div>
 							</div>
 						</div>
@@ -134,7 +134,7 @@ const summaryItems = computed(() => [
 
 						<div>
 							<p
-								class="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+								class="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-muted"
 							>
 								{{ t('predicted_trends') }}
 							</p>
@@ -144,37 +144,36 @@ const summaryItems = computed(() => [
 
 							<div class="mb-3 grid grid-cols-3 gap-2 max-sm:grid-cols-1">
 								<div
-									class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
+									class="rounded-sm border border-default bg-muted/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
 								>
-									<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+									<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
 										{{ t('chart_latest') }}
 									</p>
-									<p class="mt-0.5 text-sm font-semibold tabular-nums text-foreground">
+									<p class="mt-0.5 text-sm font-semibold tabular-nums text-default">
 										{{ formatPrice(latestValue) }}
 									</p>
 								</div>
 								<div
-									class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
+									class="rounded-sm border border-default bg-muted/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
 								>
-									<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+									<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
 										{{ t('chart_range') }}
 									</p>
-									<p class="mt-0.5 text-sm font-semibold tabular-nums text-foreground">
+									<p class="mt-0.5 text-sm font-semibold tabular-nums text-default">
 										{{ formatPrice(normalizedLowValue) }} – {{ formatPrice(peakValue) }}
 									</p>
 								</div>
 								<div
-									class="rounded-sm border border-border bg-secondary/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
+									class="rounded-sm border border-default bg-muted/40 px-3 py-2 transition-all duration-200 hover:border-primary/20"
 								>
-									<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+									<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
 										{{ t('chart_delta') }}
 									</p>
 									<p
 										:class="
 											cn(
 												'mt-0.5 flex items-center gap-1 text-sm font-semibold tabular-nums',
-												deltaPositive && 'text-emerald-600 dark:text-emerald-400',
-												!deltaPositive && 'text-amber-700 dark:text-amber-400'
+												deltaPositive ? 'text-success' : 'text-warning'
 											)
 										"
 									>
@@ -186,7 +185,7 @@ const summaryItems = computed(() => [
 										{{ deltaPositive ? '+' : '-' }}{{ formatPrice(Math.abs(deltaValue)) }}
 									</p>
 									<p
-										class="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground"
+										class="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-muted"
 									>
 										{{ t('vs_12m_ago') }}
 									</p>
@@ -194,12 +193,12 @@ const summaryItems = computed(() => [
 							</div>
 
 							<div
-								class="min-h-[240px] overflow-hidden rounded-sm border border-border bg-secondary/20 p-2"
+								class="min-h-[240px] overflow-hidden rounded-sm border border-default bg-muted/20 p-2"
 							>
 								<ClientOnly>
 									<PriceTrendChart :data="trendData" :dark-mode="darkMode" />
 									<template #fallback>
-										<div class="animate-shimmer min-h-[240px] w-full rounded-sm bg-muted" />
+										<USkeleton class="min-h-[240px] w-full rounded-sm" />
 									</template>
 								</ClientOnly>
 							</div>
@@ -208,7 +207,7 @@ const summaryItems = computed(() => [
 
 					<div
 						v-else
-						class="flex flex-col items-center justify-center gap-3 rounded-sm border border-dashed border-border bg-secondary/20 px-4 py-12 text-center"
+						class="flex flex-col items-center justify-center gap-3 rounded-sm border border-dashed border-default bg-muted/20 px-4 py-12 text-center"
 					>
 						<div class="empty-float flex items-end gap-1 opacity-40" aria-hidden>
 							<div
@@ -218,10 +217,10 @@ const summaryItems = computed(() => [
 								:style="{ height: `${h * 40}px` }"
 							/>
 						</div>
-						<h3 class="font-sans text-sm font-semibold text-foreground">
+						<h3 class="font-sans text-sm font-semibold text-default">
 							{{ t('placeholder_title') }}
 						</h3>
-						<p class="mx-auto max-w-[32ch] text-sm leading-relaxed text-muted-foreground">
+						<p class="mx-auto max-w-[32ch] text-sm leading-relaxed text-muted">
 							{{ t('placeholder_body') }}
 						</p>
 					</div>
