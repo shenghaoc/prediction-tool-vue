@@ -26,12 +26,12 @@ export const predictionFormSchema = z.object({
 	storey_range: enumSchema<typeof STOREY_RANGES>(STOREY_RANGES),
 	flat_model: enumSchema<typeof FLAT_MODELS>(FLAT_MODELS),
 	floor_area_sqm: z
-		.number({ invalid_type_error: 'invalid_floor_area' })
+		.number({ error: 'invalid_floor_area' })
 		.finite('invalid_floor_area')
 		.min(MIN_FLOOR_AREA_SQM, 'floor_area_out_of_range')
 		.max(MAX_FLOOR_AREA_SQM, 'floor_area_out_of_range'),
 	lease_commence_date: z
-		.number({ invalid_type_error: 'invalid_lease_commence_date' })
+		.number({ error: 'invalid_lease_commence_date' })
 		.finite('invalid_lease_commence_date')
 		.int('invalid_lease_commence_date')
 		.min(MIN_LEASE_COMMENCE_YEAR, 'lease_commence_date_out_of_range')
@@ -46,12 +46,12 @@ export const predictionApiSchema = z.object({
 	storeyRange: enumSchema<typeof STOREY_RANGES>(STOREY_RANGES),
 	flatModel: enumSchema<typeof FLAT_MODELS>(FLAT_MODELS),
 	floorAreaSqm: z
-		.number({ invalid_type_error: 'invalid_floor_area' })
+		.number({ error: 'invalid_floor_area' })
 		.finite('invalid_floor_area')
 		.min(MIN_FLOOR_AREA_SQM, 'floor_area_out_of_range')
 		.max(MAX_FLOOR_AREA_SQM, 'floor_area_out_of_range'),
 	leaseCommenceYear: z
-		.number({ invalid_type_error: 'invalid_lease_commence_date' })
+		.number({ error: 'invalid_lease_commence_date' })
 		.finite('invalid_lease_commence_date')
 		.int('invalid_lease_commence_date')
 		.min(MIN_LEASE_COMMENCE_YEAR, 'lease_commence_date_out_of_range')

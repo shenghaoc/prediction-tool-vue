@@ -1,7 +1,13 @@
 import tailwindcss from '@tailwindcss/vite';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export default defineNuxtConfig({
 	css: ['~/assets/styles/globals.css'],
+	sourcemap: {
+		client: isDev,
+		server: isDev
+	},
 	modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@vueuse/nuxt'],
 	colorMode: {
 		storageKey: 'theme'
