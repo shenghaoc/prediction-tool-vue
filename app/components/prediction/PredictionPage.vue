@@ -23,7 +23,6 @@ const { form, reset: resetFields } = usePredictionForm({
 });
 
 const colorMode = useColorMode();
-
 const isHydrated = ref(false);
 
 const darkMode = computed(() => colorMode.value === 'dark');
@@ -33,7 +32,7 @@ const figures = [
 	{
 		label: 'stat_models',
 		value: ML_MODELS.length.toString().padStart(2, '0'),
-		icon: 'i-heroicons-square-3-stack-3d',
+		icon: 'i-heroicons-cube-transparent',
 		hint: 'stat_models_hint'
 	},
 	{
@@ -45,7 +44,7 @@ const figures = [
 	{
 		label: 'stat_types',
 		value: FLAT_MODELS.length.toString().padStart(2, '0'),
-		icon: 'i-heroicons-home',
+		icon: 'i-heroicons-home-modern',
 		hint: 'stat_types_hint'
 	}
 ];
@@ -68,122 +67,113 @@ function resetForm() {
 
 onMounted(() => {
 	isHydrated.value = true;
-	document.documentElement.classList.add('theme-ready');
 });
 </script>
 
 <template>
-	<main v-if="isHydrated" class="min-h-screen px-6 pb-10 pt-4 max-sm:px-3 max-sm:pb-6">
-		<div class="mx-auto max-w-7xl">
-			<header
-				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-default bg-default/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
+	<UContainer v-if="isHydrated" class="py-6">
+		<header
+			class="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-default pb-4"
+		>
+			<UBadge
+				color="primary"
+				variant="subtle"
+				size="lg"
+				icon="i-heroicons-sparkles"
 			>
-				<UBadge
-					color="primary"
-					variant="soft"
-					size="sm"
-					icon="i-heroicons-sparkles"
-					class="font-bold uppercase tracking-wider"
+				{{ t('brand') }}
+			</UBadge>
+
+			<div class="flex items-center gap-2">
+				<UButton
+					type="button"
+					color="neutral"
+					variant="outline"
+					size="md"
+					@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
 				>
-					{{ t('brand') }}
-				</UBadge>
+					{{ t('switch_language') }}
+				</UButton>
+				<UTooltip :text="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')">
+					<UColorModeButton color="neutral" variant="outline" size="md" />
+				</UTooltip>
+			</div>
+		</header>
 
-				<div class="flex items-center gap-2 max-sm:w-full max-sm:[&>*]:flex-1">
-					<UButton
-						type="button"
-						color="neutral"
-						variant="outline"
-						size="sm"
-						class="normal-case tracking-normal max-sm:flex-1"
-						@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
-					>
-						{{ t('switch_language') }}
-					</UButton>
-					<UTooltip :text="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')">
-						<UColorModeButton
-							color="neutral"
-							variant="outline"
-							size="sm"
-							square
-							:aria-label="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')"
-						/>
-					</UTooltip>
-				</div>
-			</header>
-
-			<div
-				class="grid grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] items-start gap-4 max-[860px]:grid-cols-1"
+		<section class="mb-10">
+			<h1
+				:class="[
+					'text-balance text-4xl font-bold tracking-tight text-highlighted sm:text-5xl',
+					isZh ? 'font-cjk' : 'font-sans'
+				]"
 			>
-				<div class="flex flex-col gap-4">
-					<UCard :ui="{ header: 'px-5 pt-5 pb-0', body: 'px-5 pt-4 pb-5' }">
-						<template #header>
-							<h1
-								:class="[
-									'whitespace-pre-line text-[clamp(1.8rem,4vw,2.4rem)] font-extrabold tracking-tight normal-case leading-tight',
-									isZh ? 'font-cjk' : 'font-sans'
-								]"
-							>
-								{{ t('price_prediction') }}
-							</h1>
-							<p class="mt-1.5 max-w-prose text-sm leading-relaxed text-toned">
-								{{ t('intro_blurb') }}
-							</p>
-						</template>
-						<div class="grid grid-cols-3 gap-2 max-sm:grid-cols-1">
-							<StatTile
-								v-for="figure in figures"
-								:key="figure.label"
-								:icon="figure.icon"
-								:label="t(figure.label)"
-								:value="figure.value"
-								:hint="t(figure.hint)"
-							/>
-						</div>
-					</UCard>
+				{{ t('price_prediction').replace('\n', ' ') }}
+			</h1>
+			<p class="mt-3 max-w-2xl text-pretty text-base text-muted">
+				{{ t('intro_blurb') }}
+			</p>
 
-					<UCard :ui="{ header: 'px-5 pt-4 pb-2', body: 'px-5 pb-4' }">
-						<template #header>
-							<h2 class="text-sm font-semibold text-primary normal-case">
-								{{ t('prediction_form') }}
-							</h2>
-						</template>
-						<PredictionForm
-							:form="form"
-							:loading="loading"
-							:error-message="errorMessage"
-							@reset="resetForm"
-						/>
-					</UCard>
-				</div>
+			<div class="mt-6 grid grid-cols-3 gap-3 max-sm:grid-cols-1">
+				<StatTile
+					v-for="figure in figures"
+					:key="figure.label"
+					:icon="figure.icon"
+					:label="t(figure.label)"
+					:value="figure.value"
+					:hint="t(figure.hint)"
+				/>
+			</div>
+		</section>
 
-				<div>
-					<PredictionResults
-						:output="output"
-						:loading="loading"
-						:summary-values="summaryValues"
-						:trend-data="trendData"
-						:dark-mode="darkMode"
-					/>
-				</div>
+		<div
+			class="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] items-start gap-6 max-[860px]:grid-cols-1"
+		>
+			<UCard>
+				<template #header>
+					<div class="flex items-center gap-2">
+						<UIcon name="i-heroicons-adjustments-horizontal" class="size-5 text-primary" />
+						<h2 class="text-base font-semibold text-highlighted">
+							{{ t('prediction_form') }}
+						</h2>
+					</div>
+				</template>
+
+				<PredictionForm
+					:form="form"
+					:loading="loading"
+					:error-message="errorMessage"
+					@reset="resetForm"
+				/>
+			</UCard>
+
+			<PredictionResults
+				:output="output"
+				:loading="loading"
+				:summary-values="summaryValues"
+				:trend-data="trendData"
+				:dark-mode="darkMode"
+			/>
+		</div>
+	</UContainer>
+
+	<UContainer v-else class="py-6" aria-busy="true">
+		<div class="mb-8 flex items-center justify-between gap-3 border-b border-default pb-4">
+			<USkeleton class="h-7 w-32" />
+			<div class="flex gap-2">
+				<USkeleton class="h-9 w-24" />
+				<USkeleton class="h-9 w-9" />
 			</div>
 		</div>
-	</main>
-
-	<main v-else class="min-h-screen px-6 pb-10 pt-4" aria-busy="true">
-		<div class="mx-auto max-w-7xl">
-			<div
-				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-default bg-default/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
-			>
-				<USkeleton class="h-5 w-24 rounded-sm" />
-				<div class="flex items-center gap-2">
-					<USkeleton class="h-7 w-24 rounded-sm" />
-					<USkeleton class="h-7 w-7 rounded-sm" />
-				</div>
-			</div>
-			<div class="grid grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] gap-4 max-[860px]:grid-cols-1">
-				<USkeleton class="h-56 rounded-sm" />
-				<USkeleton class="h-80 rounded-sm" />
-			</div>
+		<USkeleton class="mb-3 h-10 w-2/3" />
+		<USkeleton class="mb-6 h-4 w-1/2" />
+		<div class="mb-10 grid grid-cols-3 gap-3 max-sm:grid-cols-1">
+			<USkeleton class="h-20" />
+			<USkeleton class="h-20" />
+			<USkeleton class="h-20" />
 		</div>
-	</main>
+		<div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] gap-6 max-[860px]:grid-cols-1">
+			<USkeleton class="h-96" />
+			<USkeleton class="h-96" />
+		</div>
+	</UContainer>
 </template>

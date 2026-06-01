@@ -21,7 +21,8 @@ const emit = defineEmits<{
 }>();
 
 function fieldError(field: keyof FieldType, errors: unknown[] | undefined) {
-	return translatePredictionFieldError(field, errors, t);
+	const msg = translatePredictionFieldError(field, errors, t);
+	return msg || undefined;
 }
 
 function optionLabel(
@@ -46,20 +47,15 @@ const flatModelOptions = computed(() =>
 const leaseYearOptions = computed(() =>
 	YEAR_OPTIONS.map((y) => ({ value: String(y), label: String(y) }))
 );
-
-const labelUi = {
-	label: 'text-[11px] font-bold uppercase tracking-wider text-muted'
-};
 </script>
 
 <template>
-	<form class="flex flex-col gap-4" @submit.prevent="props.form.handleSubmit">
+	<form class="flex flex-col gap-5" @submit.prevent="props.form.handleSubmit">
 		<FormField v-slot="{ field }" name="ml_model">
 			<UFormField
 				name="ml_model"
 				:label="t('ml_model')"
 				:error="fieldError('ml_model', field.state.meta.errors)"
-				:ui="labelUi"
 			>
 				<USelect
 					:model-value="field.state.value"
@@ -72,13 +68,12 @@ const labelUi = {
 			</UFormField>
 		</FormField>
 
-		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
+		<div class="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
 			<FormField v-slot="{ field }" name="town">
 				<UFormField
 					name="town"
 					:label="t('town')"
 					:error="fieldError('town', field.state.meta.errors)"
-					:ui="labelUi"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -96,7 +91,6 @@ const labelUi = {
 					name="storey_range"
 					:label="t('storey_range')"
 					:error="fieldError('storey_range', field.state.meta.errors)"
-					:ui="labelUi"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -114,7 +108,6 @@ const labelUi = {
 					name="flat_model"
 					:label="t('flat_model')"
 					:error="fieldError('flat_model', field.state.meta.errors)"
-					:ui="labelUi"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -132,7 +125,6 @@ const labelUi = {
 					name="floor_area_sqm"
 					:label="t('floor_area')"
 					:error="fieldError('floor_area_sqm', field.state.meta.errors)"
-					:ui="labelUi"
 				>
 					<UInput
 						type="number"
@@ -151,10 +143,7 @@ const labelUi = {
 						"
 					>
 						<template #trailing>
-							<span class="text-xs font-semibold text-muted">
-								<span class="sr-only">{{ t('floor_area_unit') }}</span>
-								<span aria-hidden>m²</span>
-							</span>
+							<span class="text-sm text-muted" aria-label="square meters">m²</span>
 						</template>
 					</UInput>
 				</UFormField>
@@ -166,7 +155,6 @@ const labelUi = {
 				name="lease_commence_date"
 				:label="t('lease_commence_date')"
 				:error="fieldError('lease_commence_date', field.state.meta.errors)"
-				:ui="labelUi"
 			>
 				<USelect
 					:model-value="field.state.value == null || Number.isNaN(field.state.value) ? '' : String(field.state.value)"
@@ -179,26 +167,32 @@ const labelUi = {
 			</UFormField>
 		</FormField>
 
-		<div class="grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
-			<UButton
-				type="submit"
-				size="md"
-				block
-				:loading="loading"
-				class="normal-case tracking-normal"
-			>
-				{{ loading ? t('predicting') : t('get_prediction') }}
-			</UButton>
+		<UAlert
+			v-if="errorMessage && !loading"
+			color="error"
+			variant="soft"
+			icon="i-heroicons-exclamation-triangle"
+			:title="errorMessage"
+		/>
+
+		<div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
 			<UButton
 				type="button"
 				color="neutral"
-				variant="outline"
+				variant="ghost"
 				size="md"
-				block
-				class="normal-case tracking-normal"
 				@click="emit('reset')"
 			>
 				{{ t('reset_form') }}
+			</UButton>
+			<UButton
+				type="submit"
+				size="md"
+				:loading="loading"
+				icon="i-heroicons-sparkles"
+				trailing
+			>
+				{{ loading ? t('predicting') : t('get_prediction') }}
 			</UButton>
 		</div>
 
@@ -206,13 +200,6 @@ const labelUi = {
 			v-if="loading"
 			size="sm"
 			:aria-label="t('predicting')"
-		/>
-
-		<UAlert
-			v-if="errorMessage && !loading"
-			color="error"
-			variant="soft"
-			:title="errorMessage"
 		/>
 	</form>
 </template>

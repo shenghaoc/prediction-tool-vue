@@ -1,16 +1,13 @@
 <template>
-	<div class="flex flex-col gap-4" aria-hidden>
-		<div class="grid grid-cols-3 gap-2 max-sm:grid-cols-1">
-			<USkeleton v-for="i in 3" :key="i" class="h-[60px] rounded-sm" />
+	<div class="flex flex-col gap-6" aria-hidden>
+		<div class="space-y-2 text-center">
+			<USkeleton class="mx-auto h-3 w-20" />
+			<USkeleton class="mx-auto h-12 w-56" />
 		</div>
 		<USkeleton class="h-px w-full" />
-		<div class="space-y-3">
-			<USkeleton class="h-3 w-32 rounded-sm" />
-			<USkeleton class="h-4 w-48 rounded-sm" />
-			<div class="grid grid-cols-3 gap-2 max-sm:grid-cols-1">
-				<USkeleton v-for="i in 3" :key="i" class="h-14 rounded-sm" />
-			</div>
-			<USkeleton class="h-[240px] w-full rounded-sm" />
+		<div class="grid grid-cols-3 gap-3 max-sm:grid-cols-1">
+			<USkeleton v-for="i in 3" :key="i" class="h-14" />
 		</div>
+		<USkeleton class="h-[240px] w-full" />
 	</div>
 </template>
