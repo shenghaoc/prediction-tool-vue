@@ -137,14 +137,17 @@ const kpis = computed(() => [
 						</h3>
 						<p class="text-sm text-muted">{{ t('predicted_trends') }}</p>
 					</div>
-					<UBadge
-						:color="deltaPositive ? 'success' : 'warning'"
-						variant="subtle"
-						size="md"
-						:icon="deltaPositive ? 'i-heroicons-arrow-trending-up' : 'i-heroicons-arrow-trending-down'"
-					>
-						{{ deltaPositive ? '+' : '−' }}{{ formatPrice(Math.abs(deltaValue)) }}
-					</UBadge>
+					<div class="flex flex-col items-end gap-0.5">
+						<UBadge
+							:color="deltaPositive ? 'success' : 'warning'"
+							variant="subtle"
+							size="md"
+							:icon="deltaPositive ? 'i-heroicons-arrow-trending-up' : 'i-heroicons-arrow-trending-down'"
+						>
+							{{ deltaPositive ? '+' : '−' }}{{ formatPrice(Math.abs(deltaValue)) }}
+						</UBadge>
+						<span class="text-xs text-muted">{{ t('vs_12m_ago') }}</span>
+					</div>
 				</div>
 
 				<div class="mb-4 grid grid-cols-2 gap-3 max-sm:grid-cols-1">
@@ -171,8 +174,6 @@ const kpis = computed(() => [
 						</template>
 					</ClientOnly>
 				</UCard>
-
-				<p class="mt-2 text-center text-xs text-muted">{{ t('vs_12m_ago') }}</p>
 			</div>
 		</div>
 	</UCard>

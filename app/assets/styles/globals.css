@@ -8,8 +8,7 @@
 		'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
 }
 
-:root,
-.dark {
+:root {
 	--ui-radius: 0.5rem;
 }
 

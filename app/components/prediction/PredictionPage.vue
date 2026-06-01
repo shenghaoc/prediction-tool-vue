@@ -95,7 +95,12 @@ onMounted(() => {
 					{{ t('switch_language') }}
 				</UButton>
 				<UTooltip :text="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')">
-					<UColorModeButton color="neutral" variant="outline" size="md" />
+					<UColorModeButton
+						color="neutral"
+						variant="outline"
+						size="md"
+						:aria-label="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')"
+					/>
 				</UTooltip>
 			</div>
 		</header>
@@ -166,12 +171,12 @@ onMounted(() => {
 		</div>
 		<USkeleton class="mb-3 h-10 w-2/3" />
 		<USkeleton class="mb-6 h-4 w-1/2" />
-		<div class="mb-10 grid grid-cols-3 gap-3 max-sm:grid-cols-1">
+		<div class="mb-8 grid grid-cols-1 gap-3 sm:mb-10 sm:grid-cols-3">
 			<USkeleton class="h-20" />
 			<USkeleton class="h-20" />
 			<USkeleton class="h-20" />
 		</div>
-		<div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] gap-6 max-[860px]:grid-cols-1">
+		<div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
 			<USkeleton class="h-96" />
 			<USkeleton class="h-96" />
 		</div>
