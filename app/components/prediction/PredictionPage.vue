@@ -57,10 +57,6 @@ useHead(() => ({
 	}
 }));
 
-function toggleTheme() {
-	colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
-}
-
 function setLanguage(language: 'en' | 'zh') {
 	setLocale(language);
 }
@@ -82,15 +78,15 @@ onMounted(() => {
 			<header
 				class="sticky top-0 z-20 -mx-6 mb-5 flex items-center justify-between gap-4 border-b border-default bg-default/90 px-6 py-3 backdrop-blur-sm max-sm:relative max-sm:mx-0 max-sm:flex-col max-sm:items-start max-sm:px-0"
 			>
-				<div class="flex items-center gap-2">
-					<span
-						class="inline-flex items-center gap-1.5 rounded-sm border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary"
-					>
-						<span class="size-2 rounded-full bg-primary" aria-hidden />
-						<UIcon name="i-heroicons-sparkles" class="size-3" aria-hidden />
-						{{ t('brand') }}
-					</span>
-				</div>
+				<UBadge
+					color="primary"
+					variant="soft"
+					size="sm"
+					icon="i-heroicons-sparkles"
+					class="font-bold uppercase tracking-wider"
+				>
+					{{ t('brand') }}
+				</UBadge>
 
 				<div class="flex items-center gap-2 max-sm:w-full max-sm:[&>*]:flex-1">
 					<UButton
@@ -104,15 +100,12 @@ onMounted(() => {
 						{{ t('switch_language') }}
 					</UButton>
 					<UTooltip :text="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')">
-						<UButton
-							type="button"
+						<UColorModeButton
 							color="neutral"
 							variant="outline"
 							size="sm"
 							square
-							:icon="darkMode ? 'i-heroicons-sun' : 'i-heroicons-moon'"
 							:aria-label="darkMode ? t('switch_to_light_mode') : t('switch_to_dark_mode')"
-							@click="toggleTheme"
 						/>
 					</UTooltip>
 				</div>
@@ -122,7 +115,7 @@ onMounted(() => {
 				class="grid grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] items-start gap-4 max-[860px]:grid-cols-1"
 			>
 				<div class="flex flex-col gap-4">
-					<UCard :ui="{ body: 'px-5 py-5' }">
+					<UCard :ui="{ header: 'px-5 pt-5 pb-0', body: 'px-5 pt-4 pb-5' }">
 						<template #header>
 							<h1
 								:class="[
@@ -148,7 +141,7 @@ onMounted(() => {
 						</div>
 					</UCard>
 
-					<UCard :ui="{ body: 'px-5 py-4' }">
+					<UCard :ui="{ header: 'px-5 pt-4 pb-2', body: 'px-5 pb-4' }">
 						<template #header>
 							<h2 class="text-sm font-semibold text-primary normal-case">
 								{{ t('prediction_form') }}

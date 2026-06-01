@@ -66,46 +66,46 @@ const summaryItems = computed(() => [
 
 <template>
 	<section aria-labelledby="prediction-results-heading" :aria-busy="loading">
-		<div class="rounded-lg border border-default bg-default">
-			<div class="flex flex-row items-start justify-between gap-4 px-5 py-4 max-sm:flex-col">
-				<div>
+		<UCard :ui="{ header: 'px-5 py-4', body: 'px-5 pb-5 pt-0' }">
+			<template #header>
+				<div class="flex flex-row items-start justify-between gap-4 max-sm:flex-col">
 					<h2
 						id="prediction-results-heading"
 						class="font-sans text-xl font-extrabold tracking-tight normal-case"
 					>
 						{{ t('predicted_price') }}
 					</h2>
-				</div>
 
-				<div
-					:class="
-						cn(
-							'min-w-[180px] rounded-sm border px-4 py-3 transition-all duration-300 max-sm:w-full',
-							hasOutput ? 'border-primary/25 bg-primary/5' : 'border-default bg-muted/50'
-						)
-					"
-				>
-					<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
-						{{ t('prediction') }}
-					</p>
-					<USkeleton v-if="showSkeleton" class="mt-2 h-8 w-32 rounded-sm" />
-					<p
-						v-else
-						:key="output"
+					<div
 						:class="
 							cn(
-								'mt-1 font-sans text-2xl font-extrabold tabular-nums tracking-tight transition-all duration-300',
-								!hasOutput && 'text-sm font-semibold text-muted',
-								hasOutput && 'text-primary animate-settle'
+								'min-w-[180px] rounded-sm border px-4 py-3 transition-all duration-300 max-sm:w-full',
+								hasOutput ? 'border-primary/25 bg-primary/5' : 'border-default bg-muted/50'
 							)
 						"
 					>
-						{{ hasOutput ? formatPrice(output) : t('awaiting') }}
-					</p>
+						<p class="text-[10px] font-bold uppercase tracking-wider text-muted">
+							{{ t('prediction') }}
+						</p>
+						<USkeleton v-if="showSkeleton" class="mt-2 h-8 w-32 rounded-sm" />
+						<p
+							v-else
+							:key="output"
+							:class="
+								cn(
+									'mt-1 font-sans text-2xl font-extrabold tabular-nums tracking-tight transition-all duration-300',
+									!hasOutput && 'text-sm font-semibold text-muted',
+									hasOutput && 'text-primary animate-settle'
+								)
+							"
+						>
+							{{ hasOutput ? formatPrice(output) : t('awaiting') }}
+						</p>
+					</div>
 				</div>
-			</div>
+			</template>
 
-			<div class="flex flex-col gap-4 px-5 pb-5">
+			<div class="flex flex-col gap-4">
 				<ResultsSkeleton v-if="showSkeleton" />
 				<template v-else>
 					<template v-if="hasOutput">
@@ -133,9 +133,7 @@ const summaryItems = computed(() => [
 						<USeparator />
 
 						<div>
-							<p
-								class="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-muted"
-							>
+							<p class="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-muted">
 								{{ t('predicted_trends') }}
 							</p>
 							<h3 class="mb-3 font-sans text-sm font-semibold normal-case">
@@ -184,9 +182,7 @@ const summaryItems = computed(() => [
 										/>
 										{{ deltaPositive ? '+' : '-' }}{{ formatPrice(Math.abs(deltaValue)) }}
 									</p>
-									<p
-										class="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-muted"
-									>
+									<p class="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-muted">
 										{{ t('vs_12m_ago') }}
 									</p>
 								</div>
@@ -205,27 +201,29 @@ const summaryItems = computed(() => [
 						</div>
 					</template>
 
-					<div
+					<UEmpty
 						v-else
-						class="flex flex-col items-center justify-center gap-3 rounded-sm border border-dashed border-default bg-muted/20 px-4 py-12 text-center"
+						:title="t('placeholder_title')"
+						:description="t('placeholder_body')"
+						:ui="{
+							root: 'rounded-sm border border-dashed border-default bg-muted/20 px-4 py-12',
+							title: 'text-sm font-semibold text-default',
+							description: 'mx-auto max-w-[32ch] text-sm leading-relaxed text-muted'
+						}"
 					>
-						<div class="empty-float flex items-end gap-1 opacity-40" aria-hidden>
-							<div
-								v-for="(h, i) in [0.35, 0.55, 0.85, 0.45, 0.7, 0.3]"
-								:key="i"
-								class="w-2 rounded-sm bg-primary"
-								:style="{ height: `${h * 40}px` }"
-							/>
-						</div>
-						<h3 class="font-sans text-sm font-semibold text-default">
-							{{ t('placeholder_title') }}
-						</h3>
-						<p class="mx-auto max-w-[32ch] text-sm leading-relaxed text-muted">
-							{{ t('placeholder_body') }}
-						</p>
-					</div>
+						<template #leading>
+							<div class="empty-float flex items-end gap-1 opacity-40" aria-hidden>
+								<div
+									v-for="(h, i) in [0.35, 0.55, 0.85, 0.45, 0.7, 0.3]"
+									:key="i"
+									class="w-2 rounded-sm bg-primary"
+									:style="{ height: `${h * 40}px` }"
+								/>
+							</div>
+						</template>
+					</UEmpty>
 				</template>
 			</div>
-		</div>
+		</UCard>
 	</section>
 </template>

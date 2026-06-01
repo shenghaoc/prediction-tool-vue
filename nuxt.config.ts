@@ -3,6 +3,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineNuxtConfig({
 	css: ['~/assets/styles/globals.css'],
 	modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@vueuse/nuxt'],
+	colorMode: {
+		storageKey: 'theme'
+	},
 	i18n: {
 		strategy: 'no_prefix',
 		defaultLocale: 'en',

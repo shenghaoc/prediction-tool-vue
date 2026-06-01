@@ -46,15 +46,20 @@ const flatModelOptions = computed(() =>
 const leaseYearOptions = computed(() =>
 	YEAR_OPTIONS.map((y) => ({ value: String(y), label: String(y) }))
 );
+
+const labelUi = {
+	label: 'text-[11px] font-bold uppercase tracking-wider text-muted'
+};
 </script>
 
 <template>
 	<form class="flex flex-col gap-4" @submit.prevent="props.form.handleSubmit">
 		<FormField v-slot="{ field }" name="ml_model">
 			<UFormField
+				name="ml_model"
 				:label="t('ml_model')"
 				:error="fieldError('ml_model', field.state.meta.errors)"
-				:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
+				:ui="labelUi"
 			>
 				<USelect
 					:model-value="field.state.value"
@@ -70,9 +75,10 @@ const leaseYearOptions = computed(() =>
 		<div class="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
 			<FormField v-slot="{ field }" name="town">
 				<UFormField
+					name="town"
 					:label="t('town')"
 					:error="fieldError('town', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
+					:ui="labelUi"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -87,9 +93,10 @@ const leaseYearOptions = computed(() =>
 
 			<FormField v-slot="{ field }" name="storey_range">
 				<UFormField
+					name="storey_range"
 					:label="t('storey_range')"
 					:error="fieldError('storey_range', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
+					:ui="labelUi"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -104,9 +111,10 @@ const leaseYearOptions = computed(() =>
 
 			<FormField v-slot="{ field }" name="flat_model">
 				<UFormField
+					name="flat_model"
 					:label="t('flat_model')"
 					:error="fieldError('flat_model', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
+					:ui="labelUi"
 				>
 					<USelect
 						:model-value="field.state.value"
@@ -121,9 +129,10 @@ const leaseYearOptions = computed(() =>
 
 			<FormField v-slot="{ field }" name="floor_area_sqm">
 				<UFormField
+					name="floor_area_sqm"
 					:label="t('floor_area')"
 					:error="fieldError('floor_area_sqm', field.state.meta.errors)"
-					:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
+					:ui="labelUi"
 				>
 					<UInput
 						type="number"
@@ -154,9 +163,10 @@ const leaseYearOptions = computed(() =>
 
 		<FormField v-slot="{ field }" name="lease_commence_date">
 			<UFormField
+				name="lease_commence_date"
 				:label="t('lease_commence_date')"
 				:error="fieldError('lease_commence_date', field.state.meta.errors)"
-				:ui="{ label: 'text-[11px] font-bold uppercase tracking-wider text-muted' }"
+				:ui="labelUi"
 			>
 				<USelect
 					:model-value="field.state.value == null || Number.isNaN(field.state.value) ? '' : String(field.state.value)"
@@ -176,7 +186,6 @@ const leaseYearOptions = computed(() =>
 				block
 				:loading="loading"
 				class="normal-case tracking-normal"
-				:disabled="loading"
 			>
 				{{ loading ? t('predicting') : t('get_prediction') }}
 			</UButton>
@@ -193,16 +202,11 @@ const leaseYearOptions = computed(() =>
 			</UButton>
 		</div>
 
-		<div
+		<UProgress
 			v-if="loading"
-			class="progress-track"
-			role="progressbar"
+			size="sm"
 			:aria-label="t('predicting')"
-			aria-valuemin="0"
-			aria-valuemax="100"
-		>
-			<div class="progress-bar" />
-		</div>
+		/>
 
 		<UAlert
 			v-if="errorMessage && !loading"

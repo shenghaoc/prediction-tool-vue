@@ -100,18 +100,6 @@ html {
 	}
 }
 
-@keyframes progress-indeterminate {
-	0% {
-		transform: translateX(-100%);
-	}
-	50% {
-		transform: translateX(0%);
-	}
-	100% {
-		transform: translateX(100%);
-	}
-}
-
 @keyframes glow-pulse {
 	0%,
 	100% {
@@ -199,24 +187,6 @@ html {
 }
 .animate-stagger > *:nth-child(6) {
 	animation-delay: 0.4s;
-}
-
-.progress-track {
-	position: relative;
-	overflow: hidden;
-	border-radius: 9999px;
-	background: var(--ui-bg-muted);
-	height: 4px;
-}
-.progress-bar {
-	height: 100%;
-	border-radius: 9999px;
-	background: linear-gradient(
-		90deg,
-		var(--ui-primary),
-		color-mix(in oklab, var(--ui-primary) 60%, var(--ui-bg-inverted))
-	);
-	animation: progress-indeterminate 1.8s ease-in-out infinite;
 }
 
 .empty-float {
