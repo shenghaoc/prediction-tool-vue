@@ -33,6 +33,6 @@
 		"tailwind-merge": "^3.6.0",
 		"tailwindcss": "^4.3.0",
 		"vue-echarts": "^8.0.1",
-		"zod": "^3.25.76"
+		"zod": "^4.4.3"
 	}
 }
