@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
 	css: ['~/assets/styles/globals.css'],
-	modules: ['@nuxt/eslint', '@nuxtjs/i18n', '@vueuse/nuxt'],
+	modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/i18n', '@vueuse/nuxt'],
 	i18n: {
 		strategy: 'no_prefix',
 		defaultLocale: 'en',

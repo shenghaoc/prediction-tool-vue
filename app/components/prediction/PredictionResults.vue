@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Home, Layers, MapPin, TrendingDown, TrendingUp } from '@lucide/vue';
 
 import PriceTrendChart from '~/components/prediction/PriceTrendChart.vue';
 import ResultsSkeleton from '~/components/prediction/ResultsSkeleton.vue';
-import Separator from '~/components/ui/Separator.vue';
-import Skeleton from '~/components/ui/Skeleton.vue';
 import { cn } from '~/lib/utils';
 import { formatCurrency } from '~/utils/format';
 import type { SummaryValues, TrendPoint } from '~/utils/prediction';
@@ -52,17 +49,17 @@ const summaryItems = computed(() => [
 	{
 		label: t('ml_model'),
 		value: optionLabel('ml_models', props.summaryValues.ml_model),
-		icon: Layers
+		icon: 'i-heroicons-square-3-stack-3d'
 	},
 	{
 		label: t('town'),
 		value: optionLabel('towns', props.summaryValues.town),
-		icon: MapPin
+		icon: 'i-heroicons-map-pin'
 	},
 	{
 		label: t('lease_commence_date'),
 		value: String(props.summaryValues.lease_commence_date),
-		icon: Home
+		icon: 'i-heroicons-home'
 	}
 ]);
 </script>
@@ -91,7 +88,7 @@ const summaryItems = computed(() => [
 					<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 						{{ t('prediction') }}
 					</p>
-					<Skeleton v-if="showSkeleton" class="animate-shimmer mt-2 h-8 w-32 rounded-sm" />
+					<USkeleton v-if="showSkeleton" class="mt-2 h-8 w-32 rounded-sm" />
 					<p
 						v-else
 						:key="output"
@@ -122,7 +119,7 @@ const summaryItems = computed(() => [
 									class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"
 									aria-hidden
 								>
-									<component :is="item.icon" class="size-4 text-primary" />
+									<UIcon :name="item.icon" class="size-4 text-primary" />
 								</div>
 								<div class="min-w-0">
 									<p class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -133,7 +130,7 @@ const summaryItems = computed(() => [
 							</div>
 						</div>
 
-						<Separator />
+						<USeparator />
 
 						<div>
 							<p
@@ -181,8 +178,11 @@ const summaryItems = computed(() => [
 											)
 										"
 									>
-										<TrendingUp v-if="deltaPositive" class="size-3.5 shrink-0" aria-hidden />
-										<TrendingDown v-else class="size-3.5 shrink-0" aria-hidden />
+										<UIcon
+											:name="deltaPositive ? 'i-heroicons-arrow-trending-up' : 'i-heroicons-arrow-trending-down'"
+											class="size-3.5 shrink-0"
+											aria-hidden
+										/>
 										{{ deltaPositive ? '+' : '-' }}{{ formatPrice(Math.abs(deltaValue)) }}
 									</p>
 									<p

@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Component } from 'vue';
 import { cn } from '~/lib/utils';
-import Tooltip from '~/components/ui/Tooltip.vue';
 
 const props = defineProps<{
-	icon: Component;
+	icon: string;
 	label: string;
 	value: string;
 	hint?: string;
@@ -23,16 +21,13 @@ const tileClasses = computed(() =>
 </script>
 
 <template>
-	<Tooltip v-if="hint">
-		<template #content>
-			<span class="max-w-[220px] text-center leading-relaxed">{{ hint }}</span>
-		</template>
+	<UTooltip v-if="hint" :text="hint">
 		<div :class="tileClasses">
 			<div
 				class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"
 				aria-hidden
 			>
-				<component :is="icon" class="size-4 text-primary" />
+				<UIcon :name="icon" class="size-4 text-primary" />
 			</div>
 			<div class="flex min-w-0 flex-col gap-0.5">
 				<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -43,14 +38,14 @@ const tileClasses = computed(() =>
 				</strong>
 			</div>
 		</div>
-	</Tooltip>
+	</UTooltip>
 
 	<div v-else :class="tileClasses">
 		<div
 			class="flex size-7 shrink-0 items-center justify-center rounded-sm bg-primary/10 ring-1 ring-primary/15"
 			aria-hidden
 		>
-			<component :is="icon" class="size-4 text-primary" />
+			<UIcon :name="icon" class="size-4 text-primary" />
 		</div>
 		<div class="flex min-w-0 flex-col gap-0.5">
 			<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
