@@ -102,7 +102,7 @@ const kpis = computed(() => [
 				</p>
 				<p
 					:key="output"
-					class="animate-settle mt-1 font-sans text-5xl font-bold tabular-nums tracking-tight text-primary"
+					class="animate-settle mt-1 font-sans text-4xl font-bold tabular-nums tracking-tight text-primary sm:text-5xl"
 				>
 					{{ formatPrice(output) }}
 				</p>

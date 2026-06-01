@@ -71,7 +71,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<UContainer v-if="isHydrated" class="py-6">
+	<UContainer v-if="isHydrated" class="py-4 sm:py-6">
 		<header
 			class="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-default pb-4"
 		>
@@ -100,20 +100,20 @@ onMounted(() => {
 			</div>
 		</header>
 
-		<section class="mb-10">
+		<section class="mb-8 sm:mb-10">
 			<h1
 				:class="[
-					'text-balance text-4xl font-bold tracking-tight text-highlighted sm:text-5xl',
+					'text-balance text-3xl font-bold tracking-tight text-highlighted sm:text-4xl lg:text-5xl',
 					isZh ? 'font-cjk' : 'font-sans'
 				]"
 			>
 				{{ t('price_prediction').replace('\n', ' ') }}
 			</h1>
-			<p class="mt-3 max-w-2xl text-pretty text-base text-muted">
+			<p class="mt-3 max-w-2xl text-pretty text-sm text-muted sm:text-base">
 				{{ t('intro_blurb') }}
 			</p>
 
-			<div class="mt-6 grid grid-cols-3 gap-3 max-sm:grid-cols-1">
+			<div class="mt-5 grid grid-cols-1 gap-3 sm:mt-6 sm:grid-cols-3">
 				<StatTile
 					v-for="figure in figures"
 					:key="figure.label"
@@ -126,7 +126,7 @@ onMounted(() => {
 		</section>
 
 		<div
-			class="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] items-start gap-6 max-[860px]:grid-cols-1"
+			class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]"
 		>
 			<UCard>
 				<template #header>

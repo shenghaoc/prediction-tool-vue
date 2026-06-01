@@ -175,12 +175,14 @@ const leaseYearOptions = computed(() =>
 			:title="errorMessage"
 		/>
 
-		<div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+		<div class="grid grid-cols-1 gap-2 sm:flex sm:justify-end">
 			<UButton
 				type="button"
 				color="neutral"
-				variant="ghost"
+				variant="subtle"
 				size="md"
+				block
+				class="sm:w-auto"
 				@click="emit('reset')"
 			>
 				{{ t('reset_form') }}
@@ -188,9 +190,11 @@ const leaseYearOptions = computed(() =>
 			<UButton
 				type="submit"
 				size="md"
+				block
 				:loading="loading"
 				icon="i-heroicons-sparkles"
 				trailing
+				class="sm:w-auto"
 			>
 				{{ loading ? t('predicting') : t('get_prediction') }}
 			</UButton>
