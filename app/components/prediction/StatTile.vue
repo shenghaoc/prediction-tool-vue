@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n();
+
 defineProps<{
 	icon: string;
 	label: string;
@@ -24,7 +26,7 @@ defineProps<{
 						color="neutral"
 						variant="ghost"
 						class="min-h-0 p-0.5"
-						aria-label="More information"
+						:aria-label="t('more_info')"
 					/>
 				</UTooltip>
 			</div>
