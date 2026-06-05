@@ -50,7 +50,11 @@ const leaseYearOptions = computed(() =>
 </script>
 
 <template>
-	<form class="flex flex-col gap-5" @submit.prevent="props.form.handleSubmit">
+	<form
+		:aria-label="t('prediction_form')"
+		class="flex flex-col gap-5"
+		@submit.prevent="props.form.handleSubmit"
+	>
 		<FormField v-slot="{ field }" name="ml_model">
 			<UFormField
 				name="ml_model"

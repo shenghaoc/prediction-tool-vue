@@ -43,6 +43,22 @@ export default defineNuxtConfig({
 	},
 	app: {
 		head: {
+			meta: [
+				{
+					name: 'viewport',
+					content: 'width=device-width, initial-scale=1, viewport-fit=cover'
+				},
+				{
+					name: 'theme-color',
+					content: '#4f46e5',
+					media: '(prefers-color-scheme: light)'
+				},
+				{
+					name: 'theme-color',
+					content: '#818cf8',
+					media: '(prefers-color-scheme: dark)'
+				}
+			],
 			link: [
 				{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
 				{ rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
