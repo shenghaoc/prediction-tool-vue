@@ -72,7 +72,7 @@ onMounted(() => {
 
 <template>
 	<a href="#main-content" class="skip-link">{{ t('skip_to_main') }}</a>
-	<main id="main-content">
+	<main id="main-content" tabindex="-1" class="focus:outline-none">
 	<UContainer v-if="isHydrated" class="py-4 sm:py-6">
 		<header
 			class="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-default pb-4"
