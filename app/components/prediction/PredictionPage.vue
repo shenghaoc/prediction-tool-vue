@@ -71,6 +71,8 @@ onMounted(() => {
 </script>
 
 <template>
+	<a href="#main-content" class="skip-link">{{ t('skip_to_main') }}</a>
+	<main id="main-content">
 	<UContainer v-if="isHydrated" class="py-4 sm:py-6">
 		<header
 			class="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-default pb-4"
@@ -90,6 +92,7 @@ onMounted(() => {
 					color="neutral"
 					variant="outline"
 					size="md"
+					:aria-label="locale === 'en' ? t('switch_to_chinese') : t('switch_to_english')"
 					@click="setLanguage(locale === 'en' ? 'zh' : 'en')"
 				>
 					{{ t('switch_language') }}
@@ -181,4 +184,5 @@ onMounted(() => {
 			<USkeleton class="h-96" />
 		</div>
 	</UContainer>
+	</main>
 </template>

@@ -85,6 +85,12 @@ const kpis = computed(() => [
 			</div>
 		</template>
 
+		<div role="status" aria-live="polite" aria-atomic="true" class="sr-only">
+			<template v-if="hasOutput && !loading">
+				{{ t('prediction') }}: {{ formatPrice(output) }}
+			</template>
+		</div>
+
 		<ResultsSkeleton v-if="showSkeleton" />
 
 		<UEmpty

@@ -121,6 +121,9 @@
     "Type S1": "Type S1",
     "Type S2": "Type S2"
   },
+  "skip_to_main": "Skip to main content",
+  "switch_to_chinese": "Switch to Chinese",
+  "switch_to_english": "Switch to English",
   "predicting": "Predicting…",
   "awaiting": "Awaiting prediction",
   "placeholder_title": "Run a scenario to generate a forecast",

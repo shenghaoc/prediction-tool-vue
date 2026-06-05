@@ -13,6 +13,7 @@ defineProps<{
 			variant="subtle"
 			:ui="{ body: 'flex items-center gap-3 p-4 sm:p-4' }"
 			class="h-full transition-transform hover:-translate-y-0.5"
+			tabindex="0"
 		>
 			<UAvatar :icon="icon" color="primary" variant="soft" size="md" />
 			<div class="min-w-0">
