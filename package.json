@@ -24,11 +24,11 @@
 		"@js-temporal/polyfill": "^0.5.1",
 		"@nuxt/ui": "^4.8.1",
 		"@nuxtjs/i18n": "^10.4.0",
-		"@tailwindcss/vite": "^4.3.0",
+		"@tailwindcss/vite": "^4.3.2",
 		"@tanstack/vue-form": "^1.33.0",
 		"@vueuse/nuxt": "^14.3.0",
 		"echarts": "^6.1.0",
-		"tailwindcss": "^4.3.0",
+		"tailwindcss": "^4.3.2",
 		"vue-echarts": "^8.0.1",
 		"zod": "^4.4.3"
 	}
